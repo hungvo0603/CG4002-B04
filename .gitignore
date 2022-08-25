@@ -466,3 +466,8 @@ FodyWeavers.xsd
 
 ### VisualStudio Patch ###
 # Additional files built by Visual Studio
+
+# Vuforia package
+visualizer/Packages/com.ptc.vuforia.engine-10.9.3.tgz
+visualizer/Library/ArtifactDB
+visualizer/Library/PackageCache/com.ptc.vuforia.engine@7c95fcfcb02e/
