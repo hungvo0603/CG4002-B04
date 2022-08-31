@@ -167,11 +167,11 @@ class Client(threading.Thread):
 
 
 if __name__ == '__main__':
-
+    print(XILINX_HOST)
     if len(sys.argv) != 5:
         print('[Client] Invalid number of arguments')
         print(
-            'python eval_client.py [IP address] [Port] [groupID] [secret key]')
+            'python client_remote.py [IP address] [Port] [groupID] [secret key]')
         sys.exit()
 
     ip_addr = sys.argv[1]

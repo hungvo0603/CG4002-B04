@@ -3,6 +3,7 @@ To install:
 `python3 -m venv <virtual_env_name>`
 `source <virtual_env_name>/bin/activate`
 `pip3 install -r requirements.txt`
+`pip3 install -r requirements_client.txt` (For client dependencies)
 
 To run:
 
