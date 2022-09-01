@@ -1,11 +1,14 @@
 To install:
-
 `python3 -m venv <virtual_env_name>`
 `source <virtual_env_name>/bin/activate`
 `pip3 install -r requirements.txt`
 `pip3 install -r requirements_client.txt` (For client dependencies)
 
 To run:
+Create a .env file. Then fill in the following details in `[]` and copy it to your .env file
+XILINX_HOST = '[xilinx host IP address]'
+SUNFIRE_USER = '[sunfire username]'
+SUNFIRE_PWD = '[sunfire password]'
 
 # Start virtual env
 `source <virtual_env_name>/bin/activate`
