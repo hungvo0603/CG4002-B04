@@ -1,5 +1,5 @@
 ext_comms/.env
-ext_comms/evaluation_logs
+ext_comms/eval_server/evaluation_logs
 
 ### Unity ###
 # This .gitignore file should be placed at the root of your Unity project directory

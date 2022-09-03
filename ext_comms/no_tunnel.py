@@ -1,9 +1,7 @@
 # TODO:
 # remove env xilinx host (input or env)
 # try out client remote
-# cannot work with tunnel yet (tunnel itself is working tho)
 
-import sshtunnel
 from Crypto.Util.Padding import pad, unpad
 from Crypto.Cipher import AES
 from Crypto import Random
@@ -64,25 +62,23 @@ class Client(threading.Thread):
         self.dest_address = (ip_addr, port_num)
         self.group_id = group_id
         self.secret_key = secret_key
-        self.create_tunnel((SUNFIRE_HOST, 22), ('localhost',
-                                                1), SUNFIRE_USER, SUNFIRE_PWD)
 
-        self.conn.connect(('localhost', self.tunnel.local_bind_port))
+        self.conn.connect(self.dest_address)
         print("[Client] Connection established to:", self.dest_address)
 
-    def create_tunnel(self, ssh_address, local_address, ssh_username, ssh_password):
-        # Connection from laptop to ultra96
-        self.tunnel = sshtunnel.open_tunnel(
-            ssh_address_or_host=ssh_address,  # gateway addr
-            remote_bind_address=self.dest_address,
-            local_bind_address=local_address,
-            ssh_username=ssh_username,
-            ssh_password=ssh_password
-        )
-        self.tunnel.start()
-        self.tunnel.check_tunnels()
-        print(self.tunnel.tunnel_is_up, flush=True)
-        print("[Client] Tunnel established to:", self.dest_address)
+    # def create_tunnel(self, ssh_address, local_address, ssh_username, ssh_password):
+    #     # Connection from laptop to ultra96
+    #     self.tunnel = sshtunnel.open_tunnel(
+    #         ssh_address_or_host=ssh_address,  # gateway addr
+    #         remote_bind_address=self.dest_address,
+    #         local_bind_address=local_address,
+    #         ssh_username=ssh_username,
+    #         ssh_password=ssh_password
+    #     )
+    #     self.tunnel.start()
+    #     self.tunnel.check_tunnels()
+    #     print(self.tunnel.tunnel_is_up, flush=True)
+    #     print("[Client] Tunnel established to:", self.dest_address)
 
     def jsonify_state(self, player_num, hp, action, bullets, grenades, shield_time, shield_health, num_deaths, num_shield):
         curr_state[player_num] = {
