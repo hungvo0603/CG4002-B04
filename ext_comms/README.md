@@ -1,3 +1,10 @@
+Main idea:
+- Internal comms send data to laptop (relay)
+- [All connection is via mqtt except the u96 to eval]
+- laptop publish data to ultra96 subscriber via mqtt broker
+- ultra96 process data and send result to eval server via socket
+- ultra96 publish data to visualizer subscriber via mqtt broker
+
 To install:
 `python3 -m venv <virtual_env_name>`
 `source <virtual_env_name>/bin/activate`
