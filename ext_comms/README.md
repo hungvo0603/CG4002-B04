@@ -1,10 +1,21 @@
-To install:
+Main idea:
+- Internal comms send data to laptop (relay)
+- [All connection is via mqtt except the u96 to eval]
+- laptop publish data to ultra96 subscriber via mqtt broker
+- ultra96 process data and send result to eval server via socket
+- ultra96 publish data to visualizer subscriber via mqtt broker
 
+To install:
 `python3 -m venv <virtual_env_name>`
 `source <virtual_env_name>/bin/activate`
 `pip3 install -r requirements.txt`
+`pip3 install -r requirements_client.txt` (For client dependencies)
 
 To run:
+Create a .env file. Then fill in the following details in `[]` and copy it to your .env file
+XILINX_HOST = '[xilinx host IP address]'
+SUNFIRE_USER = '[sunfire username]'
+SUNFIRE_PWD = '[sunfire password]'
 
 # Start virtual env
 `source <virtual_env_name>/bin/activate`

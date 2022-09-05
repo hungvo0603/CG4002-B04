@@ -1,3 +1,8 @@
+# TODO:
+# remove env xilinx host (input or env)
+# try out client remote
+# cannot work with tunnel yet (tunnel itself is working tho)
+
 import sshtunnel
 from Crypto.Util.Padding import pad, unpad
 from Crypto.Cipher import AES
@@ -11,14 +16,14 @@ import json
 import os
 import dotenv
 
-# python client_local.py localhost 1234 4 secret_key (16-digit)
-# p1 grenade 1 1 1 1 1 1
-
+# python client_remote.py 192.168.95.228 22 4 secret_key (16-digit)
+# p1 100 grenade 1 1 1 1 1 1
 
 # Player JSON format
 # {
 # 	"hp":           integer value of current player health,
 # 	"action":       string representing the current action performed by the player
+
 # Taking values from "grenade, reload, shoot, logout, shield",
 # 	"bullets":      integer value of number of bullets left in the magazine,
 # 	"grenades":     integer value of number of grenades left,
@@ -44,6 +49,7 @@ INITIAL_STATE = {
     "p2": DEFAULT_STATE
 }
 
+# Load environment variables
 dotenv.load_dotenv()
 XILINX_HOST = os.getenv('XILINX_HOST')
 SUNFIRE_USER = os.getenv('SUNFIRE_USER')
@@ -74,6 +80,8 @@ class Client(threading.Thread):
             ssh_password=ssh_password
         )
         self.tunnel.start()
+        self.tunnel.check_tunnels()
+        print(self.tunnel.tunnel_is_up, flush=True)
         print("[Client] Tunnel established to:", self.dest_address)
 
     def jsonify_state(self, player_num, hp, action, bullets, grenades, shield_time, shield_health, num_deaths, num_shield):
@@ -167,11 +175,10 @@ class Client(threading.Thread):
 
 
 if __name__ == '__main__':
-
     if len(sys.argv) != 5:
         print('[Client] Invalid number of arguments')
         print(
-            'python eval_client.py [IP address] [Port] [groupID] [secret key]')
+            'python client_remote.py [IP address] [Port] [groupID] [secret key]')
         sys.exit()
 
     ip_addr = sys.argv[1]
