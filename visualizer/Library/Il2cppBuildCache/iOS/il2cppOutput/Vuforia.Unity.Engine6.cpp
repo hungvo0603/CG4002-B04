@@ -2982,26 +2982,26 @@ struct KeyValuePair_2_t0F607A7AEEC8E08768B64AFDF0FE11CFFFC1F840
 struct KeyedCollection_2_t1BAFAAE4B56DF1BA761B031F8EC49E8AB2ABE72C  : public Collection_1_t73FBA2904C733510EF43AFA4F86D9CDC1B1CF947
 {
 	// System.Collections.Generic.IEqualityComparer`1<TKey> System.Collections.ObjectModel.KeyedCollection`2::comparer
-	RuntimeObject* ___comparer_2;
+	RuntimeObject* ___comparer_1;
 	// System.Collections.Generic.Dictionary`2<TKey,TItem> System.Collections.ObjectModel.KeyedCollection`2::dict
-	Dictionary_2_t675E7E6137FAC9293ACA50623A4D4797E6275F8C* ___dict_3;
+	Dictionary_2_t675E7E6137FAC9293ACA50623A4D4797E6275F8C* ___dict_2;
 	// System.Int32 System.Collections.ObjectModel.KeyedCollection`2::keyCount
-	int32_t ___keyCount_4;
+	int32_t ___keyCount_3;
 	// System.Int32 System.Collections.ObjectModel.KeyedCollection`2::threshold
-	int32_t ___threshold_5;
+	int32_t ___threshold_4;
 };
 
 // System.Collections.ObjectModel.KeyedCollection`2<System.String,Vuforia.Newtonsoft.Json.Schema.JsonSchemaNode>
 struct KeyedCollection_2_t41852846A5035969FC83684FE72885A909C21C1E  : public Collection_1_t25A80580AA4B1CDAFDFE8C9DF3D31A1A86037F27
 {
 	// System.Collections.Generic.IEqualityComparer`1<TKey> System.Collections.ObjectModel.KeyedCollection`2::comparer
-	RuntimeObject* ___comparer_2;
+	RuntimeObject* ___comparer_1;
 	// System.Collections.Generic.Dictionary`2<TKey,TItem> System.Collections.ObjectModel.KeyedCollection`2::dict
-	Dictionary_2_t0F487E5B3B0606A9DBAC1CB0631DB098A89D49C9* ___dict_3;
+	Dictionary_2_t0F487E5B3B0606A9DBAC1CB0631DB098A89D49C9* ___dict_2;
 	// System.Int32 System.Collections.ObjectModel.KeyedCollection`2::keyCount
-	int32_t ___keyCount_4;
+	int32_t ___keyCount_3;
 	// System.Int32 System.Collections.ObjectModel.KeyedCollection`2::threshold
-	int32_t ___threshold_5;
+	int32_t ___threshold_4;
 };
 
 // System.Nullable`1<System.Boolean>
@@ -4276,9 +4276,9 @@ struct JsonProperty_t3BA776ED1EF4760F1DCA10AF343D8E884C34B0B0  : public RuntimeO
 struct JsonPropertyCollection_t1DA0322BC1D4ED08C4C1ECEFD38D99D231333A86  : public KeyedCollection_2_t1BAFAAE4B56DF1BA761B031F8EC49E8AB2ABE72C
 {
 	// System.Type Vuforia.Newtonsoft.Json.Serialization.JsonPropertyCollection::_type
-	Type_t* ____type_6;
+	Type_t* ____type_5;
 	// System.Collections.Generic.List`1<Vuforia.Newtonsoft.Json.Serialization.JsonProperty> Vuforia.Newtonsoft.Json.Serialization.JsonPropertyCollection::_list
-	List_1_t4001DA952A0606B11F9D7DF60EAA22BD3EA26338* ____list_7;
+	List_1_t4001DA952A0606B11F9D7DF60EAA22BD3EA26338* ____list_6;
 };
 
 // Vuforia.Newtonsoft.Json.JsonReader
@@ -9314,7 +9314,7 @@ IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void TraceJsonReader__ctor_m27161774E6BC71687
 		String_t* L_5;
 		L_5 = String_Concat_m9E3155FB84015C823606188F53B47CB44C444991(_stringLiteralB62AA2CC6BFDA437017A321F61AE9B5B2FF52ADE, L_4, NULL);
 		NullCheck(L_3);
-		VirtualActionInvoker1< String_t* >::Invoke(16 /* System.Void System.IO.TextWriter::Write(System.String) */, L_3, L_5);
+		VirtualActionInvoker1< String_t* >::Invoke(15 /* System.Void System.IO.TextWriter::Write(System.String) */, L_3, L_5);
 		StringWriter_tF48052BE4F980E5C85403221E835768E4156267D* L_6 = __this->____sw_17;
 		JsonTextWriter_tAF7D7448E922BC07032AD079053C7417A4C4A595* L_7 = (JsonTextWriter_tAF7D7448E922BC07032AD079053C7417A4C4A595*)il2cpp_codegen_object_new(JsonTextWriter_tAF7D7448E922BC07032AD079053C7417A4C4A595_il2cpp_TypeInfo_var);
 		NullCheck(L_7);
@@ -9697,7 +9697,7 @@ IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void TraceJsonWriter__ctor_m5044C6F2CE893C8EC
 		String_t* L_5;
 		L_5 = String_Concat_m9E3155FB84015C823606188F53B47CB44C444991(_stringLiteral95C8A5370D26D671D01AC2995934B40AF9E59DB1, L_4, NULL);
 		NullCheck(L_3);
-		VirtualActionInvoker1< String_t* >::Invoke(16 /* System.Void System.IO.TextWriter::Write(System.String) */, L_3, L_5);
+		VirtualActionInvoker1< String_t* >::Invoke(15 /* System.Void System.IO.TextWriter::Write(System.String) */, L_3, L_5);
 		StringWriter_tF48052BE4F980E5C85403221E835768E4156267D* L_6 = __this->____sw_15;
 		JsonTextWriter_tAF7D7448E922BC07032AD079053C7417A4C4A595* L_7 = (JsonTextWriter_tAF7D7448E922BC07032AD079053C7417A4C4A595*)il2cpp_codegen_object_new(JsonTextWriter_tAF7D7448E922BC07032AD079053C7417A4C4A595_il2cpp_TypeInfo_var);
 		NullCheck(L_7);
@@ -38281,7 +38281,7 @@ IL_0014:
 		RuntimeObject* L_7 = __this->____annotations_4;
 		NullCheck(L_6);
 		bool L_8;
-		L_8 = VirtualFuncInvoker1< bool, RuntimeObject* >::Invoke(117 /* System.Boolean System.Type::IsInstanceOfType(System.Object) */, L_6, L_7);
+		L_8 = VirtualFuncInvoker1< bool, RuntimeObject* >::Invoke(113 /* System.Boolean System.Type::IsInstanceOfType(System.Object) */, L_6, L_7);
 		if (!L_8)
 		{
 			goto IL_0060;
@@ -38317,7 +38317,7 @@ IL_0044:
 		RuntimeObject* L_16 = V_2;
 		NullCheck(L_15);
 		bool L_17;
-		L_17 = VirtualFuncInvoker1< bool, RuntimeObject* >::Invoke(117 /* System.Boolean System.Type::IsInstanceOfType(System.Object) */, L_15, L_16);
+		L_17 = VirtualFuncInvoker1< bool, RuntimeObject* >::Invoke(113 /* System.Boolean System.Type::IsInstanceOfType(System.Object) */, L_15, L_16);
 		if (!L_17)
 		{
 			goto IL_0056;
@@ -38428,7 +38428,7 @@ IL_0014:
 		RuntimeObject* L_7 = __this->____annotations_4;
 		NullCheck(L_6);
 		bool L_8;
-		L_8 = VirtualFuncInvoker1< bool, RuntimeObject* >::Invoke(117 /* System.Boolean System.Type::IsInstanceOfType(System.Object) */, L_6, L_7);
+		L_8 = VirtualFuncInvoker1< bool, RuntimeObject* >::Invoke(113 /* System.Boolean System.Type::IsInstanceOfType(System.Object) */, L_6, L_7);
 		if (!L_8)
 		{
 			goto IL_0082;
@@ -38466,7 +38466,7 @@ IL_0047:
 		RuntimeObject* L_15 = V_3;
 		NullCheck(L_14);
 		bool L_16;
-		L_16 = VirtualFuncInvoker1< bool, RuntimeObject* >::Invoke(117 /* System.Boolean System.Type::IsInstanceOfType(System.Object) */, L_14, L_15);
+		L_16 = VirtualFuncInvoker1< bool, RuntimeObject* >::Invoke(113 /* System.Boolean System.Type::IsInstanceOfType(System.Object) */, L_14, L_15);
 		if (L_16)
 		{
 			goto IL_005f;

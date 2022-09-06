@@ -19402,7 +19402,7 @@ IL_0028:
 		L_7 = Directory_GetParent_mDD1F4DD5F95A5D6676009FB76E5016EDD127FFB2(L_6, NULL);
 		NullCheck(L_7);
 		String_t* L_8;
-		L_8 = VirtualFuncInvoker0< String_t* >::Invoke(9 /* System.String System.IO.FileSystemInfo::get_Name() */, L_7);
+		L_8 = VirtualFuncInvoker0< String_t* >::Invoke(8 /* System.String System.IO.FileSystemInfo::get_Name() */, L_7);
 		G_B3_0 = L_8;
 		G_B3_1 = G_B2_0;
 	}
@@ -19570,7 +19570,7 @@ IL_0028:
 		L_7 = Directory_GetParent_mDD1F4DD5F95A5D6676009FB76E5016EDD127FFB2(L_6, NULL);
 		NullCheck(L_7);
 		String_t* L_8;
-		L_8 = VirtualFuncInvoker0< String_t* >::Invoke(9 /* System.String System.IO.FileSystemInfo::get_Name() */, L_7);
+		L_8 = VirtualFuncInvoker0< String_t* >::Invoke(8 /* System.String System.IO.FileSystemInfo::get_Name() */, L_7);
 		G_B3_0 = L_8;
 		G_B3_1 = G_B2_0;
 	}
