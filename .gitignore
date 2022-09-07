@@ -5,13 +5,13 @@ ext_comms/eval_server/evaluation_logs
 # This .gitignore file should be placed at the root of your Unity project directory
 #
 # Get latest from https://github.com/github/gitignore/blob/main/Unity.gitignore
-/[Ll]ibrary/
-/[Tt]emp/
-/[Oo]bj/
-/[Bb]uild/
-/[Bb]uilds/
-/[Ll]ogs/
-/[Uu]ser[Ss]ettings/
+/visualizer/[Ll]ibrary/
+/visualizer/[Tt]emp/
+/visualizer/[Oo]bj/
+/visualizer/[Bb]uild/
+/visualizer/[Bb]uilds/
+/visualzer/[Ll]ogs/
+/visualizer/[Uu]ser[Ss]ettings/
 
 # MemoryCaptures can get excessive in size.
 # They also could contain extremely sensitive data

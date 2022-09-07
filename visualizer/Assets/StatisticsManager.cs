@@ -15,6 +15,12 @@ public class StatisticsManager : MonoBehaviour
     int player1Health = 100;
     int player1Bullet = 6;
 
+    void Start()
+    {
+        player1HealthText.text = "100%";
+        player1BulletText.text = "6/6";
+    }
+
     public void HealthDownButtonPress() 
     {
         player1Health = (player1Health > 0) ? (player1Health - 10) : MAX_HEALTH;

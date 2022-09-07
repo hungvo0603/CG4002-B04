@@ -4,12 +4,16 @@ using UnityEngine;
 
 public class BombExplosion : MonoBehaviour
 {
-    public GameObject explosion;
-    public float explosionForce, radius;
+    public GameObject explosionParticles;
 
-    private void OnCollisionEnter(Collision other)
+    void Start ()
     {
-        GameObject _exp = Instantiate(explosion, transform.position, transform.rotation);
-        Destroy(_exp, 5);
+        explosionParticles.SetActive(false);
     }
+
+    public void ExplosionButtonPress ()
+    {
+        explosionParticles.SetActive(true);
+    }
+
 }

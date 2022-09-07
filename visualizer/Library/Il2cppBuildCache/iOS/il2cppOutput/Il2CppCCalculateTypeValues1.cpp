@@ -14446,12 +14446,10 @@ struct AudioListener_t1D629CE9BC079C8ECDE8F822616E8A8E319EAE35  : public AudioBe
 // BombExplosion
 struct BombExplosion_tF563EF38053E43F3B8F9762FA26E99FB52E9EF15  : public MonoBehaviour_t532A11E69716D348D8AA7F854AFCBFCB8AD17F71
 {
-	// UnityEngine.GameObject BombExplosion::explosion
-	GameObject_t76FEDD663AB33C991A9C9A23129337651094216F* ___explosion_4;
-	// System.Single BombExplosion::explosionForce
-	float ___explosionForce_5;
-	// System.Single BombExplosion::radius
-	float ___radius_6;
+	// UnityEngine.GameObject BombExplosion::explosionParticles
+	GameObject_t76FEDD663AB33C991A9C9A23129337651094216F* ___explosionParticles_4;
+	// System.Boolean BombExplosion::isActive
+	bool ___isActive_5;
 };
 
 // BoundingBoxRenderer

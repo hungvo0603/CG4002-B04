@@ -6104,12 +6104,10 @@ struct VuValidationAreaObservation_t62F283EEC2923949690C4660DB8BEA67D9B6E2A6  : 
 // BombExplosion
 struct BombExplosion_tF563EF38053E43F3B8F9762FA26E99FB52E9EF15  : public MonoBehaviour_t532A11E69716D348D8AA7F854AFCBFCB8AD17F71
 {
-	// UnityEngine.GameObject BombExplosion::explosion
-	GameObject_t76FEDD663AB33C991A9C9A23129337651094216F* ___explosion_4;
-	// System.Single BombExplosion::explosionForce
-	float ___explosionForce_5;
-	// System.Single BombExplosion::radius
-	float ___radius_6;
+	// UnityEngine.GameObject BombExplosion::explosionParticles
+	GameObject_t76FEDD663AB33C991A9C9A23129337651094216F* ___explosionParticles_4;
+	// System.Boolean BombExplosion::isActive
+	bool ___isActive_5;
 };
 
 // BoundingBoxRenderer
@@ -7305,9 +7303,9 @@ IL2CPP_EXTERN_C const int32_t g_FieldOffsetTable6557[1] =
 IL2CPP_EXTERN_C const int32_t g_FieldOffsetTable6558[6] = 
 {
 	static_cast<int32_t>(offsetof(RaycastHit2D_t3EAAA06E6603C6BC61AC1291DD881C5C1E23BDFA, ___m_Centroid_0)) + static_cast<int32_t>(sizeof(RuntimeObject)),static_cast<int32_t>(offsetof(RaycastHit2D_t3EAAA06E6603C6BC61AC1291DD881C5C1E23BDFA, ___m_Point_1)) + static_cast<int32_t>(sizeof(RuntimeObject)),static_cast<int32_t>(offsetof(RaycastHit2D_t3EAAA06E6603C6BC61AC1291DD881C5C1E23BDFA, ___m_Normal_2)) + static_cast<int32_t>(sizeof(RuntimeObject)),static_cast<int32_t>(offsetof(RaycastHit2D_t3EAAA06E6603C6BC61AC1291DD881C5C1E23BDFA, ___m_Distance_3)) + static_cast<int32_t>(sizeof(RuntimeObject)),static_cast<int32_t>(offsetof(RaycastHit2D_t3EAAA06E6603C6BC61AC1291DD881C5C1E23BDFA, ___m_Fraction_4)) + static_cast<int32_t>(sizeof(RuntimeObject)),static_cast<int32_t>(offsetof(RaycastHit2D_t3EAAA06E6603C6BC61AC1291DD881C5C1E23BDFA, ___m_Collider_5)) + static_cast<int32_t>(sizeof(RuntimeObject)),};
-IL2CPP_EXTERN_C const int32_t g_FieldOffsetTable6569[3] = 
+IL2CPP_EXTERN_C const int32_t g_FieldOffsetTable6569[2] = 
 {
-	static_cast<int32_t>(offsetof(BombExplosion_tF563EF38053E43F3B8F9762FA26E99FB52E9EF15, ___explosion_4)),static_cast<int32_t>(offsetof(BombExplosion_tF563EF38053E43F3B8F9762FA26E99FB52E9EF15, ___explosionForce_5)),static_cast<int32_t>(offsetof(BombExplosion_tF563EF38053E43F3B8F9762FA26E99FB52E9EF15, ___radius_6)),};
+	static_cast<int32_t>(offsetof(BombExplosion_tF563EF38053E43F3B8F9762FA26E99FB52E9EF15, ___explosionParticles_4)),static_cast<int32_t>(offsetof(BombExplosion_tF563EF38053E43F3B8F9762FA26E99FB52E9EF15, ___isActive_5)),};
 IL2CPP_EXTERN_C const int32_t g_FieldOffsetTable6570[6] = 
 {
 	static_cast<int32_t>(offsetof(Grenade_tC1EC92A9482C95871AD10641DF9F48B222A13B62, ___delay_4)),static_cast<int32_t>(offsetof(Grenade_tC1EC92A9482C95871AD10641DF9F48B222A13B62, ___radius_5)),static_cast<int32_t>(offsetof(Grenade_tC1EC92A9482C95871AD10641DF9F48B222A13B62, ___explosionForce_6)),static_cast<int32_t>(offsetof(Grenade_tC1EC92A9482C95871AD10641DF9F48B222A13B62, ___explosionEffect_7)),static_cast<int32_t>(offsetof(Grenade_tC1EC92A9482C95871AD10641DF9F48B222A13B62, ___countdown_8)),static_cast<int32_t>(offsetof(Grenade_tC1EC92A9482C95871AD10641DF9F48B222A13B62, ___hasExploded_9)),};
