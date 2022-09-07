@@ -24,10 +24,10 @@ from PlayerState import PlayerStateBase
 
 
 # Global flags
-DISABLE_GUI = False     # the server will not display any GUI
-SINGLE_PLAYER_MODE = False     # the server is for 1-player test
-DEBUG_FLAG = False
-CLOSE_WINDOW = False     # close the GUI
+DISABLE_GUI             = False     # the server will not display any GUI
+SINGLE_PLAYER_MODE      = False     # the server is for 1-player test
+DEBUG_FLAG              = False
+CLOSE_WINDOW            = False     # close the GUI
 
 LOG_DIR = os.path.join(os.path.dirname(__file__), 'evaluation_logs')
 message_queue = Queue()     # message to be displayed on the window
@@ -39,22 +39,21 @@ class TurnGenerator:
     Actions will be displayed on the evaluation server UI for the
     players to follow.
     """
-
     def __init__(self):
         self.cur_turn = -1
         self.game_engine = MoveEngine(is_single_player=SINGLE_PLAYER_MODE,
                                       disable_gui=DISABLE_GUI)
 
         # Generate random sequence of actions for Player 1
-        self.p1_actions = self.game_engine.actions_player_1
-        self.p1_positions = self.game_engine.positions_player_1
+        self.p1_actions     = self.game_engine.actions_player_1
+        self.p1_positions   = self.game_engine.positions_player_1
         if DEBUG_FLAG:
             print("Actions:   ", self.p1_actions)
             print("Positions: ", self.p1_positions)
 
         # Generate random sequence of actions for Player 2
-        self.p2_actions = self.game_engine.actions_player_2
-        self.p2_positions = self.game_engine.positions_player_2
+        self.p2_actions     = self.game_engine.actions_player_2
+        self.p2_positions   = self.game_engine.positions_player_2
         if DEBUG_FLAG:
             print("Actions:   ", self.p2_actions)
             print("Positions: ", self.p2_positions)
@@ -62,7 +61,6 @@ class TurnGenerator:
     """
     Called at the start of every turn to generate new values for player actions
     """
-
     def iterate(self):
         # Return True if we have finished going through all turns
         if self.cur_turn + 1 >= len(self.p1_actions):
@@ -115,7 +113,6 @@ class Server(threading.Thread):
     """
     class to start the eval server
     """
-
     def __init__(self, port_num, group_id):
         super().__init__()
 
@@ -127,10 +124,10 @@ class Server(threading.Thread):
 
         # Setup logger
         if DISABLE_GUI:
-            self.log_filename_csv = 'group{}_cli_logs.csv'.format(group_id)
+            self.log_filename_csv  = 'group{}_cli_logs.csv'.format(group_id)
             self.log_filename_json = 'group{}_cli_logs.json'.format(group_id)
         else:
-            self.log_filename_csv = 'group{}_logs.csv'.format(group_id)
+            self.log_filename_csv  = 'group{}_logs.csv'.format(group_id)
             self.log_filename_json = 'group{}_logs.json'.format(group_id)
         if not os.path.exists(LOG_DIR):
             os.makedirs(LOG_DIR)
@@ -148,25 +145,23 @@ class Server(threading.Thread):
         self.random_id = random.randint(1, 10*1000)
 
         # Setup turns
-        self.turn_gen = TurnGenerator()   # Initialize turn generator
-        # Time turn instructions/actions were set by eval_server
-        self.action_set_time = 0
-        self.turn_wait_timeout = 60        # Turn response timeout amount
-        # Timer object to keep track of turn response timeout
-        self.turn_wait_timer = None
+        self.turn_gen           = TurnGenerator()   # Initialize turn generator
+        self.action_set_time    = 0         # Time turn instructions/actions were set by eval_server
+        self.turn_wait_timeout  = 60        # Turn response timeout amount
+        self.turn_wait_timer    = None      # Timer object to keep track of turn response timeout
 
         # Temporary storage for correct actions for each player
         self.last_p1_action = None
         self.last_p2_action = None
 
         # Ultra96 Connection things
-        self.server_socket = server_socket
-        self.connection = None  # Ultra96 connection object
-        self.secret_key = None  # AES secret key
+        self.server_socket  = server_socket
+        self.connection     = None  # Ultra96 connection object
+        self.secret_key     = None  # AES secret key
 
-        self.has_no_response = True  # Flag set when there was no response from Ultra96
-        self.expecting_packet = threading.Event()  # indicates weather
-        self.shutdown = threading.Event()  # indicates that the thread has to die
+        self.has_no_response    = True  # Flag set when there was no response from Ultra96
+        self.expecting_packet   = threading.Event()  # indicates weather
+        self.shutdown           = threading.Event()  # indicates that the thread has to die
 
     @staticmethod
     def game_state_diff(expected, received):
@@ -240,8 +235,7 @@ class Server(threading.Thread):
             self.action_set_time = time.time()
 
             # Restart turn wait timer
-            self.turn_wait_timer = threading.Timer(
-                self.turn_wait_timeout, self.setup_turn)
+            self.turn_wait_timer = threading.Timer(self.turn_wait_timeout, self.setup_turn)
             self.has_no_response = True
             self.turn_wait_timer.start()
             self.expecting_packet.set()
@@ -253,8 +247,8 @@ class Server(threading.Thread):
         """
         Write data to logger.
         """
-        _flag_write_csv = True
-        _flag_write_json = True
+        _flag_write_csv     = True
+        _flag_write_json    = True
         if _flag_write_csv:
             log_filepath = self.log_filepath_csv
             if not os.path.exists(log_filepath):  # first write
@@ -263,30 +257,26 @@ class Server(threading.Thread):
 
             with open(log_filepath, 'a') as f:
                 data = dict()
-                data['timestamp'] = time.time()
-                data['id'] = self.random_id
+                data['timestamp']   = time.time()
+                data['id']          = self.random_id
 
-                data['p1_action'] = predicted_p1_action
-                data['gt_p1_action'] = correct_p1_action
-                data['p2_action'] = predicted_p2_action
-                data['gt_p2_action'] = correct_p2_action
+                data['p1_action']       = predicted_p1_action
+                data['gt_p1_action']    = correct_p1_action
+                data['p2_action']       = predicted_p2_action
+                data['gt_p2_action']       = correct_p2_action
 
-                data['response_time'] = data['timestamp'] - \
-                    self.action_set_time
-                data['is_p1_action_correct'] = (
-                    predicted_p1_action == correct_p1_action)
-                data['is_p2_action_correct'] = (
-                    predicted_p2_action == correct_p2_action)
+                data['response_time']        = data['timestamp'] - self.action_set_time
+                data['is_p1_action_correct'] = (predicted_p1_action == correct_p1_action)
+                data['is_p2_action_correct'] = (predicted_p2_action == correct_p2_action)
 
-                self.df = pd.DataFrame(data, index=[0])[
-                    self.columns].set_index('timestamp')
+                self.df = pd.DataFrame(data, index=[0])[self.columns].set_index('timestamp')
                 self.df.to_csv(f, header=False)
 
         if _flag_write_json:
             data = dict()
-            data['id'] = self.random_id
-            data['timestamp'] = time.time()
-            data['response_time'] = data['timestamp'] - self.action_set_time
+            data['id']                  = self.random_id
+            data['timestamp']           = time.time()
+            data['response_time']       = data['timestamp'] - self.action_set_time
             data['game_state_received'] = game_state_received
             data['game_state_expected'] = game_state_expected
 
@@ -330,24 +320,17 @@ class Server(threading.Thread):
         that was entered in this script during initial connection by the Ultra96.
         It returns a dictionary containing the action detected by the Ultra96.
         """
-        decoded_message = base64.b64decode(
-            cipher_text)                            # Decode message from base64 to bytes
-        # Get IV value
-        iv = decoded_message[:AES.block_size]
-        # Convert secret key to bytes
-        secret_key = bytes(str(self.secret_key), encoding="utf8")
+        decoded_message = base64.b64decode(cipher_text)                            # Decode message from base64 to bytes
+        iv              = decoded_message[:AES.block_size]                                     # Get IV value
+        secret_key      = bytes(str(self.secret_key), encoding="utf8")             # Convert secret key to bytes
 
-        # Create new AES cipher object
-        cipher = AES.new(secret_key, AES.MODE_CBC, iv)
+        cipher = AES.new(secret_key, AES.MODE_CBC, iv)                              # Create new AES cipher object
 
-        decrypted_message = cipher.decrypt(
-            decoded_message[AES.block_size:])  # Perform decryption
+        decrypted_message = cipher.decrypt(decoded_message[AES.block_size:])  # Perform decryption
         decrypted_message = unpad(decrypted_message, AES.block_size)
-        decrypted_message = decrypted_message.decode(
-            'utf8')  # Decode bytes into utf-8
+        decrypted_message = decrypted_message.decode('utf8')  # Decode bytes into utf-8
 
         ret = json.loads(decrypted_message)
-        print("[Eval server] Received:", ret)
         return ret
 
     def recv_game_state(self):
@@ -394,8 +377,7 @@ class Server(threading.Thread):
         self.expecting_packet.clear()
         # Listen for incoming connections
         self.server_socket.listen(1)
-        # Wait for secret key from Ultra96
-        self.secret_key = self.setup_connection()
+        self.secret_key = self.setup_connection()      # Wait for secret key from Ultra96
 
         while not self.shutdown.is_set():
             try:
@@ -431,21 +413,14 @@ class Server(threading.Thread):
                 )
 
                 ice_print_debug("")
-                ice_print_debug(
-                    "------   ", self.turn_gen.cur_turn, "   ------")
-                ice_print_debug("Received P1: ",
-                                game_state_received['p1'], color=1)
-                ice_print_debug(
-                    "Expected P1: ", _game_state_correct.player_1.get_dict(), color=1)
-                ice_print_debug("Received P2: ",
-                                game_state_received['p2'], color=3)
-                ice_print_debug(
-                    "Expected P2: ", _game_state_correct.player_2.get_dict(), color=3)
+                ice_print_debug("------   ", self.turn_gen.cur_turn, "   ------")
+                ice_print_debug("Received P1: ", game_state_received['p1'], color=1)
+                ice_print_debug("Expected P1: ", _game_state_correct.player_1.get_dict(), color=1)
+                ice_print_debug("Received P2: ", game_state_received['p2'], color=3)
+                ice_print_debug("Expected P2: ", _game_state_correct.player_2.get_dict(), color=3)
                 if True:
-                    diff_p1 = self.game_state_diff(
-                        _game_state_correct.player_1.get_dict(), game_state_received['p1'])
-                    diff_p2 = self.game_state_diff(
-                        _game_state_correct.player_2.get_dict(), game_state_received['p2'])
+                    diff_p1 = self.game_state_diff(_game_state_correct.player_1.get_dict(), game_state_received['p1'])
+                    diff_p2 = self.game_state_diff(_game_state_correct.player_2.get_dict(), game_state_received['p2'])
                     ice_print_debug("diff P1: ", diff_p1, color=1)
                     ice_print_debug("diff P2: ", diff_p2, color=3)
 
@@ -468,16 +443,15 @@ class Eval:
     """
     The main evaluation class
     """
-
     def __init__(self, port_num, group_id):
-        self.p1_action_text = None
-        self.p2_action_text = None
-        self.max_num_actions = 0
-        self.p2_frame = None
-        self.p1_frame = None
-        self.turn_text = None
-        self.port_num = port_num
-        self.group_id = group_id
+        self.p1_action_text     = None
+        self.p2_action_text     = None
+        self.max_num_actions    = 0
+        self.p2_frame   = None
+        self.p1_frame   = None
+        self.turn_text  = None
+        self.port_num   = port_num
+        self.group_id   = group_id
 
         # start the server
         self.server = Server(self.port_num, self.group_id)
@@ -506,13 +480,11 @@ class Eval:
                         break
                     self.p2_action_text.set(text)
 
-                self.turn_text.set(
-                    f"{self.server.turn_gen.cur_turn + 1} / {self.max_num_actions + 1}")
+                self.turn_text.set(f"{self.server.turn_gen.cur_turn + 1} / {self.max_num_actions + 1}")
                 self.display_window.update()
             break
 
-        # Check again after delay.
-        self.display_window.after(10, self.check_loop_status)
+        self.display_window.after(10, self.check_loop_status)  # Check again after delay.
 
     def start(self):
         """
@@ -531,16 +503,14 @@ class Eval:
 
             # Finished turns
             self.turn_text = tk.StringVar()
-            turn_label = tk.Label(
-                main_frame, textvariable=self.turn_text, font=("times", 80))
+            turn_label = tk.Label(main_frame, textvariable=self.turn_text, font=("times", 80))
             turn_label.pack(fill='x')
 
             # Player 1 column
             self.p1_frame = tk.Frame(main_frame, bg="red")
             self.p1_frame.pack(expand=True, fill='both', side='left')
             # Player 1 title
-            p1_label = tk.Label(self.p1_frame, text="Player 1", font=(
-                'times', 100, 'bold'), bg="red")
+            p1_label = tk.Label(self.p1_frame, text="Player 1", font=('times', 100, 'bold'), bg="red")
             p1_label.pack(ipady=20)
             # Player 1 variable frame
             p1_var_frame = tk.Frame(self.p1_frame, bg='#ffcccb')
@@ -559,8 +529,7 @@ class Eval:
                 self.p2_frame = tk.Frame(main_frame, bg="blue")
                 self.p2_frame.pack(expand=True, fill='both', side='right')
                 # Player 2 title
-                p2_label = tk.Label(self.p2_frame, text="Player 2", font=(
-                    'times', 100, 'bold'), bg="blue")
+                p2_label = tk.Label(self.p2_frame, text="Player 2", font=('times', 100, 'bold'), bg="blue")
                 p2_label.pack(ipady=20)
                 # Player 2 variable frame
                 p2_var_frame = tk.Frame(self.p2_frame, bg='#add8e6')
@@ -582,8 +551,7 @@ class Eval:
             self.display_window.update()
             self.max_num_actions = len(self.server.turn_gen.p1_actions) - 1
             # display none till connection established
-            self.turn_text.set(
-                f"0 / {self.max_num_actions + 1}  G{self.group_id}")
+            self.turn_text.set(f"0 / {self.max_num_actions + 1}  G{self.group_id}")
             self.p1_action_text.set('none')
             if not SINGLE_PLAYER_MODE:
                 self.p2_action_text.set('none')
@@ -591,7 +559,7 @@ class Eval:
 
             self.check_loop_status()  # Start periodic checking.
             self.display_window.mainloop()
-            print('closing window')
+            print ('closing window')
             self.server.join()
         else:
             # wait for the server to terminate
@@ -605,8 +573,7 @@ if __name__ == '__main__':
     _num_para = 4
     if len(sys.argv) < _num_para:
         print('Invalid number of arguments')
-        print('python3 ' + os.path.basename(__file__) +
-              ' [Port] [groupID] [mode]')
+        print('python3 ' + os.path.basename(__file__) + ' [Port] [groupID] [mode]')
         print('port   : The port number for the TCP server')
         print('groupID: Identifier of the group being evaluated')
         print('mode   : Takes value 1 for single player and 2 for double player')
