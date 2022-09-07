@@ -1,22 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Video;
 
 public class BombExplosion : MonoBehaviour
 {
-    public GameObject explosionParticles;
-    bool isActive;
+    public ParticleSystem explosionParticles;
 
     void Start ()
     {
-        isActive = false;
-        explosionParticles.SetActive(isActive);
+        explosionParticles.Stop();
+        explosionParticles.Clear();
     }
 
-    public void ExplosionButtonPress ()
+    public void ExplosionButtonPress()
     {
-        isActive = !isActive;
-        explosionParticles.SetActive(isActive);
+        explosionParticles.Play();
     }
-
 }
