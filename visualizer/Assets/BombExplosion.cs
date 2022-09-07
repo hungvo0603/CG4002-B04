@@ -5,15 +5,18 @@ using UnityEngine;
 public class BombExplosion : MonoBehaviour
 {
     public GameObject explosionParticles;
+    bool isActive;
 
     void Start ()
     {
-        explosionParticles.SetActive(false);
+        isActive = false;
+        explosionParticles.SetActive(isActive);
     }
 
     public void ExplosionButtonPress ()
     {
-        explosionParticles.SetActive(true);
+        isActive = !isActive;
+        explosionParticles.SetActive(isActive);
     }
 
 }
