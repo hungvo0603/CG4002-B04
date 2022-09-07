@@ -258,19 +258,25 @@ extern void CFX_SpawnSystem_Awake_m7C1B26FBE2BC7B4C4F0AA6805C61201BEC70C4F4 (voi
 extern void CFX_SpawnSystem_Start_m8011B4DA2670B06F4AD3AFF414B0FFFBADE3B3B2 (void);
 // 0x0000007B System.Void CFX_SpawnSystem::.ctor()
 extern void CFX_SpawnSystem__ctor_mD338755A1730D647569C56E368BD28236FE250ED (void);
-// 0x0000007C System.Void StatisticsManager::Start()
+// 0x0000007C System.Void ShootController::Start()
+extern void ShootController_Start_mA20C52B5BE2C46630486948A1D89AFE3A91F0ECA (void);
+// 0x0000007D System.Void ShootController::Update()
+extern void ShootController_Update_m3722D12524EFC191A069694C3A836112B463C1E7 (void);
+// 0x0000007E System.Void ShootController::.ctor()
+extern void ShootController__ctor_mDF9AEE5CE1F84BB6930D4F8009B9CE588E643FB8 (void);
+// 0x0000007F System.Void StatisticsManager::Start()
 extern void StatisticsManager_Start_m183C7694874F9F0423CAF8E7AA2D85F9C8AF502C (void);
-// 0x0000007D System.Void StatisticsManager::HealthDownButtonPress()
+// 0x00000080 System.Void StatisticsManager::HealthDownButtonPress()
 extern void StatisticsManager_HealthDownButtonPress_mC0A19D2F3C1D1636F133EBBE0321BF9280E5C340 (void);
-// 0x0000007E System.Void StatisticsManager::BulletDownButtonPress()
+// 0x00000081 System.Void StatisticsManager::BulletDownButtonPress()
 extern void StatisticsManager_BulletDownButtonPress_mD011B15DBF390E78C5135BB8B3B9EF9DEFB8D3FB (void);
-// 0x0000007F System.Void StatisticsManager::.ctor()
+// 0x00000082 System.Void StatisticsManager::.ctor()
 extern void StatisticsManager__ctor_m4EFBC6076F8D6D9ED0B25796F23C43FE66D5E6AD (void);
-// 0x00000080 System.Void Readme::.ctor()
+// 0x00000083 System.Void Readme::.ctor()
 extern void Readme__ctor_m69C325C4C171DCB0312B646A9034AA91EA8C39C6 (void);
-// 0x00000081 System.Void Readme/Section::.ctor()
+// 0x00000084 System.Void Readme/Section::.ctor()
 extern void Section__ctor_m5F732533E4DFC0167D965E5F5DB332E46055399B (void);
-static Il2CppMethodPointer s_methodPointers[129] = 
+static Il2CppMethodPointer s_methodPointers[132] = 
 {
 	BombExplosion_Start_m1AC24D0DE310A1AA5C73B0DE1BB1EDD0CCD53D93,
 	BombExplosion_ExplosionButtonPress_m7C2363EA4E92733EC6BDB30F4822547FD484C6C0,
@@ -395,6 +401,9 @@ static Il2CppMethodPointer s_methodPointers[129] =
 	CFX_SpawnSystem_Awake_m7C1B26FBE2BC7B4C4F0AA6805C61201BEC70C4F4,
 	CFX_SpawnSystem_Start_m8011B4DA2670B06F4AD3AFF414B0FFFBADE3B3B2,
 	CFX_SpawnSystem__ctor_mD338755A1730D647569C56E368BD28236FE250ED,
+	ShootController_Start_mA20C52B5BE2C46630486948A1D89AFE3A91F0ECA,
+	ShootController_Update_m3722D12524EFC191A069694C3A836112B463C1E7,
+	ShootController__ctor_mDF9AEE5CE1F84BB6930D4F8009B9CE588E643FB8,
 	StatisticsManager_Start_m183C7694874F9F0423CAF8E7AA2D85F9C8AF502C,
 	StatisticsManager_HealthDownButtonPress_mC0A19D2F3C1D1636F133EBBE0321BF9280E5C340,
 	StatisticsManager_BulletDownButtonPress_mD011B15DBF390E78C5135BB8B3B9EF9DEFB8D3FB,
@@ -402,7 +411,7 @@ static Il2CppMethodPointer s_methodPointers[129] =
 	Readme__ctor_m69C325C4C171DCB0312B646A9034AA91EA8C39C6,
 	Section__ctor_m5F732533E4DFC0167D965E5F5DB332E46055399B,
 };
-static const int32_t s_InvokerIndices[129] = 
+static const int32_t s_InvokerIndices[132] = 
 {
 	5099,
 	5099,
@@ -533,12 +542,15 @@ static const int32_t s_InvokerIndices[129] =
 	5099,
 	5099,
 	5099,
+	5099,
+	5099,
+	5099,
 };
 IL2CPP_EXTERN_C const Il2CppCodeGenModule g_AssemblyU2DCSharp_CodeGenModule;
 const Il2CppCodeGenModule g_AssemblyU2DCSharp_CodeGenModule = 
 {
 	"Assembly-CSharp.dll",
-	129,
+	132,
 	s_methodPointers,
 	0,
 	NULL,

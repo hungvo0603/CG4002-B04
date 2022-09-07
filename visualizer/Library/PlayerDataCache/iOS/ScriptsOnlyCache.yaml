@@ -3,6 +3,7 @@ ScriptsOnlyBuild:
     Assembly-CSharp.dll:
     - BombExplosion
     - CFX_AutoDestructShuriken
+    - ShootController
     - StatisticsManager
     Unity.Rider.Editor.dll:
     - Packages.Rider.Editor.UnitTesting.CallbackData
@@ -155,6 +156,8 @@ ScriptsOnlyBuild:
       Script: {instanceID: 6872}
     - Class: 114
       Script: {instanceID: 8470}
+    - Class: 114
+      Script: {instanceID: 25000}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -2824,7 +2827,13 @@ ScriptsOnlyBuild:
     assemblyName: Unity.VisualScripting.Core.dll
     namespaceName: Unity.VisualScripting
     className: UnityOnSliderValueChangedMessageListener
+  - hash:
+      serializedVersion: 2
+      Hash: 55530b746f48a3545221b3cec12a13cf
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: ShootController
   platform: 9
   scenePathNames:
   - Assets/Scenes/MainScene.unity
-  playerPath: C:/Users/Hungggggg/NUSwork/Y4S1/CG4002/build-ios/build-ios-4
+  playerPath: C:/Users/Hungggggg/NUSwork/Y4S1/CG4002/build-ios/build-ios-10
