@@ -1,0 +1,13 @@
+timestamp,id,p1_action,gt_p1_action,p2_action,gt_p2_action,response_time,is_p1_action_correct,is_p2_action_correct
+1662548938.6270213,5152,none,shoot,none,none,17.366777420043945,False,True
+1662548998.660026,5152,None,None,None,None,60.013017892837524,True,True
+1662549027.679429,5152,none,grenade,none,none,29.019402980804443,False,True
+1662549087.7008405,5152,None,None,None,None,60.01541566848755,True,True
+1662549147.7050965,5152,None,None,None,None,60.00425601005554,True,True
+1662549481.1552238,8987,grenade,grenade,none,none,13.367595911026001,True,True
+1662549541.1771224,8987,None,None,None,None,60.01290583610535,True,True
+1662549594.5847957,7544,grenade,grenade,none,none,8.035264253616333,True,True
+1662549624.9233236,7544,grenade,shoot,none,none,30.319538831710815,False,True
+1662549684.9391232,7544,None,None,None,None,60.00680494308472,True,True
+1662549707.5624406,7544,grenade,shoot,none,none,22.60533905029297,False,True
+1662549709.7215483,7544,grenade,reload,none,none,2.1521103382110596,False,True

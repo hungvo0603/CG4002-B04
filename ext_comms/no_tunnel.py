@@ -8,13 +8,12 @@ from Crypto import Random
 import threading
 import sys
 import base64
-import time
 import socket
 import json
 import os
 import dotenv
 
-# python client_remote.py 192.168.95.228 22 4 secret_key (16-digit)
+# python no_tunnel.py 127.0.0.1 1 4 1234567890123456 secret_key (16-digit)
 # p1 100 grenade 1 1 1 1 1 1
 
 # Player JSON format
@@ -174,7 +173,7 @@ if __name__ == '__main__':
     if len(sys.argv) != 5:
         print('[Client] Invalid number of arguments')
         print(
-            'python client_remote.py [IP address] [Port] [groupID] [secret key]')
+            'python no_tunnel.py [IP address] [Port] [groupID] [secret key]')
         sys.exit()
 
     ip_addr = sys.argv[1]
@@ -195,7 +194,6 @@ if __name__ == '__main__':
         my_client.send_data(player_num, hp, action, bullets, grenades,
                             shield_time, shield_health, num_deaths, num_shield)
         print("[Client] Sent data:", message)
-        time.sleep(2)
 
         # received data from eval_server is unencrypted
         my_client.receive_data(False)
