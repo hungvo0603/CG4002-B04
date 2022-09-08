@@ -7,18 +7,18 @@ using TMPro;
 public class StatisticsManager : MonoBehaviour
 {
     private const int MAX_HEALTH = 100;
-    private const int MAX_BULLET = 6;
+    // private const int MAX_BULLET = 6;
 
     [SerializeField] private TextMeshProUGUI player1HealthText;
-    [SerializeField] private TextMeshProUGUI player1BulletText;
+    // [SerializeField] private TextMeshProUGUI player1BulletText;
 
     int player1Health = 100;
-    int player1Bullet = 6;
+    // int player1Bullet = 6;
 
     void Start()
     {
         player1HealthText.text = "100%";
-        player1BulletText.text = "6/6";
+        // player1BulletText.text = "6/6";
     }
 
     public void HealthDownButtonPress() 
@@ -27,9 +27,9 @@ public class StatisticsManager : MonoBehaviour
         player1HealthText.text = player1Health.ToString() + "%";
     }
 
-    public void BulletDownButtonPress()
-    {
-        player1Bullet = (player1Bullet > 0) ? (player1Bullet - 1) : MAX_BULLET;
-        player1BulletText.text = player1Bullet.ToString() + "/6";
-    }
+    // public void BulletDownButtonPress()
+    // {
+    //     player1Bullet = (player1Bullet > 0) ? (player1Bullet - 1) : MAX_BULLET;
+    //     player1BulletText.text = player1Bullet.ToString() + "/6";
+    // }
 }
