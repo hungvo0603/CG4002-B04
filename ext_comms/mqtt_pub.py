@@ -1,10 +1,8 @@
 # Mqtt (publisher)
 
 import random
-import time
-
+import threading
 from paho.mqtt import client as mqtt_client
-
 
 broker = 'broker.emqx.io'  # Public broker
 port = 1883
@@ -15,40 +13,38 @@ client_id = f'python-mqtt-{random.randint(0, 1000)}'
 # password = 'public'
 
 
-def connect_mqtt():
-    def on_connect(client, userdata, flags, rc):
-        if rc == 0:
-            print("Connected to MQTT Broker!")
-        else:
-            print("Failed to connect, return code %d\n", rc)
+class Publisher(threading.Thread):
+    def __init__(self, topic, client_id):
+        super().__init__()
+        self.topic = topic
+        self.client_id = client_id
+        self.client = self.connect_mqtt()
 
-    client = mqtt_client.Client(client_id)
-#     client.username_pw_set(username, password)
-    client.on_connect = on_connect
-    client.connect(broker, port)
-    return client
+    def connect_mqtt(self):
+        def on_connect(client, broker, port, rc):
+            if rc == 0:
+                print("Connected to MQTT Broker!")
+            else:
+                print("Failed to connect, return code %d\n", rc)
 
+        client = mqtt_client.Client(self.client_id)
+    #     client.username_pw_set(username, password)
+        client.on_connect = on_connect
+        client.connect(broker, port)
+        return client
 
-def publish(client):
-    msg_count = 0
-    while True:
-        time.sleep(1)
-        msg = f"messages: {msg_count}"
-        result = client.publish(topic, msg)
-        # result: [0, 1]
+    def publish(self, message):
+        result = pub.client.publish(topic, message)
         status = result[0]
         if status == 0:
-            print(f"Send `{msg}` to topic `{topic}`")
+            print(f"Sent message [`{topic}`]: `{message}`")
         else:
             print(f"Failed to send message to topic {topic}")
-        msg_count += 1
-
-
-def run():
-    client = connect_mqtt()
-    client.loop_start()
-    publish(client)
 
 
 if __name__ == '__main__':
-    run()
+    pub = Publisher(topic, client_id)
+    message = ""
+    while message != "exit":
+        message = input("[Pub] Enter message to publish: ")
+        pub.publish(message)

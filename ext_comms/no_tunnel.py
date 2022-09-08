@@ -47,11 +47,11 @@ INITIAL_STATE = {
 }
 
 # Load environment variables
-dotenv.load_dotenv()
-XILINX_HOST = os.getenv('XILINX_HOST')
-SUNFIRE_USER = os.getenv('SUNFIRE_USER')
-SUNFIRE_PWD = os.getenv('SUNFIRE_PWD')
-SUNFIRE_HOST = 'sunfire-r.comp.nus.edu.sg'
+# dotenv.load_dotenv()
+# XILINX_HOST = os.getenv('XILINX_HOST')
+# SUNFIRE_USER = os.getenv('SUNFIRE_USER')
+# SUNFIRE_PWD = os.getenv('SUNFIRE_PWD')
+# SUNFIRE_HOST = 'sunfire-r.comp.nus.edu.sg'
 
 
 class Client(threading.Thread):
