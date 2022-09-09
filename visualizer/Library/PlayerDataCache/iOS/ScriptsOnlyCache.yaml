@@ -13,6 +13,15 @@ ScriptsOnlyBuild:
     - TMPro.TMP_SpriteAsset
     - TMPro.TMP_StyleSheet
     - TMPro.TextMeshProUGUI
+    UnityEditor.Graphs.dll:
+    - UnityEditor.Graphs.AnimationBlendTree.Graph
+    - UnityEditor.Graphs.AnimationBlendTree.GraphGUI
+    - UnityEditor.Graphs.AnimationStateMachine.AnimatorStateTransitionInspector
+    - UnityEditor.Graphs.AnimationStateMachine.AnyStateNode
+    - UnityEditor.Graphs.AnimationStateMachine.Graph
+    - UnityEditor.Graphs.AnimationStateMachine.GraphGUI
+    - UnityEditor.Graphs.AnimationStateMachine.StateNode
+    - UnityEditor.Graphs.AnimatorControllerTool
     UnityEditor.TestRunner.dll:
     - UnityEditor.TestTools.TestRunner.Api.CallbacksHolder
     - UnityEditor.TestTools.TestRunner.TestListCacheData
@@ -78,11 +87,11 @@ ScriptsOnlyBuild:
     - Vuforia.VuforiaConfiguration/WebCamConfiguration
   methodsToPreserve:
   - assembly: Assembly-CSharp
-    fullTypeName: StatisticsManager
-    methodName: HealthDownButtonPress
+    fullTypeName: ShootController
+    methodName: GunPress
   - assembly: Assembly-CSharp
     fullTypeName: StatisticsManager
-    methodName: BulletDownButtonPress
+    methodName: HealthDownButtonPress
   - assembly: Assembly-CSharp
     fullTypeName: BombExplosion
     methodName: ExplosionButtonPress
@@ -104,9 +113,15 @@ ScriptsOnlyBuild:
       Script: {instanceID: 0}
     - Class: 49
       Script: {instanceID: 0}
+    - Class: 74
+      Script: {instanceID: 0}
     - Class: 81
       Script: {instanceID: 0}
     - Class: 89
+      Script: {instanceID: 0}
+    - Class: 91
+      Script: {instanceID: 0}
+    - Class: 95
       Script: {instanceID: 0}
     - Class: 104
       Script: {instanceID: 0}
@@ -143,21 +158,21 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 4996}
     - Class: 114
-      Script: {instanceID: 5596}
+      Script: {instanceID: 5092}
     - Class: 114
-      Script: {instanceID: 5728}
+      Script: {instanceID: 5598}
     - Class: 114
-      Script: {instanceID: 5992}
+      Script: {instanceID: 5730}
     - Class: 114
-      Script: {instanceID: 6334}
+      Script: {instanceID: 5994}
     - Class: 114
-      Script: {instanceID: 6544}
+      Script: {instanceID: 6336}
     - Class: 114
-      Script: {instanceID: 6872}
+      Script: {instanceID: 6546}
     - Class: 114
-      Script: {instanceID: 8470}
+      Script: {instanceID: 6874}
     - Class: 114
-      Script: {instanceID: 25000}
+      Script: {instanceID: 8472}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -1671,6 +1686,12 @@ ScriptsOnlyBuild:
     className: CFX_AutoDestructShuriken
   - hash:
       serializedVersion: 2
+      Hash: 211f7d7ff4dbe5c418edd949f118271d
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: ShootController
+  - hash:
+      serializedVersion: 2
       Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
     assemblyName: Unity.VisualScripting.Core.dll
     namespaceName: Unity.VisualScripting
@@ -2751,7 +2772,7 @@ ScriptsOnlyBuild:
     className: UnityOnParticleCollisionMessageListener
   - hash:
       serializedVersion: 2
-      Hash: 0393728ee6b890eac32cd1f794befda0
+      Hash: 6a92060d6efe0ba257c3b9d4d322ada5
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: StatisticsManager
@@ -2827,13 +2848,7 @@ ScriptsOnlyBuild:
     assemblyName: Unity.VisualScripting.Core.dll
     namespaceName: Unity.VisualScripting
     className: UnityOnSliderValueChangedMessageListener
-  - hash:
-      serializedVersion: 2
-      Hash: 55530b746f48a3545221b3cec12a13cf
-    assemblyName: Assembly-CSharp.dll
-    namespaceName: 
-    className: ShootController
   platform: 9
   scenePathNames:
   - Assets/Scenes/MainScene.unity
-  playerPath: C:/Users/Hungggggg/NUSwork/Y4S1/CG4002/build-ios/build-ios-10
+  playerPath: C:/Users/Hungggggg/NUSwork/Y4S1/CG4002/build-ios/build-ios-2
