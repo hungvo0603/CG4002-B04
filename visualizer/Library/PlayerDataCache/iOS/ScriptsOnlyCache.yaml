@@ -3,8 +3,11 @@ ScriptsOnlyBuild:
     Assembly-CSharp.dll:
     - BombExplosion
     - CFX_AutoDestructShuriken
+    - HealthBarController
+    - Player
     - ShootController
     - StatisticsManager
+    - WeaponManager
     Unity.Rider.Editor.dll:
     - Packages.Rider.Editor.UnitTesting.CallbackData
     Unity.TextMeshPro.dll:
@@ -16,7 +19,6 @@ ScriptsOnlyBuild:
     UnityEditor.Graphs.dll:
     - UnityEditor.Graphs.AnimationBlendTree.Graph
     - UnityEditor.Graphs.AnimationBlendTree.GraphGUI
-    - UnityEditor.Graphs.AnimationStateMachine.AnimatorStateTransitionInspector
     - UnityEditor.Graphs.AnimationStateMachine.AnyStateNode
     - UnityEditor.Graphs.AnimationStateMachine.Graph
     - UnityEditor.Graphs.AnimationStateMachine.GraphGUI
@@ -33,6 +35,7 @@ ScriptsOnlyBuild:
     - UnityEngine.UI.CanvasScaler
     - UnityEngine.UI.GraphicRaycaster
     - UnityEngine.UI.Image
+    - UnityEngine.UI.Slider
     - UnityEngine.UI.Text
     Vuforia.Unity.Engine.dll:
     - Vuforia.ImageTargetBehaviour
@@ -75,6 +78,7 @@ ScriptsOnlyBuild:
     - UnityEngine.UI.FontData
     - UnityEngine.UI.MaskableGraphic/CullStateChangedEvent
     - UnityEngine.UI.Navigation
+    - UnityEngine.UI.Slider/SliderEvent
     - UnityEngine.UI.SpriteState
     Vuforia.Unity.Engine:
     - Vuforia.VuforiaConfiguration/DatabaseConfiguration
@@ -88,7 +92,10 @@ ScriptsOnlyBuild:
   methodsToPreserve:
   - assembly: Assembly-CSharp
     fullTypeName: ShootController
-    methodName: GunPress
+    methodName: GunShot
+  - assembly: Assembly-CSharp
+    fullTypeName: WeaponManager
+    methodName: PlayGunShotSound
   - assembly: Assembly-CSharp
     fullTypeName: StatisticsManager
     methodName: HealthDownButtonPress
@@ -116,6 +123,10 @@ ScriptsOnlyBuild:
     - Class: 74
       Script: {instanceID: 0}
     - Class: 81
+      Script: {instanceID: 0}
+    - Class: 82
+      Script: {instanceID: 0}
+    - Class: 83
       Script: {instanceID: 0}
     - Class: 89
       Script: {instanceID: 0}
@@ -162,6 +173,8 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 5598}
     - Class: 114
+      Script: {instanceID: 5638}
+    - Class: 114
       Script: {instanceID: 5730}
     - Class: 114
       Script: {instanceID: 5994}
@@ -173,6 +186,14 @@ ScriptsOnlyBuild:
       Script: {instanceID: 6874}
     - Class: 114
       Script: {instanceID: 8472}
+    - Class: 114
+      Script: {instanceID: 30440}
+    - Class: 114
+      Script: {instanceID: 32348}
+    - Class: 114
+      Script: {instanceID: 34924}
+    - Class: 114
+      Script: {instanceID: 34932}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -186,6 +207,8 @@ ScriptsOnlyBuild:
     - Class: 198
       Script: {instanceID: 0}
     - Class: 199
+      Script: {instanceID: 0}
+    - Class: 212
       Script: {instanceID: 0}
     - Class: 213
       Script: {instanceID: 0}
@@ -1686,7 +1709,7 @@ ScriptsOnlyBuild:
     className: CFX_AutoDestructShuriken
   - hash:
       serializedVersion: 2
-      Hash: 211f7d7ff4dbe5c418edd949f118271d
+      Hash: ada683bfa2a494db9d7b388a2cd15e84
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: ShootController
@@ -2848,7 +2871,25 @@ ScriptsOnlyBuild:
     assemblyName: Unity.VisualScripting.Core.dll
     namespaceName: Unity.VisualScripting
     className: UnityOnSliderValueChangedMessageListener
+  - hash:
+      serializedVersion: 2
+      Hash: 6d9d77a9488a636401f3d28db530d48a
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: WeaponManager
+  - hash:
+      serializedVersion: 2
+      Hash: 1028c39545bcfa841aaab54121e69a47
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: HealthBarController
+  - hash:
+      serializedVersion: 2
+      Hash: ecac690f62ee2934129f973227e7f10f
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: Player
   platform: 9
   scenePathNames:
   - Assets/Scenes/MainScene.unity
-  playerPath: C:/Users/Hungggggg/NUSwork/Y4S1/CG4002/build-ios/build-ios-2
+  playerPath: C:/Users/Hungggggg/NUSwork/Y4S1/CG4002/build-ios/build-ios-5

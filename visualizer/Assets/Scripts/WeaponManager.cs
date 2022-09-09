@@ -7,7 +7,7 @@ public class WeaponManager : MonoBehaviour
     // Start is called before the first frame update
     public AudioSource gunShotSound;
 
-    public void playGunShotSound() {
+    public void PlayGunShotSound() {
         gunShotSound.Play();
     }
 }

@@ -8,6 +8,8 @@ public class ShootController : MonoBehaviour
 {
     private const int MAX_BULLET = 6;
 
+    public Player player1;
+
 
     [SerializeField] private TextMeshProUGUI player1BulletText;
 
@@ -19,10 +21,11 @@ public class ShootController : MonoBehaviour
         player1BulletText.text = "6/6";
     }
 
-    public void GunPress()
+    public void GunShot()
     {
         player1Bullet = (player1Bullet > 0) ? (player1Bullet - 1) : MAX_BULLET;
         player1BulletText.text = player1Bullet.ToString() + "/6";
+        player1.TakeDamageFromShot();
     }
 
 }
