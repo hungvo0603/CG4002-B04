@@ -11,3 +11,9 @@ timestamp,id,p1_action,gt_p1_action,p2_action,gt_p2_action,response_time,is_p1_a
 1662549684.9391232,7544,None,None,None,None,60.00680494308472,True,True
 1662549707.5624406,7544,grenade,shoot,none,none,22.60533905029297,False,True
 1662549709.7215483,7544,grenade,reload,none,none,2.1521103382110596,False,True
+1662549926.30256,9729,reload,reload,none,none,7.225109100341797,True,True
+1662600176.2445512,5681,grenade,shield,none,none,27.800016164779663,False,True
+1662600236.2721596,5681,None,None,None,None,60.006619930267334,True,True
+1662600253.2293315,5681,logout,shoot,none,none,16.945177793502808,False,True
+1662600400.7238472,8824,grenade,shoot,none,none,6.952021837234497,False,True
+1662600427.1647148,8824,logout,reload,none,none,26.384897232055664,False,True
