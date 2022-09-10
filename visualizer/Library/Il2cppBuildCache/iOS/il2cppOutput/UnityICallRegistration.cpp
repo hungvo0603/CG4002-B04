@@ -1130,6 +1130,10 @@ void RegisterAllStrippedInternalCalls()
 		void Register_UnityEngine_Gradient_Cleanup();
 		Register_UnityEngine_Gradient_Cleanup();
 
+		//System.Void UnityEngine.Gradient::Evaluate_Injected(System.Single,UnityEngine.Color&)
+		void Register_UnityEngine_Gradient_Evaluate_Injected();
+		Register_UnityEngine_Gradient_Evaluate_Injected();
+
 	//End Registrations for type : UnityEngine.Gradient
 
 	//Start Registrations for type : UnityEngine.Graphics

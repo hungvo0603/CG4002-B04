@@ -177,6 +177,8 @@ struct FontData_tB8E562846C6CB59C43260F69AE346B9BF3157224;
 struct GUILayoutOption_t8B0AA056521747053A3176FCC43E9C3608940A14;
 // UnityEngine.GameObject
 struct GameObject_t76FEDD663AB33C991A9C9A23129337651094216F;
+// UnityEngine.Gradient
+struct Gradient_tA7FEBE2FDB4929FFF6C997134841046F713DAC1E;
 // UnityEngine.UI.Graphic
 struct Graphic_tCBFCA4585A19E2B75465AECFEAC43F4016BF7931;
 // Grenade
@@ -1521,6 +1523,23 @@ struct Extents_tA2D2F95811D0A18CB7AC3570D2D8F8CD3AF4C4A8_StaticFields
 	Extents_tA2D2F95811D0A18CB7AC3570D2D8F8CD3AF4C4A8 ___uninitialized_1;
 };
 
+// UnityEngine.Gradient
+struct Gradient_tA7FEBE2FDB4929FFF6C997134841046F713DAC1E  : public RuntimeObject
+{
+	// System.IntPtr UnityEngine.Gradient::m_Ptr
+	intptr_t ___m_Ptr_0;
+};
+// Native definition for P/Invoke marshalling of UnityEngine.Gradient
+struct Gradient_tA7FEBE2FDB4929FFF6C997134841046F713DAC1E_marshaled_pinvoke
+{
+	intptr_t ___m_Ptr_0;
+};
+// Native definition for COM marshalling of UnityEngine.Gradient
+struct Gradient_tA7FEBE2FDB4929FFF6C997134841046F713DAC1E_marshaled_com
+{
+	intptr_t ___m_Ptr_0;
+};
+
 // TMPro.HighlightState
 struct HighlightState_tE4F50287E5E2E91D42AB77DEA281D88D3AD6A28B 
 {
@@ -2227,15 +2246,23 @@ struct HealthBarController_tFA96A066CD36EF363D3771F26E0BE6BFC2FDC848  : public M
 {
 	// UnityEngine.UI.Slider HealthBarController::slider
 	Slider_t87EA570E3D6556CABF57456C2F3873FFD86E652F* ___slider_4;
+	// UnityEngine.Gradient HealthBarController::gradient
+	Gradient_tA7FEBE2FDB4929FFF6C997134841046F713DAC1E* ___gradient_5;
+	// UnityEngine.UI.Image HealthBarController::fill
+	Image_tBC1D03F63BF71132E9A5E472B8742F172A011E7E* ___fill_6;
 };
 
 // Player
 struct Player_tF98BD09D3495D2FF1922E5D34866AEAC6AE2DF74  : public MonoBehaviour_t532A11E69716D348D8AA7F854AFCBFCB8AD17F71
 {
-	// HealthBarController Player::healthBar
-	HealthBarController_tFA96A066CD36EF363D3771F26E0BE6BFC2FDC848* ___healthBar_6;
-	// System.Int32 Player::playerCurrentHealth
-	int32_t ___playerCurrentHealth_7;
+	// HealthBarController Player::healthBarPlayer1
+	HealthBarController_tFA96A066CD36EF363D3771F26E0BE6BFC2FDC848* ___healthBarPlayer1_7;
+	// HealthBarController Player::healthBarPlayer2
+	HealthBarController_tFA96A066CD36EF363D3771F26E0BE6BFC2FDC848* ___healthBarPlayer2_8;
+	// System.Int32 Player::player1CurrentHealth
+	int32_t ___player1CurrentHealth_9;
+	// System.Int32 Player::player2CurrentHealth
+	int32_t ___player2CurrentHealth_10;
 };
 
 // ShootController
@@ -2243,10 +2270,12 @@ struct ShootController_t0E03774116F4ADAC3D3E3A3D6A8F86B1D32151A6  : public MonoB
 {
 	// Player ShootController::player1
 	Player_tF98BD09D3495D2FF1922E5D34866AEAC6AE2DF74* ___player1_5;
+	// Player ShootController::player2
+	Player_tF98BD09D3495D2FF1922E5D34866AEAC6AE2DF74* ___player2_6;
 	// TMPro.TextMeshProUGUI ShootController::player1BulletText
-	TextMeshProUGUI_t101091AF4B578BB534C92E9D1EEAF0611636D957* ___player1BulletText_6;
+	TextMeshProUGUI_t101091AF4B578BB534C92E9D1EEAF0611636D957* ___player1BulletText_7;
 	// System.Int32 ShootController::player1Bullet
-	int32_t ___player1Bullet_7;
+	int32_t ___player1Bullet_8;
 };
 
 // StatisticsManager
@@ -4191,10 +4220,14 @@ inline Rigidbody_t268697F5A994213ED97393309870968BC1C7393C* GameObject_GetCompon
 {
 	return ((  Rigidbody_t268697F5A994213ED97393309870968BC1C7393C* (*) (GameObject_t76FEDD663AB33C991A9C9A23129337651094216F*, const RuntimeMethod*))GameObject_GetComponent_TisRuntimeObject_m6EAED4AA356F0F48288F67899E5958792395563B_gshared)(__this, method);
 }
+// System.Single UnityEngine.UI.Slider::get_normalizedValue()
+IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR float Slider_get_normalizedValue_mC839197322275EF1318B6E49B7573FDB30F74D83 (Slider_t87EA570E3D6556CABF57456C2F3873FFD86E652F* __this, const RuntimeMethod* method) ;
+// UnityEngine.Color UnityEngine.Gradient::Evaluate(System.Single)
+IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR Color_tD001788D726C3A7F1379BEED0260B9591F440C1F Gradient_Evaluate_m332A32F48EA3F884CB55D74131DF8064F29F9C32 (Gradient_tA7FEBE2FDB4929FFF6C997134841046F713DAC1E* __this, float ___time0, const RuntimeMethod* method) ;
 // System.Void HealthBarController::SetHealth(System.Int32)
 IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void HealthBarController_SetHealth_mCBEADAD13F45906B3CEA93F83422D3E9F6CBF6DC (HealthBarController_tFA96A066CD36EF363D3771F26E0BE6BFC2FDC848* __this, int32_t ___health0, const RuntimeMethod* method) ;
-// System.Void Player::TakeDamageFromShot()
-IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void Player_TakeDamageFromShot_m63DB00603112A51FA98724C78508351784BA14E9 (Player_tF98BD09D3495D2FF1922E5D34866AEAC6AE2DF74* __this, const RuntimeMethod* method) ;
+// System.Void Player::TakeDamageFromShotPlayer2()
+IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void Player_TakeDamageFromShotPlayer2_mB68FDC3E870987CC3B42DAB2EC754B5D4014AEB2 (Player_tF98BD09D3495D2FF1922E5D34866AEAC6AE2DF74* __this, const RuntimeMethod* method) ;
 // System.Void UnityEngine.AudioSource::Play()
 IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void AudioSource_Play_m95DF07111C61D0E0F00257A00384D31531D590C3 (AudioSource_t871AC2272F896738252F04EE949AEF5B241D3299* __this, const RuntimeMethod* method) ;
 // System.Void UnityEngine.ScriptableObject::.ctor()
@@ -11771,6 +11804,18 @@ IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void HealthBarController_SetHealth_mCBEADAD13
 		int32_t L_1 = ___health0;
 		NullCheck(L_0);
 		VirtualActionInvoker1< float >::Invoke(47 /* System.Void UnityEngine.UI.Slider::set_value(System.Single) */, L_0, ((float)((int32_t)(L_1/((int32_t)10)))));
+		// fill.color = gradient.Evaluate(slider.normalizedValue);
+		Image_tBC1D03F63BF71132E9A5E472B8742F172A011E7E* L_2 = __this->___fill_6;
+		Gradient_tA7FEBE2FDB4929FFF6C997134841046F713DAC1E* L_3 = __this->___gradient_5;
+		Slider_t87EA570E3D6556CABF57456C2F3873FFD86E652F* L_4 = __this->___slider_4;
+		NullCheck(L_4);
+		float L_5;
+		L_5 = Slider_get_normalizedValue_mC839197322275EF1318B6E49B7573FDB30F74D83(L_4, NULL);
+		NullCheck(L_3);
+		Color_tD001788D726C3A7F1379BEED0260B9591F440C1F L_6;
+		L_6 = Gradient_Evaluate_m332A32F48EA3F884CB55D74131DF8064F29F9C32(L_3, L_5, NULL);
+		NullCheck(L_2);
+		VirtualActionInvoker1< Color_tD001788D726C3A7F1379BEED0260B9591F440C1F >::Invoke(23 /* System.Void UnityEngine.UI.Graphic::set_color(UnityEngine.Color) */, L_2, L_6);
 		// }
 		return;
 	}
@@ -11795,12 +11840,18 @@ IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void HealthBarController__ctor_mC49562983F5F7
 IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void Player_Start_mC31CF4F40DDEA35C5E39E8C43EC37284AE7C453D (Player_tF98BD09D3495D2FF1922E5D34866AEAC6AE2DF74* __this, const RuntimeMethod* method) 
 {
 	{
-		// playerCurrentHealth = MAX_HEALTH;
-		__this->___playerCurrentHealth_7 = ((int32_t)100);
-		// healthBar.SetHealth(MAX_HEALTH);
-		HealthBarController_tFA96A066CD36EF363D3771F26E0BE6BFC2FDC848* L_0 = __this->___healthBar_6;
+		// player1CurrentHealth = MAX_HEALTH;
+		__this->___player1CurrentHealth_9 = ((int32_t)100);
+		// healthBarPlayer1.SetHealth(MAX_HEALTH);
+		HealthBarController_tFA96A066CD36EF363D3771F26E0BE6BFC2FDC848* L_0 = __this->___healthBarPlayer1_7;
 		NullCheck(L_0);
 		HealthBarController_SetHealth_mCBEADAD13F45906B3CEA93F83422D3E9F6CBF6DC(L_0, ((int32_t)100), NULL);
+		// player2CurrentHealth = MAX_HEALTH;
+		__this->___player2CurrentHealth_10 = ((int32_t)100);
+		// healthBarPlayer2.SetHealth(MAX_HEALTH);
+		HealthBarController_tFA96A066CD36EF363D3771F26E0BE6BFC2FDC848* L_1 = __this->___healthBarPlayer2_8;
+		NullCheck(L_1);
+		HealthBarController_SetHealth_mCBEADAD13F45906B3CEA93F83422D3E9F6CBF6DC(L_1, ((int32_t)100), NULL);
 		// }
 		return;
 	}
@@ -11813,18 +11864,68 @@ IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void Player_Update_m95E134A5EF1B5164EA281F61D
 		return;
 	}
 }
-// System.Void Player::TakeDamageFromShot()
-IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void Player_TakeDamageFromShot_m63DB00603112A51FA98724C78508351784BA14E9 (Player_tF98BD09D3495D2FF1922E5D34866AEAC6AE2DF74* __this, const RuntimeMethod* method) 
+// System.Void Player::TakeDamageFromShotPlayer1()
+IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void Player_TakeDamageFromShotPlayer1_m6F354B55F36048A00658B0B4E32FE77F4094B483 (Player_tF98BD09D3495D2FF1922E5D34866AEAC6AE2DF74* __this, const RuntimeMethod* method) 
 {
 	{
-		// playerCurrentHealth -= SHOT_DAMAGE;
-		int32_t L_0 = __this->___playerCurrentHealth_7;
-		__this->___playerCurrentHealth_7 = ((int32_t)il2cpp_codegen_subtract(L_0, ((int32_t)10)));
-		// healthBar.SetHealth(playerCurrentHealth);
-		HealthBarController_tFA96A066CD36EF363D3771F26E0BE6BFC2FDC848* L_1 = __this->___healthBar_6;
-		int32_t L_2 = __this->___playerCurrentHealth_7;
-		NullCheck(L_1);
-		HealthBarController_SetHealth_mCBEADAD13F45906B3CEA93F83422D3E9F6CBF6DC(L_1, L_2, NULL);
+		// player1CurrentHealth -= SHOT_DAMAGE;
+		int32_t L_0 = __this->___player1CurrentHealth_9;
+		__this->___player1CurrentHealth_9 = ((int32_t)il2cpp_codegen_subtract(L_0, ((int32_t)10)));
+		// if (player1CurrentHealth <= 0)
+		int32_t L_1 = __this->___player1CurrentHealth_9;
+		if ((((int32_t)L_1) > ((int32_t)0)))
+		{
+			goto IL_0026;
+		}
+	}
+	{
+		// healthBarPlayer1.SetHealth(MAX_HEALTH);
+		HealthBarController_tFA96A066CD36EF363D3771F26E0BE6BFC2FDC848* L_2 = __this->___healthBarPlayer1_7;
+		NullCheck(L_2);
+		HealthBarController_SetHealth_mCBEADAD13F45906B3CEA93F83422D3E9F6CBF6DC(L_2, ((int32_t)100), NULL);
+		return;
+	}
+
+IL_0026:
+	{
+		// healthBarPlayer1.SetHealth(player1CurrentHealth);
+		HealthBarController_tFA96A066CD36EF363D3771F26E0BE6BFC2FDC848* L_3 = __this->___healthBarPlayer1_7;
+		int32_t L_4 = __this->___player1CurrentHealth_9;
+		NullCheck(L_3);
+		HealthBarController_SetHealth_mCBEADAD13F45906B3CEA93F83422D3E9F6CBF6DC(L_3, L_4, NULL);
+		// }
+		return;
+	}
+}
+// System.Void Player::TakeDamageFromShotPlayer2()
+IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void Player_TakeDamageFromShotPlayer2_mB68FDC3E870987CC3B42DAB2EC754B5D4014AEB2 (Player_tF98BD09D3495D2FF1922E5D34866AEAC6AE2DF74* __this, const RuntimeMethod* method) 
+{
+	{
+		// player2CurrentHealth -= SHOT_DAMAGE;
+		int32_t L_0 = __this->___player2CurrentHealth_10;
+		__this->___player2CurrentHealth_10 = ((int32_t)il2cpp_codegen_subtract(L_0, ((int32_t)10)));
+		// if (player2CurrentHealth <= 0)
+		int32_t L_1 = __this->___player2CurrentHealth_10;
+		if ((((int32_t)L_1) > ((int32_t)0)))
+		{
+			goto IL_0026;
+		}
+	}
+	{
+		// healthBarPlayer2.SetHealth(MAX_HEALTH);
+		HealthBarController_tFA96A066CD36EF363D3771F26E0BE6BFC2FDC848* L_2 = __this->___healthBarPlayer2_8;
+		NullCheck(L_2);
+		HealthBarController_SetHealth_mCBEADAD13F45906B3CEA93F83422D3E9F6CBF6DC(L_2, ((int32_t)100), NULL);
+		return;
+	}
+
+IL_0026:
+	{
+		// healthBarPlayer2.SetHealth(player2CurrentHealth);
+		HealthBarController_tFA96A066CD36EF363D3771F26E0BE6BFC2FDC848* L_3 = __this->___healthBarPlayer2_8;
+		int32_t L_4 = __this->___player2CurrentHealth_10;
+		NullCheck(L_3);
+		HealthBarController_SetHealth_mCBEADAD13F45906B3CEA93F83422D3E9F6CBF6DC(L_3, L_4, NULL);
 		// }
 		return;
 	}
@@ -11856,7 +11957,7 @@ IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void ShootController_Start_mA20C52B5BE2C46630
 	}
 	{
 		// player1BulletText.text = "6/6";
-		TextMeshProUGUI_t101091AF4B578BB534C92E9D1EEAF0611636D957* L_0 = __this->___player1BulletText_6;
+		TextMeshProUGUI_t101091AF4B578BB534C92E9D1EEAF0611636D957* L_0 = __this->___player1BulletText_7;
 		NullCheck(L_0);
 		VirtualActionInvoker1< String_t* >::Invoke(66 /* System.Void TMPro.TMP_Text::set_text(System.String) */, L_0, _stringLiteralEF67C4C5CFC57C4ED1915754B5847B87E07064CB);
 		// }
@@ -11878,7 +11979,7 @@ IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void ShootController_GunShot_m0F71B7B2735864E
 	ShootController_t0E03774116F4ADAC3D3E3A3D6A8F86B1D32151A6* G_B3_1 = NULL;
 	{
 		// player1Bullet = (player1Bullet > 0) ? (player1Bullet - 1) : MAX_BULLET;
-		int32_t L_0 = __this->___player1Bullet_7;
+		int32_t L_0 = __this->___player1Bullet_8;
 		G_B1_0 = __this;
 		if ((((int32_t)L_0) > ((int32_t)0)))
 		{
@@ -11894,7 +11995,7 @@ IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void ShootController_GunShot_m0F71B7B2735864E
 
 IL_000d:
 	{
-		int32_t L_1 = __this->___player1Bullet_7;
+		int32_t L_1 = __this->___player1Bullet_8;
 		G_B3_0 = ((int32_t)il2cpp_codegen_subtract(L_1, 1));
 		G_B3_1 = G_B2_0;
 	}
@@ -11902,20 +12003,20 @@ IL_000d:
 IL_0015:
 	{
 		NullCheck(G_B3_1);
-		G_B3_1->___player1Bullet_7 = G_B3_0;
+		G_B3_1->___player1Bullet_8 = G_B3_0;
 		// player1BulletText.text = player1Bullet.ToString() + "/6";
-		TextMeshProUGUI_t101091AF4B578BB534C92E9D1EEAF0611636D957* L_2 = __this->___player1BulletText_6;
-		int32_t* L_3 = (&__this->___player1Bullet_7);
+		TextMeshProUGUI_t101091AF4B578BB534C92E9D1EEAF0611636D957* L_2 = __this->___player1BulletText_7;
+		int32_t* L_3 = (&__this->___player1Bullet_8);
 		String_t* L_4;
 		L_4 = Int32_ToString_m030E01C24E294D6762FB0B6F37CB541581F55CA5(L_3, NULL);
 		String_t* L_5;
 		L_5 = String_Concat_m9E3155FB84015C823606188F53B47CB44C444991(L_4, _stringLiteral8B9EAEB193AB4BD065CC3F5BC604FF7ABD6FE1E5, NULL);
 		NullCheck(L_2);
 		VirtualActionInvoker1< String_t* >::Invoke(66 /* System.Void TMPro.TMP_Text::set_text(System.String) */, L_2, L_5);
-		// player1.TakeDamageFromShot();
-		Player_tF98BD09D3495D2FF1922E5D34866AEAC6AE2DF74* L_6 = __this->___player1_5;
+		// player2.TakeDamageFromShotPlayer2();
+		Player_tF98BD09D3495D2FF1922E5D34866AEAC6AE2DF74* L_6 = __this->___player2_6;
 		NullCheck(L_6);
-		Player_TakeDamageFromShot_m63DB00603112A51FA98724C78508351784BA14E9(L_6, NULL);
+		Player_TakeDamageFromShotPlayer2_mB68FDC3E870987CC3B42DAB2EC754B5D4014AEB2(L_6, NULL);
 		// }
 		return;
 	}
@@ -11925,7 +12026,7 @@ IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void ShootController__ctor_mDF9AEE5CE1F84BB69
 {
 	{
 		// int player1Bullet = 6;
-		__this->___player1Bullet_7 = 6;
+		__this->___player1Bullet_8 = 6;
 		MonoBehaviour__ctor_m592DB0105CA0BC97AA1C5F4AD27B12D68A3B7C1E(__this, NULL);
 		return;
 	}

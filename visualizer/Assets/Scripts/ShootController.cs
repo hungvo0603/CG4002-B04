@@ -9,6 +9,7 @@ public class ShootController : MonoBehaviour
     private const int MAX_BULLET = 6;
 
     public Player player1;
+    public Player player2;
 
 
     [SerializeField] private TextMeshProUGUI player1BulletText;
@@ -25,7 +26,7 @@ public class ShootController : MonoBehaviour
     {
         player1Bullet = (player1Bullet > 0) ? (player1Bullet - 1) : MAX_BULLET;
         player1BulletText.text = player1Bullet.ToString() + "/6";
-        player1.TakeDamageFromShot();
+        player2.TakeDamageFromShotPlayer2();
     }
 
 }

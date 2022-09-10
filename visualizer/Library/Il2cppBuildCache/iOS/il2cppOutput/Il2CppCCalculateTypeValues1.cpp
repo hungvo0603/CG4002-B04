@@ -566,6 +566,8 @@ struct GameObject_t76FEDD663AB33C991A9C9A23129337651094216F;
 struct GenericStack_t1FB49AB7D847C97ABAA97AB232CA416CABD24C49;
 // UnityEngine.TextCore.Glyph
 struct Glyph_t700CF8EBE04ED4AEAB520885AAA1B309E02A103F;
+// UnityEngine.Gradient
+struct Gradient_tA7FEBE2FDB4929FFF6C997134841046F713DAC1E;
 // UnityEngine.UI.Graphic
 struct Graphic_tCBFCA4585A19E2B75465AECFEAC43F4016BF7931;
 // HealthBarController
@@ -14870,15 +14872,23 @@ struct HealthBarController_tFA96A066CD36EF363D3771F26E0BE6BFC2FDC848  : public M
 {
 	// UnityEngine.UI.Slider HealthBarController::slider
 	Slider_t87EA570E3D6556CABF57456C2F3873FFD86E652F* ___slider_4;
+	// UnityEngine.Gradient HealthBarController::gradient
+	Gradient_tA7FEBE2FDB4929FFF6C997134841046F713DAC1E* ___gradient_5;
+	// UnityEngine.UI.Image HealthBarController::fill
+	Image_tBC1D03F63BF71132E9A5E472B8742F172A011E7E* ___fill_6;
 };
 
 // Player
 struct Player_tF98BD09D3495D2FF1922E5D34866AEAC6AE2DF74  : public MonoBehaviour_t532A11E69716D348D8AA7F854AFCBFCB8AD17F71
 {
-	// HealthBarController Player::healthBar
-	HealthBarController_tFA96A066CD36EF363D3771F26E0BE6BFC2FDC848* ___healthBar_6;
-	// System.Int32 Player::playerCurrentHealth
-	int32_t ___playerCurrentHealth_7;
+	// HealthBarController Player::healthBarPlayer1
+	HealthBarController_tFA96A066CD36EF363D3771F26E0BE6BFC2FDC848* ___healthBarPlayer1_7;
+	// HealthBarController Player::healthBarPlayer2
+	HealthBarController_tFA96A066CD36EF363D3771F26E0BE6BFC2FDC848* ___healthBarPlayer2_8;
+	// System.Int32 Player::player1CurrentHealth
+	int32_t ___player1CurrentHealth_9;
+	// System.Int32 Player::player2CurrentHealth
+	int32_t ___player2CurrentHealth_10;
 };
 
 // ShootController
@@ -14886,10 +14896,12 @@ struct ShootController_t0E03774116F4ADAC3D3E3A3D6A8F86B1D32151A6  : public MonoB
 {
 	// Player ShootController::player1
 	Player_tF98BD09D3495D2FF1922E5D34866AEAC6AE2DF74* ___player1_5;
+	// Player ShootController::player2
+	Player_tF98BD09D3495D2FF1922E5D34866AEAC6AE2DF74* ___player2_6;
 	// TMPro.TextMeshProUGUI ShootController::player1BulletText
-	TextMeshProUGUI_t101091AF4B578BB534C92E9D1EEAF0611636D957* ___player1BulletText_6;
+	TextMeshProUGUI_t101091AF4B578BB534C92E9D1EEAF0611636D957* ___player1BulletText_7;
 	// System.Int32 ShootController::player1Bullet
-	int32_t ___player1Bullet_7;
+	int32_t ___player1Bullet_8;
 };
 
 // StatisticsManager
