@@ -13,7 +13,7 @@ import json
 import os
 import dotenv
 
-# python no_tunnel.py 127.0.0.1 1 4 1234567890123456 secret_key (16-digit)
+# python laptop_u96.py 127.0.0.1 1 4 1234567890123456 secret_key (16-digit)
 # p1 100 grenade 1 1 1 1 1 1
 
 # Player JSON format
@@ -47,11 +47,11 @@ INITIAL_STATE = {
 }
 
 # Load environment variables
-# dotenv.load_dotenv()
-# XILINX_HOST = os.getenv('XILINX_HOST')
-# SUNFIRE_USER = os.getenv('SUNFIRE_USER')
-# SUNFIRE_PWD = os.getenv('SUNFIRE_PWD')
-# SUNFIRE_HOST = 'sunfire-r.comp.nus.edu.sg'
+dotenv.load_dotenv()
+XILINX_HOST = os.getenv('XILINX_HOST')
+SUNFIRE_USER = os.getenv('SUNFIRE_USER')
+SUNFIRE_PWD = os.getenv('SUNFIRE_PWD')
+SUNFIRE_HOST = 'sunfire-r.comp.nus.edu.sg'
 
 
 class Client(threading.Thread):
@@ -64,20 +64,6 @@ class Client(threading.Thread):
 
         self.conn.connect(self.dest_address)
         print("[Client] Connection established to:", self.dest_address)
-
-    # def create_tunnel(self, ssh_address, local_address, ssh_username, ssh_password):
-    #     # Connection from laptop to ultra96
-    #     self.tunnel = sshtunnel.open_tunnel(
-    #         ssh_address_or_host=ssh_address,  # gateway addr
-    #         remote_bind_address=self.dest_address,
-    #         local_bind_address=local_address,
-    #         ssh_username=ssh_username,
-    #         ssh_password=ssh_password
-    #     )
-    #     self.tunnel.start()
-    #     self.tunnel.check_tunnels()
-    #     print(self.tunnel.tunnel_is_up, flush=True)
-    #     print("[Client] Tunnel established to:", self.dest_address)
 
     def jsonify_state(self, player_num, hp, action, bullets, grenades, shield_time, shield_health, num_deaths, num_shield):
         curr_state[player_num] = {
@@ -95,17 +81,17 @@ class Client(threading.Thread):
     def end_client_connection(self):
         self.conn.close()
 
-    def encrypt_message(self, message):
-        print("[Client] message:", message)
-        # AES.block_size = 16 (default)
-        # padding with 0x02 (start of text)
-        padded_msg = pad(bytes(message, "utf8"), AES.block_size)
-        iv = Random.new().read(AES.block_size)  # generate iv
-        aes_key = bytes(str(self.secret_key), encoding="utf8")
-        cipher = AES.new(aes_key, AES.MODE_CBC, iv)
-        encrypted_text = base64.b64encode(
-            iv + cipher.encrypt(padded_msg))  # encode with AES-128
-        return encrypted_text
+    # def encrypt_message(self, message):
+    #     print("[Client] message:", message)
+    #     # AES.block_size = 16 (default)
+    #     # padding with 0x02 (start of text)
+    #     padded_msg = pad(bytes(message, "utf8"), AES.block_size)
+    #     iv = Random.new().read(AES.block_size)  # generate iv
+    #     aes_key = bytes(str(self.secret_key), encoding="utf8")
+    #     cipher = AES.new(aes_key, AES.MODE_CBC, iv)
+    #     encrypted_text = base64.b64encode(
+    #         iv + cipher.encrypt(padded_msg))  # encode with AES-128
+    #     return encrypted_text
 
     def send_data(self, player_num, hp, action, bullets, grenades, shield_time, shield_health, num_deaths, num_shield):
         message = self.jsonify_state(

@@ -9,7 +9,7 @@ import socket
 import json
 
 # python client_local.py localhost 1234 4 secret_key (16-digit)
-# p1 grenade 1 1 1 1 1 1
+# p1 100 grenade 1 1 1 1 1 1
 
 # Player JSON format
 # {
