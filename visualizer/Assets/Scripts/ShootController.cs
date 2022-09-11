@@ -12,20 +12,17 @@ public class ShootController : MonoBehaviour
     public Player player2;
 
 
-    [SerializeField] private TextMeshProUGUI player1BulletText;
-
-    int player1Bullet = 6;
+    int player1Bullet;
 
     // Start is called before the first frame update
     void Start()
     {
-        player1BulletText.text = "6/6";
+        player1Bullet = MAX_BULLET;
     }
 
     public void GunShot()
     {
         player1Bullet = (player1Bullet > 0) ? (player1Bullet - 1) : MAX_BULLET;
-        player1BulletText.text = player1Bullet.ToString() + "/6";
         player2.TakeDamageFromShotPlayer2();
     }
 

@@ -276,8 +276,8 @@ extern void Player__ctor_m0A83E0706592FC871B0CF188B37AFC6649F3D85D (void);
 extern void ShieldCountdown_Start_m3300B919D68ADC7E42A1C924BAF8E538AB089894 (void);
 // 0x00000084 System.Void ShieldCountdown::Update()
 extern void ShieldCountdown_Update_m38DD222DA46184464AF74C512BFCF3A8D2A3FC76 (void);
-// 0x00000085 System.Void ShieldCountdown::ActivateShield()
-extern void ShieldCountdown_ActivateShield_m72D19F516E9E738AF9AF730AB910CEC3C44CEFB5 (void);
+// 0x00000085 System.Void ShieldCountdown::ActivateShieldPlayer1()
+extern void ShieldCountdown_ActivateShieldPlayer1_mCACC1E0CE18343E564B456D3D037FE41C494E04F (void);
 // 0x00000086 System.Void ShieldCountdown::.ctor()
 extern void ShieldCountdown__ctor_m2731C3B2183BA500E7059762D992FDB921B58446 (void);
 // 0x00000087 System.Void ShieldDisplay::Start()
@@ -440,7 +440,7 @@ static Il2CppMethodPointer s_methodPointers[147] =
 	Player__ctor_m0A83E0706592FC871B0CF188B37AFC6649F3D85D,
 	ShieldCountdown_Start_m3300B919D68ADC7E42A1C924BAF8E538AB089894,
 	ShieldCountdown_Update_m38DD222DA46184464AF74C512BFCF3A8D2A3FC76,
-	ShieldCountdown_ActivateShield_m72D19F516E9E738AF9AF730AB910CEC3C44CEFB5,
+	ShieldCountdown_ActivateShieldPlayer1_mCACC1E0CE18343E564B456D3D037FE41C494E04F,
 	ShieldCountdown__ctor_m2731C3B2183BA500E7059762D992FDB921B58446,
 	ShieldDisplay_Start_m6EB66C2071A99A7806AB75029EA288D738DDEF93,
 	ShieldDisplay_Update_m9B402663F072293FD09626957F4A7DF26C16748D,
