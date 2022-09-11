@@ -12,7 +12,7 @@ public class ShootController : MonoBehaviour
     public Player player2;
 
 
-    int player1Bullet;
+    public int player1Bullet;
 
     // Start is called before the first frame update
     void Start()
@@ -20,9 +20,17 @@ public class ShootController : MonoBehaviour
         player1Bullet = MAX_BULLET;
     }
 
+    void Update()
+    {
+        if (player1Bullet == 0)
+        {
+            player1Bullet = MAX_BULLET;
+        }
+    }
+
     public void GunShot()
     {
-        player1Bullet = (player1Bullet > 0) ? (player1Bullet - 1) : MAX_BULLET;
+        player1Bullet -= 1;
         player2.TakeDamageFromShotPlayer2();
     }
 

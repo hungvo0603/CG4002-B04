@@ -668,6 +668,8 @@ GameObject:
   - component: {fileID: 429989562}
   - component: {fileID: 429989564}
   - component: {fileID: 429989563}
+  - component: {fileID: 429989565}
+  - component: {fileID: 429989566}
   m_Layer: 5
   m_Name: Grenade
   m_TagString: Untagged
@@ -733,6 +735,40 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 429989561}
   m_CullTransparentMesh: 1
+--- !u!95 &429989565
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 429989561}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 02b80f98f4c43e14f97bcec5ddb4060c, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &429989566
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 429989561}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a63b486ba755384c942dc45a5a047d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  launchGrenade: {fileID: 1826213843}
+  gc: {fileID: 1826213846}
 --- !u!1 &464489895
 GameObject:
   m_ObjectHideFlags: 0
@@ -744,6 +780,8 @@ GameObject:
   - component: {fileID: 464489896}
   - component: {fileID: 464489898}
   - component: {fileID: 464489897}
+  - component: {fileID: 464489900}
+  - component: {fileID: 464489901}
   m_Layer: 5
   m_Name: Grenade (1)
   m_TagString: Untagged
@@ -809,6 +847,40 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 464489895}
   m_CullTransparentMesh: 1
+--- !u!95 &464489900
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 464489895}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: bb70dd7165998e74d84105ff28721370, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &464489901
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 464489895}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a63b486ba755384c942dc45a5a047d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  launchGrenade: {fileID: 1826213843}
+  gc: {fileID: 1826213846}
 --- !u!1 &474855403
 GameObject:
   m_ObjectHideFlags: 0
@@ -942,6 +1014,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player1: {fileID: 1633802249}
   player2: {fileID: 223229226}
+  player1Bullet: 0
 --- !u!114 &491453813
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2232,6 +2305,7 @@ GameObject:
   - component: {fileID: 1047347774}
   - component: {fileID: 1047347773}
   - component: {fileID: 1047347772}
+  - component: {fileID: 1047347776}
   m_Layer: 5
   m_Name: GrenadeCanvas
   m_TagString: Untagged
@@ -2323,6 +2397,22 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &1047347776
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1047347771}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc96d7520d504044f8dc71399c6cdb52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  grenadePlayer1:
+  - {fileID: 429989561}
+  - {fileID: 464489895}
+  grenades: {fileID: 1826213846}
 --- !u!1 &1055252940
 GameObject:
   m_ObjectHideFlags: 0
@@ -4389,7 +4479,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1768293316}
   m_LocalRotation: {x: 0.40821788, y: -0.23456968, z: 0.10938163, w: 0.8754261}
-  m_LocalPosition: {x: 0, y: 3, z: 0}
+  m_LocalPosition: {x: 3042, y: 1107, z: 57}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4638,6 +4728,7 @@ GameObject:
   - component: {fileID: 1826213844}
   - component: {fileID: 1826213843}
   - component: {fileID: 1826213846}
+  - component: {fileID: 1826213847}
   m_Layer: 5
   m_Name: LaunchGrenadeButton
   m_TagString: Untagged
@@ -4722,6 +4813,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1826213847}
+        m_TargetAssemblyTypeName: UnityEngine.AudioSource, UnityEngine
+        m_MethodName: Play
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1826213844
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4773,6 +4876,104 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   explosionParticles: {fileID: 1456397085}
+  grenadeExplosionSound: {fileID: 0}
+  player1Grenade: 0
+--- !u!82 &1826213847
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1826213840}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: db5bd233297a01b4cb8fb6733e593246, type: 3}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &1835352560
 GameObject:
   m_ObjectHideFlags: 0
@@ -4785,6 +4986,7 @@ GameObject:
   - component: {fileID: 1835352563}
   - component: {fileID: 1835352562}
   - component: {fileID: 1835352561}
+  - component: {fileID: 1835352565}
   m_Layer: 5
   m_Name: BulletCanvas
   m_TagString: Untagged
@@ -4880,6 +5082,26 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &1835352565
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1835352560}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67959a668d12f694495ffb9f48e16d75, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bulletsPlayer1:
+  - {fileID: 2020004034}
+  - {fileID: 751708527}
+  - {fileID: 1273715684}
+  - {fileID: 1521402102}
+  - {fileID: 343997345}
+  - {fileID: 514364554}
+  gun: {fileID: 491453812}
 --- !u!1 &1836541402
 GameObject:
   m_ObjectHideFlags: 0
