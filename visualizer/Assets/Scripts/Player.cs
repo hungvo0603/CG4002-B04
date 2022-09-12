@@ -30,9 +30,9 @@ public class Player : MonoBehaviour
         
     }
 
-    public void TakeDamageFromShotPlayer1()
+    public void TakeDamagePlayer1(int damage)
     {
-        player1CurrentHealth -= SHOT_DAMAGE;
+        player1CurrentHealth -= damage;
         if (player1CurrentHealth <= 0)
         {
             player1CurrentHealth = MAX_HEALTH;
@@ -40,14 +40,15 @@ public class Player : MonoBehaviour
         healthBarPlayer1.SetHealth(player1CurrentHealth);
     }
 
-    public void TakeDamageFromShotPlayer2()
+    public void TakeDamagePlayer2(int damage)
     {
-        player2CurrentHealth -= SHOT_DAMAGE;
+        player2CurrentHealth -= damage;
         if (player2CurrentHealth <= 0)
         {
             player2CurrentHealth = MAX_HEALTH;
         } 
         healthBarPlayer2.SetHealth(player2CurrentHealth);
     }
+
 
 }

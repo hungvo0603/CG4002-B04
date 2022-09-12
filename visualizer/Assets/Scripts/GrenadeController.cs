@@ -7,6 +7,11 @@ public class GrenadeController : MonoBehaviour
     public ParticleSystem explosionParticles;
     public AudioSource grenadeExplosionSound;
     private const int MAX_GRENADE = 2;
+    private const int GRENADE_DAMAGE = 30;
+    public Player player2;
+
+    public EnemyDetector enemy;
+    private bool hasEnemy;
 
     public int player1Grenade;
 
@@ -16,11 +21,12 @@ public class GrenadeController : MonoBehaviour
         player1Grenade = MAX_GRENADE;
         explosionParticles.Stop();
         explosionParticles.Clear();
+        hasEnemy = false;
     }
 
     void Update()
     {
-        
+
     }
 
     public void ExplosionButtonPress()
@@ -39,5 +45,11 @@ public class GrenadeController : MonoBehaviour
         player1Grenade -= 1;
         explosionParticles.Play();
         grenadeExplosionSound.Play();
+        
+        hasEnemy = enemy.hasEnemy;
+        if (hasEnemy)
+        {
+            player2.TakeDamagePlayer2(GRENADE_DAMAGE);
+        }
     }
 }

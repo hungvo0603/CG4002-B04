@@ -530,6 +530,8 @@ struct DSA_tB12EE3AEA99FBD41DE318E2A371878CA94653E41;
 struct DelegateData_t9B286B493293CD2D23A5B2B5EF0E5B1324C2B77E;
 // UnityEngine.UI.Dropdown
 struct Dropdown_t54C0BDC1441E058BE37E796F68886671C270EF89;
+// EnemyDetector
+struct EnemyDetector_t00FA635CED95F15130150D3E8253735B3130D0F6;
 // UnityEngine.Event
 struct Event_tEBC6F24B56CE22B9C9AD1AC6C24A6B83BC3860CB;
 // System.EventArgs
@@ -3276,14 +3278,14 @@ struct U3CU3Ec_tFE23038B63E5E9EDD95FF07844C136230AED9FFC_StaticFields
 	Comparison_1_t236C83451572505C1D483C9DFB0550F3470A17B8* ___U3CU3E9__27_0_1;
 };
 
-// GrenadeController/<PlayExplosionEffect>d__7
-struct U3CPlayExplosionEffectU3Ed__7_t265F8AF9E7FE4922FA1364A4634EF7527B619189  : public RuntimeObject
+// GrenadeController/<PlayExplosionEffect>d__11
+struct U3CPlayExplosionEffectU3Ed__11_t04AB4978456E8DD84FE8EDF7B318A11A79AF9AE0  : public RuntimeObject
 {
-	// System.Int32 GrenadeController/<PlayExplosionEffect>d__7::<>1__state
+	// System.Int32 GrenadeController/<PlayExplosionEffect>d__11::<>1__state
 	int32_t ___U3CU3E1__state_0;
-	// System.Object GrenadeController/<PlayExplosionEffect>d__7::<>2__current
+	// System.Object GrenadeController/<PlayExplosionEffect>d__11::<>2__current
 	RuntimeObject* ___U3CU3E2__current_1;
-	// GrenadeController GrenadeController/<PlayExplosionEffect>d__7::<>4__this
+	// GrenadeController GrenadeController/<PlayExplosionEffect>d__11::<>4__this
 	GrenadeController_tD655B70B7729DAC8400C67394E735308A8040CA4* ___U3CU3E4__this_2;
 };
 
@@ -14859,6 +14861,8 @@ struct EnemyDetector_t00FA635CED95F15130150D3E8253735B3130D0F6  : public MonoBeh
 {
 	// TMPro.TextMeshProUGUI EnemyDetector::enemyDetectionText
 	TextMeshProUGUI_t101091AF4B578BB534C92E9D1EEAF0611636D957* ___enemyDetectionText_4;
+	// System.Boolean EnemyDetector::hasEnemy
+	bool ___hasEnemy_5;
 };
 
 // UnityEngine.EventSystems.EventTrigger
@@ -14892,8 +14896,14 @@ struct GrenadeController_tD655B70B7729DAC8400C67394E735308A8040CA4  : public Mon
 	ParticleSystem_tB19986EE308BD63D36FB6025EEEAFBEDB97C67C1* ___explosionParticles_4;
 	// UnityEngine.AudioSource GrenadeController::grenadeExplosionSound
 	AudioSource_t871AC2272F896738252F04EE949AEF5B241D3299* ___grenadeExplosionSound_5;
+	// Player GrenadeController::player2
+	Player_tF98BD09D3495D2FF1922E5D34866AEAC6AE2DF74* ___player2_8;
+	// EnemyDetector GrenadeController::enemy
+	EnemyDetector_t00FA635CED95F15130150D3E8253735B3130D0F6* ___enemy_9;
+	// System.Boolean GrenadeController::hasEnemy
+	bool ___hasEnemy_10;
 	// System.Int32 GrenadeController::player1Grenade
-	int32_t ___player1Grenade_7;
+	int32_t ___player1Grenade_11;
 };
 
 // GrenadeDisplay
@@ -14989,6 +14999,8 @@ struct ShieldDetector_tD47685B19EF7C634A78040AC44504EBD4A5F656C  : public MonoBe
 {
 	// TMPro.TextMeshProUGUI ShieldDetector::shieldDetectionText
 	TextMeshProUGUI_t101091AF4B578BB534C92E9D1EEAF0611636D957* ___shieldDetectionText_4;
+	// System.Boolean ShieldDetector::hasShieldEnemy
+	bool ___hasShieldEnemy_5;
 };
 
 // ShieldDisplay
@@ -15006,11 +15018,15 @@ struct ShieldDisplay_t844CE6CCE0FA923B0D7A662A703636B954226233  : public MonoBeh
 struct ShootController_t0E03774116F4ADAC3D3E3A3D6A8F86B1D32151A6  : public MonoBehaviour_t532A11E69716D348D8AA7F854AFCBFCB8AD17F71
 {
 	// Player ShootController::player1
-	Player_tF98BD09D3495D2FF1922E5D34866AEAC6AE2DF74* ___player1_5;
+	Player_tF98BD09D3495D2FF1922E5D34866AEAC6AE2DF74* ___player1_6;
 	// Player ShootController::player2
-	Player_tF98BD09D3495D2FF1922E5D34866AEAC6AE2DF74* ___player2_6;
+	Player_tF98BD09D3495D2FF1922E5D34866AEAC6AE2DF74* ___player2_7;
+	// EnemyDetector ShootController::enemy
+	EnemyDetector_t00FA635CED95F15130150D3E8253735B3130D0F6* ___enemy_8;
+	// System.Boolean ShootController::hasEnemy
+	bool ___hasEnemy_9;
 	// System.Int32 ShootController::player1Bullet
-	int32_t ___player1Bullet_7;
+	int32_t ___player1Bullet_10;
 };
 
 // StatisticsManager
@@ -18245,7 +18261,7 @@ const Il2CppTypeDefinitionSizes g_typeDefinitionSize6386 = { sizeof(EnemyDetecto
 extern const Il2CppTypeDefinitionSizes g_typeDefinitionSize6387;
 const Il2CppTypeDefinitionSizes g_typeDefinitionSize6387 = { sizeof(Grenade_tC1EC92A9482C95871AD10641DF9F48B222A13B62), -1, 0, 0 };
 extern const Il2CppTypeDefinitionSizes g_typeDefinitionSize6388;
-const Il2CppTypeDefinitionSizes g_typeDefinitionSize6388 = { sizeof(U3CPlayExplosionEffectU3Ed__7_t265F8AF9E7FE4922FA1364A4634EF7527B619189), -1, 0, 0 };
+const Il2CppTypeDefinitionSizes g_typeDefinitionSize6388 = { sizeof(U3CPlayExplosionEffectU3Ed__11_t04AB4978456E8DD84FE8EDF7B318A11A79AF9AE0), -1, 0, 0 };
 extern const Il2CppTypeDefinitionSizes g_typeDefinitionSize6389;
 const Il2CppTypeDefinitionSizes g_typeDefinitionSize6389 = { sizeof(GrenadeController_tD655B70B7729DAC8400C67394E735308A8040CA4), -1, 0, 0 };
 extern const Il2CppTypeDefinitionSizes g_typeDefinitionSize6390;

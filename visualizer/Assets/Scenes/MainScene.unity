@@ -387,6 +387,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyDetectionText: {fileID: 1450540219}
+  hasEnemy: 0
 --- !u!114 &88264821
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -400,6 +401,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shieldDetectionText: {fileID: 292849702}
+  hasShieldEnemy: 0
 --- !u!1 &106694196
 GameObject:
   m_ObjectHideFlags: 0
@@ -616,7 +618,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 920.47, y: -185}
+  m_AnchoredPosition: {x: 917, y: -456}
   m_SizeDelta: {x: 691.07, y: 139.8701}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &292849702
@@ -702,7 +704,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: -27.652313}
+  m_margin: {x: 0, y: 43.155884, z: 0, w: -59.03846}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -1225,6 +1227,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player1: {fileID: 1633802249}
   player2: {fileID: 223229226}
+  enemy: {fileID: 88264820}
   player1Bullet: 0
 --- !u!114 &491453813
 MonoBehaviour:
@@ -2152,7 +2155,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 920.47, y: -701.01}
+  m_AnchoredPosition: {x: 917, y: -987}
   m_SizeDelta: {x: 691.0692, y: 347.45}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &895545001
@@ -3608,12 +3611,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1360348141}
   m_CullTransparentMesh: 1
---- !u!1 &1383169689 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 100060, guid: fcb334eb247ae3e488abb081c847cf09,
-    type: 3}
-  m_PrefabInstance: {fileID: 1712827359}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1409162114
 GameObject:
   m_ObjectHideFlags: 0
@@ -3887,7 +3884,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 920.47, y: -597.22}
+  m_AnchoredPosition: {x: 917, y: -891}
   m_SizeDelta: {x: 691.07, y: 139.87012}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1450540219
@@ -3973,7 +3970,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: -27.652313}
+  m_margin: {x: 0, y: 0, z: 0, w: -27.652344}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -4821,19 +4818,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1712827359}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1712827362
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1383169689}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9afe68a342feb614a86b07bb57a87540, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  enemyDetectionText: {fileID: 1450540219}
 --- !u!1 &1762524609
 GameObject:
   m_ObjectHideFlags: 0
@@ -5409,6 +5393,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   explosionParticles: {fileID: 1456397085}
   grenadeExplosionSound: {fileID: 1826213847}
+  player2: {fileID: 223229226}
+  enemy: {fileID: 88264820}
   player1Grenade: 0
 --- !u!82 &1826213847
 AudioSource:

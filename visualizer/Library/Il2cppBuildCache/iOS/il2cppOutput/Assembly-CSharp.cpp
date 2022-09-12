@@ -335,8 +335,8 @@ struct ButtonClickedEvent_t8EA72E90B3BD1392FB3B3EF167D5121C23569E4C;
 struct U3CCheckIfAliveU3Ed__2_t80D6733F2C8C2AB5A29AB0073CC245C84EAC3511;
 // UnityEngine.Camera/CameraCallback
 struct CameraCallback_t844E527BFE37BC0495E7F67993E43C07642DA9DD;
-// GrenadeController/<PlayExplosionEffect>d__7
-struct U3CPlayExplosionEffectU3Ed__7_t265F8AF9E7FE4922FA1364A4634EF7527B619189;
+// GrenadeController/<PlayExplosionEffect>d__11
+struct U3CPlayExplosionEffectU3Ed__11_t04AB4978456E8DD84FE8EDF7B318A11A79AF9AE0;
 // UnityEngine.UI.MaskableGraphic/CullStateChangedEvent
 struct CullStateChangedEvent_t6073CD0D951EC1256BF74B8F9107D68FC89B99B8;
 // Readme/Section
@@ -371,7 +371,7 @@ IL2CPP_EXTERN_C RuntimeClass* StringU5BU5D_t7674CD946EC0CE7B3AE0BE70E6EE85F2ECD9
 IL2CPP_EXTERN_C RuntimeClass* U3CCheckForDeletedParticlesU3Ed__41_tD503C8C257CFBD1EC17763EF5DD2717CF9CEBB6C_il2cpp_TypeInfo_var;
 IL2CPP_EXTERN_C RuntimeClass* U3CCheckIfAliveU3Ed__2_t80D6733F2C8C2AB5A29AB0073CC245C84EAC3511_il2cpp_TypeInfo_var;
 IL2CPP_EXTERN_C RuntimeClass* U3CFlickerU3Ed__3_tE17276BBE11EAC311559A0D3F64F931399235496_il2cpp_TypeInfo_var;
-IL2CPP_EXTERN_C RuntimeClass* U3CPlayExplosionEffectU3Ed__7_t265F8AF9E7FE4922FA1364A4634EF7527B619189_il2cpp_TypeInfo_var;
+IL2CPP_EXTERN_C RuntimeClass* U3CPlayExplosionEffectU3Ed__11_t04AB4978456E8DD84FE8EDF7B318A11A79AF9AE0_il2cpp_TypeInfo_var;
 IL2CPP_EXTERN_C RuntimeClass* U3CRandomSpawnsCoroutineU3Ed__30_t4FDC3472AEB7F63995A41451FBA4BEAF0860F132_il2cpp_TypeInfo_var;
 IL2CPP_EXTERN_C RuntimeClass* U3CholeUpdateU3Ed__12_t63C4222EC44104471ED4F9EE2E6F6854FDADEF3F_il2cpp_TypeInfo_var;
 IL2CPP_EXTERN_C RuntimeClass* UnityAction_t11A1F3B953B365C072A5DCC32677EE1796A962A7_il2cpp_TypeInfo_var;
@@ -482,7 +482,7 @@ IL2CPP_EXTERN_C const RuntimeMethod* ShieldCountdown_ActivateShieldPlayer1_mCACC
 IL2CPP_EXTERN_C const RuntimeMethod* U3CCheckForDeletedParticlesU3Ed__41_System_Collections_IEnumerator_Reset_m60E1BC10AD8CACCBAABAE43F703C8AC38AE31741_RuntimeMethod_var;
 IL2CPP_EXTERN_C const RuntimeMethod* U3CCheckIfAliveU3Ed__2_System_Collections_IEnumerator_Reset_m8659443A2B072F0CFA4D0D77AFD3821588EE1068_RuntimeMethod_var;
 IL2CPP_EXTERN_C const RuntimeMethod* U3CFlickerU3Ed__3_System_Collections_IEnumerator_Reset_m4D53771CEA3E6CA61DD48905AA2989B9053A1158_RuntimeMethod_var;
-IL2CPP_EXTERN_C const RuntimeMethod* U3CPlayExplosionEffectU3Ed__7_System_Collections_IEnumerator_Reset_mF87100E5CAB014AA908B3348934C753C9D2C6198_RuntimeMethod_var;
+IL2CPP_EXTERN_C const RuntimeMethod* U3CPlayExplosionEffectU3Ed__11_System_Collections_IEnumerator_Reset_mA48C3532B6599D7D3A4B26D6372425C52D8B6C9C_RuntimeMethod_var;
 IL2CPP_EXTERN_C const RuntimeMethod* U3CRandomSpawnsCoroutineU3Ed__30_System_Collections_IEnumerator_Reset_m394030DA5A2F60E8F34A3ABB5A64BFA9D86A353B_RuntimeMethod_var;
 IL2CPP_EXTERN_C const RuntimeMethod* U3CholeUpdateU3Ed__12_System_Collections_IEnumerator_Reset_m1F3CE0ACCBAF17BD3F74D2B0ADC7B3924906F2BA_RuntimeMethod_var;
 struct Delegate_t_marshaled_com;
@@ -706,14 +706,14 @@ struct U3CCheckIfAliveU3Ed__2_t80D6733F2C8C2AB5A29AB0073CC245C84EAC3511  : publi
 	CFX_AutoDestructShuriken_t5C562E6774502B9314C1978EE951E65EDF4EDEF3* ___U3CU3E4__this_2;
 };
 
-// GrenadeController/<PlayExplosionEffect>d__7
-struct U3CPlayExplosionEffectU3Ed__7_t265F8AF9E7FE4922FA1364A4634EF7527B619189  : public RuntimeObject
+// GrenadeController/<PlayExplosionEffect>d__11
+struct U3CPlayExplosionEffectU3Ed__11_t04AB4978456E8DD84FE8EDF7B318A11A79AF9AE0  : public RuntimeObject
 {
-	// System.Int32 GrenadeController/<PlayExplosionEffect>d__7::<>1__state
+	// System.Int32 GrenadeController/<PlayExplosionEffect>d__11::<>1__state
 	int32_t ___U3CU3E1__state_0;
-	// System.Object GrenadeController/<PlayExplosionEffect>d__7::<>2__current
+	// System.Object GrenadeController/<PlayExplosionEffect>d__11::<>2__current
 	RuntimeObject* ___U3CU3E2__current_1;
-	// GrenadeController GrenadeController/<PlayExplosionEffect>d__7::<>4__this
+	// GrenadeController GrenadeController/<PlayExplosionEffect>d__11::<>4__this
 	GrenadeController_tD655B70B7729DAC8400C67394E735308A8040CA4* ___U3CU3E4__this_2;
 };
 
@@ -2395,6 +2395,8 @@ struct EnemyDetector_t00FA635CED95F15130150D3E8253735B3130D0F6  : public MonoBeh
 {
 	// TMPro.TextMeshProUGUI EnemyDetector::enemyDetectionText
 	TextMeshProUGUI_t101091AF4B578BB534C92E9D1EEAF0611636D957* ___enemyDetectionText_4;
+	// System.Boolean EnemyDetector::hasEnemy
+	bool ___hasEnemy_5;
 };
 
 // Grenade
@@ -2421,8 +2423,14 @@ struct GrenadeController_tD655B70B7729DAC8400C67394E735308A8040CA4  : public Mon
 	ParticleSystem_tB19986EE308BD63D36FB6025EEEAFBEDB97C67C1* ___explosionParticles_4;
 	// UnityEngine.AudioSource GrenadeController::grenadeExplosionSound
 	AudioSource_t871AC2272F896738252F04EE949AEF5B241D3299* ___grenadeExplosionSound_5;
+	// Player GrenadeController::player2
+	Player_tF98BD09D3495D2FF1922E5D34866AEAC6AE2DF74* ___player2_8;
+	// EnemyDetector GrenadeController::enemy
+	EnemyDetector_t00FA635CED95F15130150D3E8253735B3130D0F6* ___enemy_9;
+	// System.Boolean GrenadeController::hasEnemy
+	bool ___hasEnemy_10;
 	// System.Int32 GrenadeController::player1Grenade
-	int32_t ___player1Grenade_7;
+	int32_t ___player1Grenade_11;
 };
 
 // GrenadeDisplay
@@ -2518,6 +2526,8 @@ struct ShieldDetector_tD47685B19EF7C634A78040AC44504EBD4A5F656C  : public MonoBe
 {
 	// TMPro.TextMeshProUGUI ShieldDetector::shieldDetectionText
 	TextMeshProUGUI_t101091AF4B578BB534C92E9D1EEAF0611636D957* ___shieldDetectionText_4;
+	// System.Boolean ShieldDetector::hasShieldEnemy
+	bool ___hasShieldEnemy_5;
 };
 
 // ShieldDisplay
@@ -2535,11 +2545,15 @@ struct ShieldDisplay_t844CE6CCE0FA923B0D7A662A703636B954226233  : public MonoBeh
 struct ShootController_t0E03774116F4ADAC3D3E3A3D6A8F86B1D32151A6  : public MonoBehaviour_t532A11E69716D348D8AA7F854AFCBFCB8AD17F71
 {
 	// Player ShootController::player1
-	Player_tF98BD09D3495D2FF1922E5D34866AEAC6AE2DF74* ___player1_5;
+	Player_tF98BD09D3495D2FF1922E5D34866AEAC6AE2DF74* ___player1_6;
 	// Player ShootController::player2
-	Player_tF98BD09D3495D2FF1922E5D34866AEAC6AE2DF74* ___player2_6;
+	Player_tF98BD09D3495D2FF1922E5D34866AEAC6AE2DF74* ___player2_7;
+	// EnemyDetector ShootController::enemy
+	EnemyDetector_t00FA635CED95F15130150D3E8253735B3130D0F6* ___enemy_8;
+	// System.Boolean ShootController::hasEnemy
+	bool ___hasEnemy_9;
 	// System.Int32 ShootController::player1Bullet
-	int32_t ___player1Bullet_7;
+	int32_t ___player1Bullet_10;
 };
 
 // StatisticsManager
@@ -4483,12 +4497,14 @@ IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void ParticleSystem_Clear_mE026AF9610248EB560
 IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR RuntimeObject* GrenadeController_PlayExplosionEffect_mE00637B69632876EC6129C8EBA18C337FCCCB0EC (GrenadeController_tD655B70B7729DAC8400C67394E735308A8040CA4* __this, const RuntimeMethod* method) ;
 // UnityEngine.Coroutine UnityEngine.MonoBehaviour::StartCoroutine(System.Collections.IEnumerator)
 IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR Coroutine_t85EA685566A254C23F3FD77AB5BDFFFF8799596B* MonoBehaviour_StartCoroutine_m4CAFF732AA28CD3BDC5363B44A863575530EC812 (MonoBehaviour_t532A11E69716D348D8AA7F854AFCBFCB8AD17F71* __this, RuntimeObject* ___routine0, const RuntimeMethod* method) ;
-// System.Void GrenadeController/<PlayExplosionEffect>d__7::.ctor(System.Int32)
-IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void U3CPlayExplosionEffectU3Ed__7__ctor_mD2BC561432AAB075AA925EF6897E09580133D5FF (U3CPlayExplosionEffectU3Ed__7_t265F8AF9E7FE4922FA1364A4634EF7527B619189* __this, int32_t ___U3CU3E1__state0, const RuntimeMethod* method) ;
+// System.Void GrenadeController/<PlayExplosionEffect>d__11::.ctor(System.Int32)
+IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void U3CPlayExplosionEffectU3Ed__11__ctor_mBAE5641557C44BC81E79AFAFBA9F3996E178A084 (U3CPlayExplosionEffectU3Ed__11_t04AB4978456E8DD84FE8EDF7B318A11A79AF9AE0* __this, int32_t ___U3CU3E1__state0, const RuntimeMethod* method) ;
 // System.Void UnityEngine.ParticleSystem::Play()
 IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void ParticleSystem_Play_mD943E601BFE16CB9BB5D1F5E6AED5C36F5F11EF5 (ParticleSystem_tB19986EE308BD63D36FB6025EEEAFBEDB97C67C1* __this, const RuntimeMethod* method) ;
 // System.Void UnityEngine.AudioSource::Play()
 IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void AudioSource_Play_m95DF07111C61D0E0F00257A00384D31531D590C3 (AudioSource_t871AC2272F896738252F04EE949AEF5B241D3299* __this, const RuntimeMethod* method) ;
+// System.Void Player::TakeDamagePlayer2(System.Int32)
+IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void Player_TakeDamagePlayer2_mA00130D01ED741B4334CE04346B010EED08D505B (Player_tF98BD09D3495D2FF1922E5D34866AEAC6AE2DF74* __this, int32_t ___damage0, const RuntimeMethod* method) ;
 // T UnityEngine.GameObject::GetComponent<UnityEngine.Rigidbody>()
 inline Rigidbody_t268697F5A994213ED97393309870968BC1C7393C* GameObject_GetComponent_TisRigidbody_t268697F5A994213ED97393309870968BC1C7393C_m2D7F86C77ECF9B82AAC077B511F1004280571B90 (GameObject_t76FEDD663AB33C991A9C9A23129337651094216F* __this, const RuntimeMethod* method)
 {
@@ -4515,8 +4531,6 @@ IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR Color_tD001788D726C3A7F1379BEED0260B9591F440C
 IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void HealthBarController_SetHealth_mCBEADAD13F45906B3CEA93F83422D3E9F6CBF6DC (HealthBarController_tFA96A066CD36EF363D3771F26E0BE6BFC2FDC848* __this, int32_t ___health0, const RuntimeMethod* method) ;
 // System.Void UnityEngine.UI.Image::set_fillAmount(System.Single)
 IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void Image_set_fillAmount_m8A9B55F47F966A3214EAC4ACBFE198776A98FAA7 (Image_tBC1D03F63BF71132E9A5E472B8742F172A011E7E* __this, float ___value0, const RuntimeMethod* method) ;
-// System.Void Player::TakeDamageFromShotPlayer2()
-IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void Player_TakeDamageFromShotPlayer2_mB68FDC3E870987CC3B42DAB2EC754B5D4014AEB2 (Player_tF98BD09D3495D2FF1922E5D34866AEAC6AE2DF74* __this, const RuntimeMethod* method) ;
 // System.Void UnityEngine.ScriptableObject::.ctor()
 IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void ScriptableObject__ctor_mD037FDB0B487295EA47F79A4DB1BF1846C9087FF (ScriptableObject_tB3BFDB921A1B1795B38A5417D3B97A89A140436A* __this, const RuntimeMethod* method) ;
 // UnityEngine.Quaternion UnityEngine.Quaternion::Internal_FromEulerRad(UnityEngine.Vector3)
@@ -11824,7 +11838,7 @@ IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void BulletDisplay_Update_m56ADCA3DBA7F856EFC
 		// index = gun.player1Bullet;
 		ShootController_t0E03774116F4ADAC3D3E3A3D6A8F86B1D32151A6* L_0 = __this->___gun_5;
 		NullCheck(L_0);
-		int32_t L_1 = L_0->___player1Bullet_7;
+		int32_t L_1 = L_0->___player1Bullet_10;
 		__this->___index_7 = L_1;
 		// for (int i = 0; i < index; i++) {
 		V_0 = 0;
@@ -11914,6 +11928,16 @@ IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void BulletDisplay__ctor_m4D033634B758B7E8EA7
 #pragma clang diagnostic ignored "-Winvalid-offsetof"
 #pragma clang diagnostic ignored "-Wunused-variable"
 #endif
+// System.Void EnemyDetector::Start()
+IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void EnemyDetector_Start_mD44AB7C8218F39A4B4AA71A287CFEC6C1E563C69 (EnemyDetector_t00FA635CED95F15130150D3E8253735B3130D0F6* __this, const RuntimeMethod* method) 
+{
+	{
+		// hasEnemy = false;
+		__this->___hasEnemy_5 = (bool)0;
+		// }
+		return;
+	}
+}
 // System.Void EnemyDetector::EnemyDetected()
 IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void EnemyDetector_EnemyDetected_mF7C2AC14CD0B1755F9AC1105C1E4455F3621FCF3 (EnemyDetector_t00FA635CED95F15130150D3E8253735B3130D0F6* __this, const RuntimeMethod* method) 
 {
@@ -11928,6 +11952,8 @@ IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void EnemyDetector_EnemyDetected_mF7C2AC14CD0
 		TextMeshProUGUI_t101091AF4B578BB534C92E9D1EEAF0611636D957* L_0 = __this->___enemyDetectionText_4;
 		NullCheck(L_0);
 		VirtualActionInvoker1< String_t* >::Invoke(66 /* System.Void TMPro.TMP_Text::set_text(System.String) */, L_0, _stringLiteralC575434991CAF2C97CFC25C7B582A590F9B4CCD2);
+		// hasEnemy = true;
+		__this->___hasEnemy_5 = (bool)1;
 		// }
 		return;
 	}
@@ -11946,6 +11972,8 @@ IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void EnemyDetector_EnemyLost_m97080136234C721
 		TextMeshProUGUI_t101091AF4B578BB534C92E9D1EEAF0611636D957* L_0 = __this->___enemyDetectionText_4;
 		NullCheck(L_0);
 		VirtualActionInvoker1< String_t* >::Invoke(66 /* System.Void TMPro.TMP_Text::set_text(System.String) */, L_0, _stringLiteral1C73171AC7AD482919A9C2AB86EF02573548291F);
+		// hasEnemy = false;
+		__this->___hasEnemy_5 = (bool)0;
 		// }
 		return;
 	}
@@ -12151,7 +12179,7 @@ IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void GrenadeController_Start_m2897E06CC808336
 {
 	{
 		// player1Grenade = MAX_GRENADE;
-		__this->___player1Grenade_7 = 2;
+		__this->___player1Grenade_11 = 2;
 		// explosionParticles.Stop();
 		ParticleSystem_tB19986EE308BD63D36FB6025EEEAFBEDB97C67C1* L_0 = __this->___explosionParticles_4;
 		NullCheck(L_0);
@@ -12160,6 +12188,8 @@ IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void GrenadeController_Start_m2897E06CC808336
 		ParticleSystem_tB19986EE308BD63D36FB6025EEEAFBEDB97C67C1* L_1 = __this->___explosionParticles_4;
 		NullCheck(L_1);
 		ParticleSystem_Clear_mE026AF9610248EB560530CD292FEED0F7571F732(L_1, NULL);
+		// hasEnemy = false;
+		__this->___hasEnemy_10 = (bool)0;
 		// }
 		return;
 	}
@@ -12177,7 +12207,7 @@ IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void GrenadeController_ExplosionButtonPress_m
 {
 	{
 		// if (player1Grenade > 0)
-		int32_t L_0 = __this->___player1Grenade_7;
+		int32_t L_0 = __this->___player1Grenade_11;
 		if ((((int32_t)L_0) <= ((int32_t)0)))
 		{
 			goto IL_0017;
@@ -12195,7 +12225,7 @@ IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void GrenadeController_ExplosionButtonPress_m
 IL_0017:
 	{
 		// player1Grenade = MAX_GRENADE;
-		__this->___player1Grenade_7 = 2;
+		__this->___player1Grenade_11 = 2;
 		// }
 		return;
 	}
@@ -12206,14 +12236,14 @@ IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR RuntimeObject* GrenadeController_PlayExplosio
 	static bool s_Il2CppMethodInitialized;
 	if (!s_Il2CppMethodInitialized)
 	{
-		il2cpp_codegen_initialize_runtime_metadata((uintptr_t*)&U3CPlayExplosionEffectU3Ed__7_t265F8AF9E7FE4922FA1364A4634EF7527B619189_il2cpp_TypeInfo_var);
+		il2cpp_codegen_initialize_runtime_metadata((uintptr_t*)&U3CPlayExplosionEffectU3Ed__11_t04AB4978456E8DD84FE8EDF7B318A11A79AF9AE0_il2cpp_TypeInfo_var);
 		s_Il2CppMethodInitialized = true;
 	}
 	{
-		U3CPlayExplosionEffectU3Ed__7_t265F8AF9E7FE4922FA1364A4634EF7527B619189* L_0 = (U3CPlayExplosionEffectU3Ed__7_t265F8AF9E7FE4922FA1364A4634EF7527B619189*)il2cpp_codegen_object_new(U3CPlayExplosionEffectU3Ed__7_t265F8AF9E7FE4922FA1364A4634EF7527B619189_il2cpp_TypeInfo_var);
+		U3CPlayExplosionEffectU3Ed__11_t04AB4978456E8DD84FE8EDF7B318A11A79AF9AE0* L_0 = (U3CPlayExplosionEffectU3Ed__11_t04AB4978456E8DD84FE8EDF7B318A11A79AF9AE0*)il2cpp_codegen_object_new(U3CPlayExplosionEffectU3Ed__11_t04AB4978456E8DD84FE8EDF7B318A11A79AF9AE0_il2cpp_TypeInfo_var);
 		NullCheck(L_0);
-		U3CPlayExplosionEffectU3Ed__7__ctor_mD2BC561432AAB075AA925EF6897E09580133D5FF(L_0, 0, NULL);
-		U3CPlayExplosionEffectU3Ed__7_t265F8AF9E7FE4922FA1364A4634EF7527B619189* L_1 = L_0;
+		U3CPlayExplosionEffectU3Ed__11__ctor_mBAE5641557C44BC81E79AFAFBA9F3996E178A084(L_0, 0, NULL);
+		U3CPlayExplosionEffectU3Ed__11_t04AB4978456E8DD84FE8EDF7B318A11A79AF9AE0* L_1 = L_0;
 		NullCheck(L_1);
 		L_1->___U3CU3E4__this_2 = __this;
 		Il2CppCodeGenWriteBarrier((void**)(&L_1->___U3CU3E4__this_2), (void*)__this);
@@ -12236,8 +12266,8 @@ IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void GrenadeController__ctor_mB766F7B43085FB6
 #pragma clang diagnostic ignored "-Winvalid-offsetof"
 #pragma clang diagnostic ignored "-Wunused-variable"
 #endif
-// System.Void GrenadeController/<PlayExplosionEffect>d__7::.ctor(System.Int32)
-IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void U3CPlayExplosionEffectU3Ed__7__ctor_mD2BC561432AAB075AA925EF6897E09580133D5FF (U3CPlayExplosionEffectU3Ed__7_t265F8AF9E7FE4922FA1364A4634EF7527B619189* __this, int32_t ___U3CU3E1__state0, const RuntimeMethod* method) 
+// System.Void GrenadeController/<PlayExplosionEffect>d__11::.ctor(System.Int32)
+IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void U3CPlayExplosionEffectU3Ed__11__ctor_mBAE5641557C44BC81E79AFAFBA9F3996E178A084 (U3CPlayExplosionEffectU3Ed__11_t04AB4978456E8DD84FE8EDF7B318A11A79AF9AE0* __this, int32_t ___U3CU3E1__state0, const RuntimeMethod* method) 
 {
 	{
 		Object__ctor_mE837C6B9FA8C6D5D109F4B2EC885D79919AC0EA2(__this, NULL);
@@ -12246,15 +12276,15 @@ IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void U3CPlayExplosionEffectU3Ed__7__ctor_mD2B
 		return;
 	}
 }
-// System.Void GrenadeController/<PlayExplosionEffect>d__7::System.IDisposable.Dispose()
-IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void U3CPlayExplosionEffectU3Ed__7_System_IDisposable_Dispose_m85F99EC989AA09589C9903BFBC392262AED2F3D6 (U3CPlayExplosionEffectU3Ed__7_t265F8AF9E7FE4922FA1364A4634EF7527B619189* __this, const RuntimeMethod* method) 
+// System.Void GrenadeController/<PlayExplosionEffect>d__11::System.IDisposable.Dispose()
+IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void U3CPlayExplosionEffectU3Ed__11_System_IDisposable_Dispose_m10BBB22C106B596DD4D437FCCE544EA1532AEEC2 (U3CPlayExplosionEffectU3Ed__11_t04AB4978456E8DD84FE8EDF7B318A11A79AF9AE0* __this, const RuntimeMethod* method) 
 {
 	{
 		return;
 	}
 }
-// System.Boolean GrenadeController/<PlayExplosionEffect>d__7::MoveNext()
-IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR bool U3CPlayExplosionEffectU3Ed__7_MoveNext_m71911EFCB69EFCA6BFDBF751ED523DA94CB7F991 (U3CPlayExplosionEffectU3Ed__7_t265F8AF9E7FE4922FA1364A4634EF7527B619189* __this, const RuntimeMethod* method) 
+// System.Boolean GrenadeController/<PlayExplosionEffect>d__11::MoveNext()
+IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR bool U3CPlayExplosionEffectU3Ed__11_MoveNext_mC33D2750D40994191D4AD355AA6EDC0E9EEC8041 (U3CPlayExplosionEffectU3Ed__11_t04AB4978456E8DD84FE8EDF7B318A11A79AF9AE0* __this, const RuntimeMethod* method) 
 {
 	static bool s_Il2CppMethodInitialized;
 	if (!s_Il2CppMethodInitialized)
@@ -12306,9 +12336,9 @@ IL_0037:
 		GrenadeController_tD655B70B7729DAC8400C67394E735308A8040CA4* L_5 = V_1;
 		GrenadeController_tD655B70B7729DAC8400C67394E735308A8040CA4* L_6 = V_1;
 		NullCheck(L_6);
-		int32_t L_7 = L_6->___player1Grenade_7;
+		int32_t L_7 = L_6->___player1Grenade_11;
 		NullCheck(L_5);
-		L_5->___player1Grenade_7 = ((int32_t)il2cpp_codegen_subtract(L_7, 1));
+		L_5->___player1Grenade_11 = ((int32_t)il2cpp_codegen_subtract(L_7, 1));
 		// explosionParticles.Play();
 		GrenadeController_tD655B70B7729DAC8400C67394E735308A8040CA4* L_8 = V_1;
 		NullCheck(L_8);
@@ -12321,30 +12351,59 @@ IL_0037:
 		AudioSource_t871AC2272F896738252F04EE949AEF5B241D3299* L_11 = L_10->___grenadeExplosionSound_5;
 		NullCheck(L_11);
 		AudioSource_Play_m95DF07111C61D0E0F00257A00384D31531D590C3(L_11, NULL);
+		// hasEnemy = enemy.hasEnemy;
+		GrenadeController_tD655B70B7729DAC8400C67394E735308A8040CA4* L_12 = V_1;
+		GrenadeController_tD655B70B7729DAC8400C67394E735308A8040CA4* L_13 = V_1;
+		NullCheck(L_13);
+		EnemyDetector_t00FA635CED95F15130150D3E8253735B3130D0F6* L_14 = L_13->___enemy_9;
+		NullCheck(L_14);
+		bool L_15 = L_14->___hasEnemy_5;
+		NullCheck(L_12);
+		L_12->___hasEnemy_10 = L_15;
+		// if (hasEnemy)
+		GrenadeController_tD655B70B7729DAC8400C67394E735308A8040CA4* L_16 = V_1;
+		NullCheck(L_16);
+		bool L_17 = L_16->___hasEnemy_10;
+		if (!L_17)
+		{
+			goto IL_0088;
+		}
+	}
+	{
+		// player2.TakeDamagePlayer2(GRENADE_DAMAGE);
+		GrenadeController_tD655B70B7729DAC8400C67394E735308A8040CA4* L_18 = V_1;
+		NullCheck(L_18);
+		Player_tF98BD09D3495D2FF1922E5D34866AEAC6AE2DF74* L_19 = L_18->___player2_8;
+		NullCheck(L_19);
+		Player_TakeDamagePlayer2_mA00130D01ED741B4334CE04346B010EED08D505B(L_19, ((int32_t)30), NULL);
+	}
+
+IL_0088:
+	{
 		// }
 		return (bool)0;
 	}
 }
-// System.Object GrenadeController/<PlayExplosionEffect>d__7::System.Collections.Generic.IEnumerator<System.Object>.get_Current()
-IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR RuntimeObject* U3CPlayExplosionEffectU3Ed__7_System_Collections_Generic_IEnumeratorU3CSystem_ObjectU3E_get_Current_m46D1608F59B9FBD80058EE532152F1D06EC3F4C3 (U3CPlayExplosionEffectU3Ed__7_t265F8AF9E7FE4922FA1364A4634EF7527B619189* __this, const RuntimeMethod* method) 
+// System.Object GrenadeController/<PlayExplosionEffect>d__11::System.Collections.Generic.IEnumerator<System.Object>.get_Current()
+IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR RuntimeObject* U3CPlayExplosionEffectU3Ed__11_System_Collections_Generic_IEnumeratorU3CSystem_ObjectU3E_get_Current_mBDDC0F351C6F897580BA6C19EDA6F873B825A329 (U3CPlayExplosionEffectU3Ed__11_t04AB4978456E8DD84FE8EDF7B318A11A79AF9AE0* __this, const RuntimeMethod* method) 
 {
 	{
 		RuntimeObject* L_0 = __this->___U3CU3E2__current_1;
 		return L_0;
 	}
 }
-// System.Void GrenadeController/<PlayExplosionEffect>d__7::System.Collections.IEnumerator.Reset()
-IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void U3CPlayExplosionEffectU3Ed__7_System_Collections_IEnumerator_Reset_mF87100E5CAB014AA908B3348934C753C9D2C6198 (U3CPlayExplosionEffectU3Ed__7_t265F8AF9E7FE4922FA1364A4634EF7527B619189* __this, const RuntimeMethod* method) 
+// System.Void GrenadeController/<PlayExplosionEffect>d__11::System.Collections.IEnumerator.Reset()
+IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void U3CPlayExplosionEffectU3Ed__11_System_Collections_IEnumerator_Reset_mA48C3532B6599D7D3A4B26D6372425C52D8B6C9C (U3CPlayExplosionEffectU3Ed__11_t04AB4978456E8DD84FE8EDF7B318A11A79AF9AE0* __this, const RuntimeMethod* method) 
 {
 	{
 		NotSupportedException_t1429765983D409BD2986508963C98D214E4EBF4A* L_0 = (NotSupportedException_t1429765983D409BD2986508963C98D214E4EBF4A*)il2cpp_codegen_object_new(((RuntimeClass*)il2cpp_codegen_initialize_runtime_metadata_inline((uintptr_t*)&NotSupportedException_t1429765983D409BD2986508963C98D214E4EBF4A_il2cpp_TypeInfo_var)));
 		NullCheck(L_0);
 		NotSupportedException__ctor_m1398D0CDE19B36AA3DE9392879738C1EA2439CDF(L_0, NULL);
-		IL2CPP_RAISE_MANAGED_EXCEPTION(L_0, ((RuntimeMethod*)il2cpp_codegen_initialize_runtime_metadata_inline((uintptr_t*)&U3CPlayExplosionEffectU3Ed__7_System_Collections_IEnumerator_Reset_mF87100E5CAB014AA908B3348934C753C9D2C6198_RuntimeMethod_var)));
+		IL2CPP_RAISE_MANAGED_EXCEPTION(L_0, ((RuntimeMethod*)il2cpp_codegen_initialize_runtime_metadata_inline((uintptr_t*)&U3CPlayExplosionEffectU3Ed__11_System_Collections_IEnumerator_Reset_mA48C3532B6599D7D3A4B26D6372425C52D8B6C9C_RuntimeMethod_var)));
 	}
 }
-// System.Object GrenadeController/<PlayExplosionEffect>d__7::System.Collections.IEnumerator.get_Current()
-IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR RuntimeObject* U3CPlayExplosionEffectU3Ed__7_System_Collections_IEnumerator_get_Current_m7E39EDC72281C4F94CBA985B6D9E6D550B39EE1E (U3CPlayExplosionEffectU3Ed__7_t265F8AF9E7FE4922FA1364A4634EF7527B619189* __this, const RuntimeMethod* method) 
+// System.Object GrenadeController/<PlayExplosionEffect>d__11::System.Collections.IEnumerator.get_Current()
+IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR RuntimeObject* U3CPlayExplosionEffectU3Ed__11_System_Collections_IEnumerator_get_Current_mFDBEA08C03A2FA152B4FE8B1C37A98DAF490CD13 (U3CPlayExplosionEffectU3Ed__11_t04AB4978456E8DD84FE8EDF7B318A11A79AF9AE0* __this, const RuntimeMethod* method) 
 {
 	{
 		RuntimeObject* L_0 = __this->___U3CU3E2__current_1;
@@ -12378,7 +12437,7 @@ IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void GrenadeDisplay_Update_mB8CCBD95A0D633337
 		// index = grenades.player1Grenade;
 		GrenadeController_tD655B70B7729DAC8400C67394E735308A8040CA4* L_0 = __this->___grenades_5;
 		NullCheck(L_0);
-		int32_t L_1 = L_0->___player1Grenade_7;
+		int32_t L_1 = L_0->___player1Grenade_11;
 		__this->___index_7 = L_1;
 		// for (int i = 0; i < index; i++)
 		V_0 = 0;
@@ -12555,7 +12614,7 @@ IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void GrenadeTriggerAnimation_Update_m3377864F
 		// whichGrenade = gc.player1Grenade;
 		GrenadeController_tD655B70B7729DAC8400C67394E735308A8040CA4* L_0 = __this->___gc_5;
 		NullCheck(L_0);
-		int32_t L_1 = L_0->___player1Grenade_7;
+		int32_t L_1 = L_0->___player1Grenade_11;
 		__this->___whichGrenade_6 = L_1;
 		// }
 		return;
@@ -12725,18 +12784,19 @@ IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void Player_Update_m95E134A5EF1B5164EA281F61D
 		return;
 	}
 }
-// System.Void Player::TakeDamageFromShotPlayer1()
-IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void Player_TakeDamageFromShotPlayer1_m6F354B55F36048A00658B0B4E32FE77F4094B483 (Player_tF98BD09D3495D2FF1922E5D34866AEAC6AE2DF74* __this, const RuntimeMethod* method) 
+// System.Void Player::TakeDamagePlayer1(System.Int32)
+IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void Player_TakeDamagePlayer1_m4DE3C28B0EE0EE065C55BD5B718ED11BAFF56EFD (Player_tF98BD09D3495D2FF1922E5D34866AEAC6AE2DF74* __this, int32_t ___damage0, const RuntimeMethod* method) 
 {
 	{
-		// player1CurrentHealth -= SHOT_DAMAGE;
+		// player1CurrentHealth -= damage;
 		int32_t L_0 = __this->___player1CurrentHealth_9;
-		__this->___player1CurrentHealth_9 = ((int32_t)il2cpp_codegen_subtract(L_0, ((int32_t)10)));
+		int32_t L_1 = ___damage0;
+		__this->___player1CurrentHealth_9 = ((int32_t)il2cpp_codegen_subtract(L_0, L_1));
 		// if (player1CurrentHealth <= 0)
-		int32_t L_1 = __this->___player1CurrentHealth_9;
-		if ((((int32_t)L_1) > ((int32_t)0)))
+		int32_t L_2 = __this->___player1CurrentHealth_9;
+		if ((((int32_t)L_2) > ((int32_t)0)))
 		{
-			goto IL_0020;
+			goto IL_001f;
 		}
 	}
 	{
@@ -12744,29 +12804,30 @@ IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void Player_TakeDamageFromShotPlayer1_m6F354B
 		__this->___player1CurrentHealth_9 = ((int32_t)100);
 	}
 
-IL_0020:
+IL_001f:
 	{
 		// healthBarPlayer1.SetHealth(player1CurrentHealth);
-		HealthBarController_tFA96A066CD36EF363D3771F26E0BE6BFC2FDC848* L_2 = __this->___healthBarPlayer1_7;
-		int32_t L_3 = __this->___player1CurrentHealth_9;
-		NullCheck(L_2);
-		HealthBarController_SetHealth_mCBEADAD13F45906B3CEA93F83422D3E9F6CBF6DC(L_2, L_3, NULL);
+		HealthBarController_tFA96A066CD36EF363D3771F26E0BE6BFC2FDC848* L_3 = __this->___healthBarPlayer1_7;
+		int32_t L_4 = __this->___player1CurrentHealth_9;
+		NullCheck(L_3);
+		HealthBarController_SetHealth_mCBEADAD13F45906B3CEA93F83422D3E9F6CBF6DC(L_3, L_4, NULL);
 		// }
 		return;
 	}
 }
-// System.Void Player::TakeDamageFromShotPlayer2()
-IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void Player_TakeDamageFromShotPlayer2_mB68FDC3E870987CC3B42DAB2EC754B5D4014AEB2 (Player_tF98BD09D3495D2FF1922E5D34866AEAC6AE2DF74* __this, const RuntimeMethod* method) 
+// System.Void Player::TakeDamagePlayer2(System.Int32)
+IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void Player_TakeDamagePlayer2_mA00130D01ED741B4334CE04346B010EED08D505B (Player_tF98BD09D3495D2FF1922E5D34866AEAC6AE2DF74* __this, int32_t ___damage0, const RuntimeMethod* method) 
 {
 	{
-		// player2CurrentHealth -= SHOT_DAMAGE;
+		// player2CurrentHealth -= damage;
 		int32_t L_0 = __this->___player2CurrentHealth_10;
-		__this->___player2CurrentHealth_10 = ((int32_t)il2cpp_codegen_subtract(L_0, ((int32_t)10)));
+		int32_t L_1 = ___damage0;
+		__this->___player2CurrentHealth_10 = ((int32_t)il2cpp_codegen_subtract(L_0, L_1));
 		// if (player2CurrentHealth <= 0)
-		int32_t L_1 = __this->___player2CurrentHealth_10;
-		if ((((int32_t)L_1) > ((int32_t)0)))
+		int32_t L_2 = __this->___player2CurrentHealth_10;
+		if ((((int32_t)L_2) > ((int32_t)0)))
 		{
-			goto IL_0020;
+			goto IL_001f;
 		}
 	}
 	{
@@ -12774,13 +12835,13 @@ IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void Player_TakeDamageFromShotPlayer2_mB68FDC
 		__this->___player2CurrentHealth_10 = ((int32_t)100);
 	}
 
-IL_0020:
+IL_001f:
 	{
 		// healthBarPlayer2.SetHealth(player2CurrentHealth);
-		HealthBarController_tFA96A066CD36EF363D3771F26E0BE6BFC2FDC848* L_2 = __this->___healthBarPlayer2_8;
-		int32_t L_3 = __this->___player2CurrentHealth_10;
-		NullCheck(L_2);
-		HealthBarController_SetHealth_mCBEADAD13F45906B3CEA93F83422D3E9F6CBF6DC(L_2, L_3, NULL);
+		HealthBarController_tFA96A066CD36EF363D3771F26E0BE6BFC2FDC848* L_3 = __this->___healthBarPlayer2_8;
+		int32_t L_4 = __this->___player2CurrentHealth_10;
+		NullCheck(L_3);
+		HealthBarController_SetHealth_mCBEADAD13F45906B3CEA93F83422D3E9F6CBF6DC(L_3, L_4, NULL);
 		// }
 		return;
 	}
@@ -12974,6 +13035,16 @@ IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void ShieldCountdown__ctor_m2731C3B2183BA500E
 #pragma clang diagnostic ignored "-Winvalid-offsetof"
 #pragma clang diagnostic ignored "-Wunused-variable"
 #endif
+// System.Void ShieldDetector::Start()
+IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void ShieldDetector_Start_m85B1469BF95656286293FCD710CD9CD04B2747E6 (ShieldDetector_tD47685B19EF7C634A78040AC44504EBD4A5F656C* __this, const RuntimeMethod* method) 
+{
+	{
+		// hasShieldEnemy = false;
+		__this->___hasShieldEnemy_5 = (bool)0;
+		// }
+		return;
+	}
+}
 // System.Void ShieldDetector::ShieldDetected()
 IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void ShieldDetector_ShieldDetected_m7D7D37BC58964E2E4FD694A77CCF766F57AAFD8D (ShieldDetector_tD47685B19EF7C634A78040AC44504EBD4A5F656C* __this, const RuntimeMethod* method) 
 {
@@ -12988,6 +13059,8 @@ IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void ShieldDetector_ShieldDetected_m7D7D37BC5
 		TextMeshProUGUI_t101091AF4B578BB534C92E9D1EEAF0611636D957* L_0 = __this->___shieldDetectionText_4;
 		NullCheck(L_0);
 		VirtualActionInvoker1< String_t* >::Invoke(66 /* System.Void TMPro.TMP_Text::set_text(System.String) */, L_0, _stringLiteralD06E47BF937D1A659F49FCE22E17206D7FCB87BD);
+		// hasShieldEnemy = true;
+		__this->___hasShieldEnemy_5 = (bool)1;
 		// }
 		return;
 	}
@@ -13006,6 +13079,8 @@ IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void ShieldDetector_ShieldLost_m352EE169C7D86
 		TextMeshProUGUI_t101091AF4B578BB534C92E9D1EEAF0611636D957* L_0 = __this->___shieldDetectionText_4;
 		NullCheck(L_0);
 		VirtualActionInvoker1< String_t* >::Invoke(66 /* System.Void TMPro.TMP_Text::set_text(System.String) */, L_0, _stringLiteral3EF2EB7BDDFA5B4F36AE41ACFC83ACA9DB7E6601);
+		// hasShieldEnemy = false;
+		__this->___hasShieldEnemy_5 = (bool)0;
 		// }
 		return;
 	}
@@ -13140,7 +13215,9 @@ IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void ShootController_Start_mA20C52B5BE2C46630
 {
 	{
 		// player1Bullet = MAX_BULLET;
-		__this->___player1Bullet_7 = 6;
+		__this->___player1Bullet_10 = 6;
+		// hasEnemy = false;
+		__this->___hasEnemy_9 = (bool)0;
 		// }
 		return;
 	}
@@ -13150,7 +13227,7 @@ IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void ShootController_Update_m3722D12524EFC191
 {
 	{
 		// if (player1Bullet == 0)
-		int32_t L_0 = __this->___player1Bullet_7;
+		int32_t L_0 = __this->___player1Bullet_10;
 		if (L_0)
 		{
 			goto IL_000f;
@@ -13158,7 +13235,7 @@ IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void ShootController_Update_m3722D12524EFC191
 	}
 	{
 		// player1Bullet = MAX_BULLET;
-		__this->___player1Bullet_7 = 6;
+		__this->___player1Bullet_10 = 6;
 	}
 
 IL_000f:
@@ -13171,13 +13248,30 @@ IL_000f:
 IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void ShootController_GunShot_m0F71B7B2735864E0248F0507B56853CC95B153E2 (ShootController_t0E03774116F4ADAC3D3E3A3D6A8F86B1D32151A6* __this, const RuntimeMethod* method) 
 {
 	{
+		// hasEnemy = enemy.hasEnemy;
+		EnemyDetector_t00FA635CED95F15130150D3E8253735B3130D0F6* L_0 = __this->___enemy_8;
+		NullCheck(L_0);
+		bool L_1 = L_0->___hasEnemy_5;
+		__this->___hasEnemy_9 = L_1;
 		// player1Bullet -= 1;
-		int32_t L_0 = __this->___player1Bullet_7;
-		__this->___player1Bullet_7 = ((int32_t)il2cpp_codegen_subtract(L_0, 1));
-		// player2.TakeDamageFromShotPlayer2();
-		Player_tF98BD09D3495D2FF1922E5D34866AEAC6AE2DF74* L_1 = __this->___player2_6;
-		NullCheck(L_1);
-		Player_TakeDamageFromShotPlayer2_mB68FDC3E870987CC3B42DAB2EC754B5D4014AEB2(L_1, NULL);
+		int32_t L_2 = __this->___player1Bullet_10;
+		__this->___player1Bullet_10 = ((int32_t)il2cpp_codegen_subtract(L_2, 1));
+		// if (hasEnemy)
+		bool L_3 = __this->___hasEnemy_9;
+		if (!L_3)
+		{
+			goto IL_0034;
+		}
+	}
+	{
+		// player2.TakeDamagePlayer2(SHOOT_DAMAGE);
+		Player_tF98BD09D3495D2FF1922E5D34866AEAC6AE2DF74* L_4 = __this->___player2_7;
+		NullCheck(L_4);
+		Player_TakeDamagePlayer2_mA00130D01ED741B4334CE04346B010EED08D505B(L_4, ((int32_t)10), NULL);
+	}
+
+IL_0034:
+	{
 		// }
 		return;
 	}

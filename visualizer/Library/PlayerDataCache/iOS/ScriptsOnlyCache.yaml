@@ -303,7 +303,7 @@ ScriptsOnlyBuild:
     className: Selectable
   - hash:
       serializedVersion: 2
-      Hash: 58ec59e11362e53af8becfb312c6f013
+      Hash: 80bd3d923e8807663b8b90b680508832
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: GrenadeController
@@ -1761,7 +1761,7 @@ ScriptsOnlyBuild:
     className: CFX_AutoDestructShuriken
   - hash:
       serializedVersion: 2
-      Hash: f0bc276817bba04f645c1b18dd599d0e
+      Hash: e53c6edf9dddb01233df88e73c06b507
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: ShootController
@@ -2949,17 +2949,17 @@ ScriptsOnlyBuild:
     className: UnityOnSliderValueChangedMessageListener
   - hash:
       serializedVersion: 2
-      Hash: 0400cf8d44a5f6a513fff35a476afea9
+      Hash: 88507bb0f6249355f8db97ca63d1af7a
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: EnemyDetector
   - hash:
       serializedVersion: 2
-      Hash: 03c2cdc9cd494f62ad041f394f17dd0c
+      Hash: 22eadafe40a1f88f07df3904e676adda
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: ShieldDetector
   platform: 9
   scenePathNames:
   - Assets/Scenes/MainScene.unity
-  playerPath: C:/Users/Hungggggg/NUSwork/Y4S1/CG4002/build-ios/build-ios-10
+  playerPath: C:/Users/Hungggggg/NUSwork/Y4S1/CG4002/build-ios/build-ios-0
