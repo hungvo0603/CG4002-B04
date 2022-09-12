@@ -52,7 +52,7 @@ class Client(threading.Thread):
 
         message = ""
         while message != "logout":
-            if len(relay_lock):
+            if len(relay_buffer):
                 relay_lock.acquire()
                 message = relay_buffer.pop(0)
                 relay_lock.release()
