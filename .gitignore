@@ -1,3 +1,4 @@
+*.pem
 ext_comms/.env
 ext_comms/eval_server/evaluation_logs
 

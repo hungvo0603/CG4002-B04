@@ -1,9 +1,22 @@
+Qn:
+- how are we demoing the eval server conn in thurs?
+- how the 2nd layer tunnel act work?
+- is ti possbile to make one client publish and subscribe to same topic in mqtt? i tried by failed
+- on logout, do we still need to send state to eval_server? (curr implementation jsut directly terminate)
+
+Todo:
+- Establish tunnel to u96
+- Receiver at u96
+- check requirement for full subsystem check (canvas)
+- mqqt two way connection
+- connect to visualizer
+- threading u96
+- confirm data received by internal comms
+
 Main idea:
 - Internal comms send data to laptop (relay)
-- [All connection is via mqtt except the u96 to eval]
-- laptop publish data to ultra96 subscriber via mqtt broker
-- ultra96 process data and send result to eval server via socket
-- ultra96 publish data to visualizer subscriber via mqtt broker
+- Socket for u96-eval + relay-u96
+- mqtt for the rest
 
 To install:
 `python3 -m venv <virtual_env_name>`
