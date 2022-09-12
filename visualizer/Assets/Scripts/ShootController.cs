@@ -9,8 +9,7 @@ public class ShootController : MonoBehaviour
     private const int MAX_BULLET = 6;
     private const int SHOOT_DAMAGE = 10;
 
-    public Player player1;
-    public Player player2;
+    public Player pl;
 
     public EnemyDetector enemy;
     private bool hasEnemy;
@@ -38,7 +37,7 @@ public class ShootController : MonoBehaviour
         player1Bullet -= 1;
         if (hasEnemy)
         {
-            player2.TakeDamagePlayer2(SHOOT_DAMAGE);
+            pl.TakeDamagePlayer2(SHOOT_DAMAGE);
         }
     }
 

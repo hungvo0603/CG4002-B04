@@ -9,7 +9,9 @@ ScriptsOnlyBuild:
     - GrenadeTriggerAnimation
     - GunController
     - HealthBarController
+    - KDAController
     - Player
+    - ShieldController
     - ShieldCountdown
     - ShieldDetector
     - ShieldDisplay
@@ -222,6 +224,10 @@ ScriptsOnlyBuild:
       Script: {instanceID: 46728}
     - Class: 114
       Script: {instanceID: 47762}
+    - Class: 114
+      Script: {instanceID: 71022}
+    - Class: 114
+      Script: {instanceID: 91348}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -303,7 +309,7 @@ ScriptsOnlyBuild:
     className: Selectable
   - hash:
       serializedVersion: 2
-      Hash: 80bd3d923e8807663b8b90b680508832
+      Hash: e62547a935eaba1a916d0f6cfa53a431
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: GrenadeController
@@ -1761,7 +1767,7 @@ ScriptsOnlyBuild:
     className: CFX_AutoDestructShuriken
   - hash:
       serializedVersion: 2
-      Hash: e53c6edf9dddb01233df88e73c06b507
+      Hash: 8a3af9b9edc86d9e84eb82bded6b5ac1
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: ShootController
@@ -2955,11 +2961,23 @@ ScriptsOnlyBuild:
     className: EnemyDetector
   - hash:
       serializedVersion: 2
-      Hash: 22eadafe40a1f88f07df3904e676adda
+      Hash: 2c054b75f19d678cdf98da95afe7a546
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: ShieldDetector
+  - hash:
+      serializedVersion: 2
+      Hash: 6abc85dec69a82c6bed66b82752d2478
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: ShieldController
+  - hash:
+      serializedVersion: 2
+      Hash: 6e4702cdb34417c1b180a64f7c6c1c60
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: KDAController
   platform: 9
   scenePathNames:
   - Assets/Scenes/MainScene.unity
-  playerPath: C:/Users/Hungggggg/NUSwork/Y4S1/CG4002/build-ios/build-ios-0
+  playerPath: C:/Users/Hungggggg/NUSwork/Y4S1/CG4002/build-ios/build-ios-10
