@@ -43,21 +43,20 @@ class Client(threading.Thread):
         self.port_num = port_num
         self.group_id = group_id
         self.tunnel_dest = None
+        self.daemon = True
 
     def run(self):
-        # open tunnel to port 22 in local
+        # open tunnel
         self.tunnel_dest = self.create_tunnel()
         self.conn.connect(self.tunnel_dest)
 
         message = ""
-
         while message != "logout":
-            message = input("[Client] Enter message: ")
-            self.send_data(message)
-            print("[Client] Sent data:", message)
-
-            # received data from eval_server is unencrypted
-            # self.receive_data()
+            if len(relay_lock):
+                relay_lock.acquire()
+                message = relay_buffer.pop(0)
+                relay_lock.release()
+                self.send_data(message)
 
         self.end_client_connection()
 
@@ -154,6 +153,13 @@ if __name__ == '__main__':
     conn_u96 = Client(port_num, group_id)
     conn_u96.start()
 
-    # Receive data from bettles
-    while True:
-        time.sleep(1)
+    # Simulate receive data from bettles
+    message = ""
+
+    while message != "logout":
+        message = input("[Client] Enter message: ")
+        relay_lock.acquire()
+        relay_buffer.append(message)
+        relay_lock.release()
+
+    conn_u96.join()

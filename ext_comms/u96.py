@@ -118,6 +118,7 @@ class Mqtt(threading.Thread):
         self.client.subscribe(self.topic)
 
     def terminate(self):
+        self.client.unsubscribe()
         self.client.loop_stop()
         self.client.disconnect()
 
