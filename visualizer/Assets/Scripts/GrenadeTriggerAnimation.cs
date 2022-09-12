@@ -23,11 +23,11 @@ public class GrenadeTriggerAnimation : MonoBehaviour
 
     void TriggerAnimation()
     {
-        if (whichGrenade == 1) 
+        if (whichGrenade == 2) 
         {
             GetComponent<Animator>().Play("GrenadeThrowing");
         } 
-        else if (whichGrenade == 0)
+        else if (whichGrenade == 1)
         {
             GetComponent<Animator>().Play("GrenadeThrowing0");
         }

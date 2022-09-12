@@ -20,19 +20,24 @@ public class GrenadeController : MonoBehaviour
 
     void Update()
     {
-        if (player1Grenade == 0)
-        {
-            player1Grenade = MAX_GRENADE;
-        }
+        
     }
 
     public void ExplosionButtonPress()
     {
-        player1Grenade -= 1;
-        explosionParticles.Play();
+        if (player1Grenade > 0)
+        {
+            StartCoroutine(PlayExplosionEffect());
+        } else {
+            player1Grenade = MAX_GRENADE;
+        }
     }
 
-    public void PlayExplosionSound() {
+    IEnumerator PlayExplosionEffect() 
+    {
+        yield return new WaitForSeconds(2.01f);
+        player1Grenade -= 1;
+        explosionParticles.Play();
         grenadeExplosionSound.Play();
     }
 }
