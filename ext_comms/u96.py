@@ -1,6 +1,7 @@
 # Processes:
 # - ml model, comm visualiser, comm eval, comm relay
 from email import message
+from random import random
 from Crypto.Util.Padding import pad
 from Crypto.Cipher import AES
 from paho.mqtt import client as mqtt_client
@@ -10,6 +11,7 @@ import base64
 import socket
 import sys
 import json
+import time
 
 # p1 100 grenade 1 1 1 1 1 1
 
@@ -67,7 +69,9 @@ class MovePredictor(threading.Thread):
         self.daemon = True
 
     def pred_action(self, data):
-        return "grenade"
+        # Randomly generate action
+        actions = ["grenade", "reload", "shoot", "shield"]
+        return actions[random.randint(0, 3)]
 
     # Machine learning model
     def run(self):
@@ -75,7 +79,9 @@ class MovePredictor(threading.Thread):
         while action != "logout":
             if len(move_data_buffer):
                 data = read_data(move_data_buffer, move_data_lock)
+                print("[MovePredictor]Received data: ", data)
                 action = self.pred_action(data)
+                print("[MovePredictor]Generated action: ", action)
                 input_data(move_res_buffer, move_res_lock, action)
 
 
@@ -103,16 +109,19 @@ class Mqtt(threading.Thread):
         while True:
             if len(viz_send_buffer):
                 message = read_data(viz_send_buffer, viz_send_lock)
+
                 result = self.client.publish(self.topic, message)
+                print("[Mqtt]Published data: ", message)
                 status = result[0]
                 if status == 0:
-                    print(f"Sent message to visualizer: `{message}`")
+                    print("[Mqtt]Published data: ", message)
                 else:
-                    print(f"Failed to send message: `{message}`")
+                    print("[Mqtt]Failed to send message: ", message)
 
     def subscribe(self):
         def on_message(client, userdata, msg):
             input_data(viz_recv_buffer, viz_recv_lock, msg.payload.decode())
+            print("[Mqtt]Received data: ", msg.payload.decode())
 
         self.client.on_message = on_message
         self.client.subscribe(self.topic)
@@ -135,7 +144,7 @@ class Client(threading.Thread):
 
     def run(self):
         self.conn.connect(self.server_address)
-        print("[Client] Connection established to:", self.server_address)
+        print("[Eval server] Connection established to:", self.server_address)
 
         action = ""
 
@@ -178,7 +187,7 @@ class Client(threading.Thread):
         return json.dumps(state)
 
     def encrypt_message(self, message):
-        print("[Client] message:", message)
+        print("[Eval server] Raw message:", message)
         # AES.block_size = 16 (default)
         # padding with 0x02 (start of text)
         padded_msg = pad(bytes(message, "utf8"), AES.block_size)
@@ -195,9 +204,9 @@ class Client(threading.Thread):
         encrypted_text = self.encrypt_message(message)
         # _ is used as delimiter between len and content
         packet_size = (str(len(encrypted_text)) + '_').encode("utf-8")
-        print("[Client] encrypted_text:", encrypted_text)
         self.conn.sendall(packet_size)
         self.conn.sendall(encrypted_text)
+        print("[Eval server] Sent encrypted data:", encrypted_text)
 
     def receive_data(self):  # blocking call
         try:
@@ -228,10 +237,10 @@ class Client(threading.Thread):
                 self.end_client_connection()
             message = data.decode("utf8")  # Decode raw bytes to UTF-8
 
-            print("Ground truth:", message)
+            print("[Eval server]Ground truth:", message)
 
         except ConnectionResetError:
-            print('Connection Reset')
+            print('[Eval server]Connection Reset')
             self.end_client_connection()
         return message
 
@@ -252,9 +261,9 @@ class Server(threading.Thread):
         self.socket.listen(1)
 
         # Wait for a connection
-        print('Waiting for a connection')
+        print('[Relay]Waiting for a connection')
         self.conn, client_address = self.socket.accept()
-        print('Connection from', client_address)
+        print('[Relay]Connection from', client_address)
 
     # def stop(self):
     #     try:
@@ -298,15 +307,15 @@ class Server(threading.Thread):
                     break
                 data += _d
             if len(data) == 0:
-                print('no more data from the client')
-                self.end_client_connection()
+                print('[Relay] no more data from the client')
+                self.client.end_client_connection()
             message = data.decode("utf8")  # Decode raw bytes to UTF-8
 
-            print("[Client] decoded_text:", message)
+            print("[Relay] Received message:", message)
 
         except ConnectionResetError:
-            print('Connection Reset')
-            self.end_client_connection()
+            print('[Relay]Connection Reset')
+            self.client.end_client_connection()
         return message
 
     def run(self):
@@ -333,7 +342,7 @@ class Server(threading.Thread):
 
 if __name__ == '__main__':
     if len(sys.argv) != 6:
-        print('[Client] Invalid number of arguments')
+        print('Invalid number of arguments')
         sys.exit()
 
     local_port = int(sys.argv[1])
@@ -369,25 +378,34 @@ if __name__ == '__main__':
     action = ""
     while action != "logout":
         if len(move_res_buffer):
-            data = read_data(move_res_buffer, move_res_lock)
-            # do sth based on action
-            action = "shoot"
+            action = read_data(move_res_buffer, move_res_lock)
+            print("[Game engine] Received action:", action)
+
             state = read_data(curr_state, state_lock)
+
             # do sth based on action
+            time.sleep(2)
             input_data(curr_state, state_lock, state)
+            print("[Game engine] Resulting state:", state)
 
             if action != "grenade":
                 input_data(eval_buffer, eval_lock, state)
+                print("[Game engine] Sent to eval:", state)
 
             input_data(viz_send_buffer, viz_send_lock, state)
+            print("[Game engine] Sent to visualiser:", state)
 
         if len(viz_recv_buffer):
             is_hit = read_data(viz_recv_buffer, viz_recv_lock)
+            print("[Game engine] Received from visualiser:", is_hit)
+            state = read_data(curr_state, state_lock)
+
             if is_hit:
                 state["hp"] -= 20  # minus health based on grenade hit
 
             input_data(curr_state, state_lock, state)
             input_data(eval_buffer, eval_lock, state)
+            print("[Game engine] Sent to curr state and eval:", state)
 
     pub_client.terminate()
     recv_client.terminate()
