@@ -48,18 +48,6 @@ void RegisterAllStrippedInternalCalls()
 
 	//End Registrations for type : Unity.Profiling.LowLevel.Unsafe.ProfilerUnsafeUtility
 
-	//Start Registrations for type : UnityEngine.Animation
-
-		//System.Int32 UnityEngine.Animation::GetStateCount()
-		void Register_UnityEngine_Animation_GetStateCount();
-		Register_UnityEngine_Animation_GetStateCount();
-
-		//UnityEngine.AnimationState UnityEngine.Animation::GetStateAtIndex(System.Int32)
-		void Register_UnityEngine_Animation_GetStateAtIndex();
-		Register_UnityEngine_Animation_GetStateAtIndex();
-
-	//End Registrations for type : UnityEngine.Animation
-
 	//Start Registrations for type : UnityEngine.AnimationCurve
 
 		//System.Boolean UnityEngine.AnimationCurve::Internal_Equals(System.IntPtr)
@@ -101,6 +89,14 @@ void RegisterAllStrippedInternalCalls()
 		//System.Boolean UnityEngine.Animator::get_hasBoundPlayables()
 		void Register_UnityEngine_Animator_get_hasBoundPlayables();
 		Register_UnityEngine_Animator_get_hasBoundPlayables();
+
+		//System.Int32 UnityEngine.Animator::StringToHash(System.String)
+		void Register_UnityEngine_Animator_StringToHash();
+		Register_UnityEngine_Animator_StringToHash();
+
+		//System.Void UnityEngine.Animator::Play(System.Int32,System.Int32,System.Single)
+		void Register_UnityEngine_Animator_Play();
+		Register_UnityEngine_Animator_Play();
 
 		//System.Void UnityEngine.Animator::ResetTriggerString(System.String)
 		void Register_UnityEngine_Animator_ResetTriggerString();
@@ -193,6 +189,10 @@ void RegisterAllStrippedInternalCalls()
 	//End Registrations for type : UnityEngine.AudioSettings
 
 	//Start Registrations for type : UnityEngine.AudioSource
+
+		//System.Void UnityEngine.AudioSource::Play(System.Double)
+		void Register_UnityEngine_AudioSource_Play();
+		Register_UnityEngine_AudioSource_Play();
 
 		//System.Void UnityEngine.AudioSource::PlayHelper(UnityEngine.AudioSource,System.UInt64)
 		void Register_UnityEngine_AudioSource_PlayHelper();

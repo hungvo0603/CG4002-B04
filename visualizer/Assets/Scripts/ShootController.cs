@@ -7,26 +7,38 @@ using TMPro;
 public class ShootController : MonoBehaviour
 {
     private const int MAX_BULLET = 6;
+    private const int SHOOT_DAMAGE = 10;
 
-    public Player player1;
-    public Player player2;
+    public Player pl;
 
+    public EnemyDetector enemy;
+    private bool hasEnemy;
 
-    [SerializeField] private TextMeshProUGUI player1BulletText;
-
-    int player1Bullet = 6;
+    public int player1Bullet;
 
     // Start is called before the first frame update
     void Start()
     {
-        player1BulletText.text = "6/6";
+        player1Bullet = MAX_BULLET;
+        hasEnemy = false;
+    }
+
+    void Update()
+    {
+        if (player1Bullet == 0)
+        {
+            player1Bullet = MAX_BULLET;
+        }
     }
 
     public void GunShot()
     {
-        player1Bullet = (player1Bullet > 0) ? (player1Bullet - 1) : MAX_BULLET;
-        player1BulletText.text = player1Bullet.ToString() + "/6";
-        player2.TakeDamageFromShotPlayer2();
+        hasEnemy = enemy.hasEnemy;
+        player1Bullet -= 1;
+        if (hasEnemy)
+        {
+            pl.TakeDamagePlayer2(SHOOT_DAMAGE);
+        }
     }
 
 }

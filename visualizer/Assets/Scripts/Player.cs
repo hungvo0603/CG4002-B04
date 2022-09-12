@@ -14,6 +14,8 @@ public class Player : MonoBehaviour
     
     int player1CurrentHealth;
     int player2CurrentHealth;
+    int player1KillStatistic;
+    int player2KillStatistic;
     // Start is called before the first frame update
     void Start()
     {
@@ -22,6 +24,9 @@ public class Player : MonoBehaviour
 
         player2CurrentHealth = MAX_HEALTH;
         healthBarPlayer2.SetHealth(MAX_HEALTH);
+
+        player1KillStatistic = 0;
+        player2KillStatistic = 0;
     }
 
     // Update is called once per frame
@@ -30,24 +35,37 @@ public class Player : MonoBehaviour
         
     }
 
-    public void TakeDamageFromShotPlayer1()
+    public int getPlayer1Kill()
     {
-        player1CurrentHealth -= SHOT_DAMAGE;
+        return player1KillStatistic;
+    }
+
+    public int getPlayer2Kill()
+    {
+        return player2KillStatistic;
+    }
+
+    public void TakeDamagePlayer1(int damage)
+    {
+        player1CurrentHealth -= damage;
         if (player1CurrentHealth <= 0)
         {
+            player2KillStatistic += 1;
             player1CurrentHealth = MAX_HEALTH;
         } 
         healthBarPlayer1.SetHealth(player1CurrentHealth);
     }
 
-    public void TakeDamageFromShotPlayer2()
+    public void TakeDamagePlayer2(int damage)
     {
-        player2CurrentHealth -= SHOT_DAMAGE;
+        player2CurrentHealth -= damage;
         if (player2CurrentHealth <= 0)
         {
+            player1KillStatistic += 1;
             player2CurrentHealth = MAX_HEALTH;
         } 
         healthBarPlayer2.SetHealth(player2CurrentHealth);
     }
+
 
 }
