@@ -246,109 +246,121 @@ extern void BulletDisplay_Start_mC4CA1E30FE4DE9D1ED1BAAE756DEB885357A9E59 (void)
 extern void BulletDisplay_Update_m56ADCA3DBA7F856EFCCC0281AE7E063A55E45581 (void);
 // 0x00000075 System.Void BulletDisplay::.ctor()
 extern void BulletDisplay__ctor_m4D033634B758B7E8EA74DA937729763248C21108 (void);
-// 0x00000076 System.Void Grenade::Start()
+// 0x00000076 System.Void EnemyDetector::EnemyDetected()
+extern void EnemyDetector_EnemyDetected_mF7C2AC14CD0B1755F9AC1105C1E4455F3621FCF3 (void);
+// 0x00000077 System.Void EnemyDetector::EnemyLost()
+extern void EnemyDetector_EnemyLost_m97080136234C72173B105AC672557AD569E7319B (void);
+// 0x00000078 System.Void EnemyDetector::.ctor()
+extern void EnemyDetector__ctor_mAE25E02FE8E179633CC82A8A549E73D4DBF93C32 (void);
+// 0x00000079 System.Void Grenade::Start()
 extern void Grenade_Start_mB720555EF16F75104FBF0500262FC015CE4CFAAC (void);
-// 0x00000077 System.Void Grenade::Update()
+// 0x0000007A System.Void Grenade::Update()
 extern void Grenade_Update_m1F1A694955AB021D9D96A651B8010E001FA776BC (void);
-// 0x00000078 System.Void Grenade::Explode()
+// 0x0000007B System.Void Grenade::Explode()
 extern void Grenade_Explode_m1F566C6685BB5464C15D0CA9CB0BF8B9CDE01DDC (void);
-// 0x00000079 System.Void Grenade::.ctor()
+// 0x0000007C System.Void Grenade::.ctor()
 extern void Grenade__ctor_mB5C0B0C3DA6B1CD3D501DD35450C70CDBC5514D5 (void);
-// 0x0000007A System.Void GrenadeController::Start()
+// 0x0000007D System.Void GrenadeController::Start()
 extern void GrenadeController_Start_m2897E06CC8083367291A78F5BFEACA5493EBE58F (void);
-// 0x0000007B System.Void GrenadeController::Update()
+// 0x0000007E System.Void GrenadeController::Update()
 extern void GrenadeController_Update_mFB6D771F363F772B6B79EC000B10815813DA3B1B (void);
-// 0x0000007C System.Void GrenadeController::ExplosionButtonPress()
+// 0x0000007F System.Void GrenadeController::ExplosionButtonPress()
 extern void GrenadeController_ExplosionButtonPress_m321131ED98A6284D0795361B19A1CAFD0F5B0CEA (void);
-// 0x0000007D System.Collections.IEnumerator GrenadeController::PlayExplosionEffect()
+// 0x00000080 System.Collections.IEnumerator GrenadeController::PlayExplosionEffect()
 extern void GrenadeController_PlayExplosionEffect_mE00637B69632876EC6129C8EBA18C337FCCCB0EC (void);
-// 0x0000007E System.Void GrenadeController::.ctor()
+// 0x00000081 System.Void GrenadeController::.ctor()
 extern void GrenadeController__ctor_mB766F7B43085FB6B366D8D5C77DF00F4EB088612 (void);
-// 0x0000007F System.Void GrenadeController/<PlayExplosionEffect>d__7::.ctor(System.Int32)
+// 0x00000082 System.Void GrenadeController/<PlayExplosionEffect>d__7::.ctor(System.Int32)
 extern void U3CPlayExplosionEffectU3Ed__7__ctor_mD2BC561432AAB075AA925EF6897E09580133D5FF (void);
-// 0x00000080 System.Void GrenadeController/<PlayExplosionEffect>d__7::System.IDisposable.Dispose()
+// 0x00000083 System.Void GrenadeController/<PlayExplosionEffect>d__7::System.IDisposable.Dispose()
 extern void U3CPlayExplosionEffectU3Ed__7_System_IDisposable_Dispose_m85F99EC989AA09589C9903BFBC392262AED2F3D6 (void);
-// 0x00000081 System.Boolean GrenadeController/<PlayExplosionEffect>d__7::MoveNext()
+// 0x00000084 System.Boolean GrenadeController/<PlayExplosionEffect>d__7::MoveNext()
 extern void U3CPlayExplosionEffectU3Ed__7_MoveNext_m71911EFCB69EFCA6BFDBF751ED523DA94CB7F991 (void);
-// 0x00000082 System.Object GrenadeController/<PlayExplosionEffect>d__7::System.Collections.Generic.IEnumerator<System.Object>.get_Current()
+// 0x00000085 System.Object GrenadeController/<PlayExplosionEffect>d__7::System.Collections.Generic.IEnumerator<System.Object>.get_Current()
 extern void U3CPlayExplosionEffectU3Ed__7_System_Collections_Generic_IEnumeratorU3CSystem_ObjectU3E_get_Current_m46D1608F59B9FBD80058EE532152F1D06EC3F4C3 (void);
-// 0x00000083 System.Void GrenadeController/<PlayExplosionEffect>d__7::System.Collections.IEnumerator.Reset()
+// 0x00000086 System.Void GrenadeController/<PlayExplosionEffect>d__7::System.Collections.IEnumerator.Reset()
 extern void U3CPlayExplosionEffectU3Ed__7_System_Collections_IEnumerator_Reset_mF87100E5CAB014AA908B3348934C753C9D2C6198 (void);
-// 0x00000084 System.Object GrenadeController/<PlayExplosionEffect>d__7::System.Collections.IEnumerator.get_Current()
+// 0x00000087 System.Object GrenadeController/<PlayExplosionEffect>d__7::System.Collections.IEnumerator.get_Current()
 extern void U3CPlayExplosionEffectU3Ed__7_System_Collections_IEnumerator_get_Current_m7E39EDC72281C4F94CBA985B6D9E6D550B39EE1E (void);
-// 0x00000085 System.Void GrenadeDisplay::Start()
+// 0x00000088 System.Void GrenadeDisplay::Start()
 extern void GrenadeDisplay_Start_m6DF354D1ED2510EF1838BD2AE3332BC99D044C92 (void);
-// 0x00000086 System.Void GrenadeDisplay::Update()
+// 0x00000089 System.Void GrenadeDisplay::Update()
 extern void GrenadeDisplay_Update_mB8CCBD95A0D6333377A86C5CB2835FB7D5139762 (void);
-// 0x00000087 System.Void GrenadeDisplay::.ctor()
+// 0x0000008A System.Void GrenadeDisplay::.ctor()
 extern void GrenadeDisplay__ctor_mBBAF752C68E8F06420AAB81568E8E157DE767EF1 (void);
-// 0x00000088 System.Void GrenadeThrower::ThrowGrenade()
+// 0x0000008B System.Void GrenadeThrower::ThrowGrenade()
 extern void GrenadeThrower_ThrowGrenade_m3A56A4C507A4AD7C2075E2F1F689DA2FAC111A4C (void);
-// 0x00000089 System.Void GrenadeThrower::.ctor()
+// 0x0000008C System.Void GrenadeThrower::.ctor()
 extern void GrenadeThrower__ctor_m79E21AB6A69056036665723C9FC5387CE5B33685 (void);
-// 0x0000008A System.Void GrenadeTriggerAnimation::Start()
+// 0x0000008D System.Void GrenadeTriggerAnimation::Start()
 extern void GrenadeTriggerAnimation_Start_m866C98731020F0D6DFDC12004C3A714F69FF0AEA (void);
-// 0x0000008B System.Void GrenadeTriggerAnimation::Update()
+// 0x0000008E System.Void GrenadeTriggerAnimation::Update()
 extern void GrenadeTriggerAnimation_Update_m3377864FD8FCC748CF7B56FEBC25438B5579B92C (void);
-// 0x0000008C System.Void GrenadeTriggerAnimation::TriggerAnimation()
+// 0x0000008F System.Void GrenadeTriggerAnimation::TriggerAnimation()
 extern void GrenadeTriggerAnimation_TriggerAnimation_mC7A407C404A9AC65D4EC4B8BD84BEAAB2E62B9FC (void);
-// 0x0000008D System.Void GrenadeTriggerAnimation::.ctor()
+// 0x00000090 System.Void GrenadeTriggerAnimation::.ctor()
 extern void GrenadeTriggerAnimation__ctor_m6D6FC88B418422C4C46DE44B4A9D130A581239AB (void);
-// 0x0000008E System.Void GunControll::PlayGunShotSound()
+// 0x00000091 System.Void GunControll::PlayGunShotSound()
 extern void GunControll_PlayGunShotSound_m022670E4D117185BB6327FC759483858B3A24D95 (void);
-// 0x0000008F System.Void GunControll::.ctor()
+// 0x00000092 System.Void GunControll::.ctor()
 extern void GunControll__ctor_m8566CE0BB668F44690A0578E0587A84F3A2C107F (void);
-// 0x00000090 System.Void HealthBarController::SetHealth(System.Int32)
+// 0x00000093 System.Void HealthBarController::SetHealth(System.Int32)
 extern void HealthBarController_SetHealth_mCBEADAD13F45906B3CEA93F83422D3E9F6CBF6DC (void);
-// 0x00000091 System.Void HealthBarController::.ctor()
+// 0x00000094 System.Void HealthBarController::.ctor()
 extern void HealthBarController__ctor_mC49562983F5F7C04A78E7B3104CAE92FE3D8C587 (void);
-// 0x00000092 System.Void Player::Start()
+// 0x00000095 System.Void Player::Start()
 extern void Player_Start_mC31CF4F40DDEA35C5E39E8C43EC37284AE7C453D (void);
-// 0x00000093 System.Void Player::Update()
+// 0x00000096 System.Void Player::Update()
 extern void Player_Update_m95E134A5EF1B5164EA281F61D7FA436F59BE3C9F (void);
-// 0x00000094 System.Void Player::TakeDamageFromShotPlayer1()
+// 0x00000097 System.Void Player::TakeDamageFromShotPlayer1()
 extern void Player_TakeDamageFromShotPlayer1_m6F354B55F36048A00658B0B4E32FE77F4094B483 (void);
-// 0x00000095 System.Void Player::TakeDamageFromShotPlayer2()
+// 0x00000098 System.Void Player::TakeDamageFromShotPlayer2()
 extern void Player_TakeDamageFromShotPlayer2_mB68FDC3E870987CC3B42DAB2EC754B5D4014AEB2 (void);
-// 0x00000096 System.Void Player::.ctor()
+// 0x00000099 System.Void Player::.ctor()
 extern void Player__ctor_m0A83E0706592FC871B0CF188B37AFC6649F3D85D (void);
-// 0x00000097 System.Void ShieldCountdown::Start()
+// 0x0000009A System.Void ShieldCountdown::Start()
 extern void ShieldCountdown_Start_m3300B919D68ADC7E42A1C924BAF8E538AB089894 (void);
-// 0x00000098 System.Void ShieldCountdown::Update()
+// 0x0000009B System.Void ShieldCountdown::Update()
 extern void ShieldCountdown_Update_m38DD222DA46184464AF74C512BFCF3A8D2A3FC76 (void);
-// 0x00000099 System.Void ShieldCountdown::ActivateShieldPlayer1()
+// 0x0000009C System.Void ShieldCountdown::ActivateShieldPlayer1()
 extern void ShieldCountdown_ActivateShieldPlayer1_mCACC1E0CE18343E564B456D3D037FE41C494E04F (void);
-// 0x0000009A System.Void ShieldCountdown::.ctor()
+// 0x0000009D System.Void ShieldCountdown::.ctor()
 extern void ShieldCountdown__ctor_m2731C3B2183BA500E7059762D992FDB921B58446 (void);
-// 0x0000009B System.Void ShieldDisplay::Start()
+// 0x0000009E System.Void ShieldDetector::ShieldDetected()
+extern void ShieldDetector_ShieldDetected_m7D7D37BC58964E2E4FD694A77CCF766F57AAFD8D (void);
+// 0x0000009F System.Void ShieldDetector::ShieldLost()
+extern void ShieldDetector_ShieldLost_m352EE169C7D862BA4B5A4A95D033525957FC5F10 (void);
+// 0x000000A0 System.Void ShieldDetector::.ctor()
+extern void ShieldDetector__ctor_mFDBB6B91DA4E4F9744E33A8A07EC2818C450652F (void);
+// 0x000000A1 System.Void ShieldDisplay::Start()
 extern void ShieldDisplay_Start_m6EB66C2071A99A7806AB75029EA288D738DDEF93 (void);
-// 0x0000009C System.Void ShieldDisplay::Update()
+// 0x000000A2 System.Void ShieldDisplay::Update()
 extern void ShieldDisplay_Update_m9B402663F072293FD09626957F4A7DF26C16748D (void);
-// 0x0000009D System.Void ShieldDisplay::.ctor()
+// 0x000000A3 System.Void ShieldDisplay::.ctor()
 extern void ShieldDisplay__ctor_mFBC6DAC8491E30460CB4261BF6624B954A6DEF78 (void);
-// 0x0000009E System.Void ShootController::Start()
+// 0x000000A4 System.Void ShootController::Start()
 extern void ShootController_Start_mA20C52B5BE2C46630486948A1D89AFE3A91F0ECA (void);
-// 0x0000009F System.Void ShootController::Update()
+// 0x000000A5 System.Void ShootController::Update()
 extern void ShootController_Update_m3722D12524EFC191A069694C3A836112B463C1E7 (void);
-// 0x000000A0 System.Void ShootController::GunShot()
+// 0x000000A6 System.Void ShootController::GunShot()
 extern void ShootController_GunShot_m0F71B7B2735864E0248F0507B56853CC95B153E2 (void);
-// 0x000000A1 System.Void ShootController::.ctor()
+// 0x000000A7 System.Void ShootController::.ctor()
 extern void ShootController__ctor_mDF9AEE5CE1F84BB6930D4F8009B9CE588E643FB8 (void);
-// 0x000000A2 System.Void StatisticsManager::Start()
+// 0x000000A8 System.Void StatisticsManager::Start()
 extern void StatisticsManager_Start_m183C7694874F9F0423CAF8E7AA2D85F9C8AF502C (void);
-// 0x000000A3 System.Void StatisticsManager::HealthDownButtonPress()
+// 0x000000A9 System.Void StatisticsManager::HealthDownButtonPress()
 extern void StatisticsManager_HealthDownButtonPress_mC0A19D2F3C1D1636F133EBBE0321BF9280E5C340 (void);
-// 0x000000A4 System.Void StatisticsManager::.ctor()
+// 0x000000AA System.Void StatisticsManager::.ctor()
 extern void StatisticsManager__ctor_m4EFBC6076F8D6D9ED0B25796F23C43FE66D5E6AD (void);
-// 0x000000A5 System.Void GunController::PlayGunShotSound()
+// 0x000000AB System.Void GunController::PlayGunShotSound()
 extern void GunController_PlayGunShotSound_m8BBAF5B9176728FB6596AF9E30A1DAF2CEADC769 (void);
-// 0x000000A6 System.Void GunController::.ctor()
+// 0x000000AC System.Void GunController::.ctor()
 extern void GunController__ctor_m909818F6EA5301033F25095C923F38FF13B3934A (void);
-// 0x000000A7 System.Void Readme::.ctor()
+// 0x000000AD System.Void Readme::.ctor()
 extern void Readme__ctor_m69C325C4C171DCB0312B646A9034AA91EA8C39C6 (void);
-// 0x000000A8 System.Void Readme/Section::.ctor()
+// 0x000000AE System.Void Readme/Section::.ctor()
 extern void Section__ctor_m5F732533E4DFC0167D965E5F5DB332E46055399B (void);
-static Il2CppMethodPointer s_methodPointers[168] = 
+static Il2CppMethodPointer s_methodPointers[174] = 
 {
 	csDemoScenceControl_Start_mD9C3744087422621CCAF019CBAA8E8C2CB4DC6B6,
 	csDemoScenceControl_Update_mEF83FE0C464295458904552A02C61E1EDAF91D8F,
@@ -467,6 +479,9 @@ static Il2CppMethodPointer s_methodPointers[168] =
 	BulletDisplay_Start_mC4CA1E30FE4DE9D1ED1BAAE756DEB885357A9E59,
 	BulletDisplay_Update_m56ADCA3DBA7F856EFCCC0281AE7E063A55E45581,
 	BulletDisplay__ctor_m4D033634B758B7E8EA74DA937729763248C21108,
+	EnemyDetector_EnemyDetected_mF7C2AC14CD0B1755F9AC1105C1E4455F3621FCF3,
+	EnemyDetector_EnemyLost_m97080136234C72173B105AC672557AD569E7319B,
+	EnemyDetector__ctor_mAE25E02FE8E179633CC82A8A549E73D4DBF93C32,
 	Grenade_Start_mB720555EF16F75104FBF0500262FC015CE4CFAAC,
 	Grenade_Update_m1F1A694955AB021D9D96A651B8010E001FA776BC,
 	Grenade_Explode_m1F566C6685BB5464C15D0CA9CB0BF8B9CDE01DDC,
@@ -504,6 +519,9 @@ static Il2CppMethodPointer s_methodPointers[168] =
 	ShieldCountdown_Update_m38DD222DA46184464AF74C512BFCF3A8D2A3FC76,
 	ShieldCountdown_ActivateShieldPlayer1_mCACC1E0CE18343E564B456D3D037FE41C494E04F,
 	ShieldCountdown__ctor_m2731C3B2183BA500E7059762D992FDB921B58446,
+	ShieldDetector_ShieldDetected_m7D7D37BC58964E2E4FD694A77CCF766F57AAFD8D,
+	ShieldDetector_ShieldLost_m352EE169C7D862BA4B5A4A95D033525957FC5F10,
+	ShieldDetector__ctor_mFDBB6B91DA4E4F9744E33A8A07EC2818C450652F,
 	ShieldDisplay_Start_m6EB66C2071A99A7806AB75029EA288D738DDEF93,
 	ShieldDisplay_Update_m9B402663F072293FD09626957F4A7DF26C16748D,
 	ShieldDisplay__ctor_mFBC6DAC8491E30460CB4261BF6624B954A6DEF78,
@@ -519,7 +537,7 @@ static Il2CppMethodPointer s_methodPointers[168] =
 	Readme__ctor_m69C325C4C171DCB0312B646A9034AA91EA8C39C6,
 	Section__ctor_m5F732533E4DFC0167D965E5F5DB332E46055399B,
 };
-static const int32_t s_InvokerIndices[168] = 
+static const int32_t s_InvokerIndices[174] = 
 {
 	5100,
 	5100,
@@ -645,6 +663,9 @@ static const int32_t s_InvokerIndices[168] =
 	5100,
 	5100,
 	5100,
+	5100,
+	5100,
+	5100,
 	4993,
 	5100,
 	4025,
@@ -689,12 +710,15 @@ static const int32_t s_InvokerIndices[168] =
 	5100,
 	5100,
 	5100,
+	5100,
+	5100,
+	5100,
 };
 IL2CPP_EXTERN_C const Il2CppCodeGenModule g_AssemblyU2DCSharp_CodeGenModule;
 const Il2CppCodeGenModule g_AssemblyU2DCSharp_CodeGenModule = 
 {
 	"Assembly-CSharp.dll",
-	168,
+	174,
 	s_methodPointers,
 	0,
 	NULL,

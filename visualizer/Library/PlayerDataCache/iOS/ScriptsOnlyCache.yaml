@@ -3,6 +3,7 @@ ScriptsOnlyBuild:
     Assembly-CSharp.dll:
     - BulletDisplay
     - CFX_AutoDestructShuriken
+    - EnemyDetector
     - GrenadeController
     - GrenadeDisplay
     - GrenadeTriggerAnimation
@@ -10,6 +11,7 @@ ScriptsOnlyBuild:
     - HealthBarController
     - Player
     - ShieldCountdown
+    - ShieldDetector
     - ShieldDisplay
     - ShootController
     Unity.Rider.Editor.dll:
@@ -93,6 +95,18 @@ ScriptsOnlyBuild:
     - Vuforia.VuforiaConfiguration/VideoBackgroundConfiguration
     - Vuforia.VuforiaConfiguration/WebCamConfiguration
   methodsToPreserve:
+  - assembly: Assembly-CSharp
+    fullTypeName: EnemyDetector
+    methodName: EnemyDetected
+  - assembly: Assembly-CSharp
+    fullTypeName: ShieldDetector
+    methodName: ShieldDetected
+  - assembly: Assembly-CSharp
+    fullTypeName: ShieldDetector
+    methodName: ShieldLost
+  - assembly: Assembly-CSharp
+    fullTypeName: EnemyDetector
+    methodName: EnemyLost
   - assembly: Assembly-CSharp
     fullTypeName: ShootController
     methodName: GunShot
@@ -204,6 +218,10 @@ ScriptsOnlyBuild:
       Script: {instanceID: 7294}
     - Class: 114
       Script: {instanceID: 7958}
+    - Class: 114
+      Script: {instanceID: 46728}
+    - Class: 114
+      Script: {instanceID: 47762}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -2929,7 +2947,19 @@ ScriptsOnlyBuild:
     assemblyName: Unity.VisualScripting.Core.dll
     namespaceName: Unity.VisualScripting
     className: UnityOnSliderValueChangedMessageListener
+  - hash:
+      serializedVersion: 2
+      Hash: 0400cf8d44a5f6a513fff35a476afea9
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: EnemyDetector
+  - hash:
+      serializedVersion: 2
+      Hash: 03c2cdc9cd494f62ad041f394f17dd0c
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: ShieldDetector
   platform: 9
   scenePathNames:
   - Assets/Scenes/MainScene.unity
-  playerPath: C:/Users/Hungggggg/NUSwork/Y4S1/CG4002/build-ios/build-ios-9
+  playerPath: C:/Users/Hungggggg/NUSwork/Y4S1/CG4002/build-ios/build-ios-10
