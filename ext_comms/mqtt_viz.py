@@ -1,7 +1,8 @@
 # Mqtt for visualiser
+# Key points:
+# - Only subs to topic you wanna listen (if just pub dont need to subs))
 import threading
 from paho.mqtt import client as mqtt_client
-import time
 import json
 
 broker = 'broker.emqx.io'  # Public broker
@@ -66,6 +67,8 @@ class Mqtt(threading.Thread):
 
     def publish(self):
         print("Publishing...")
+        global is_logged_out
+
         while not is_logged_out:
             message = input(
                 "[Pub] Enter state [player_num, hp, action, bullets, grenades, shield_time, shield_health, num_deaths, num_shield]: ")
@@ -80,6 +83,9 @@ class Mqtt(threading.Thread):
                 print(f"Sent message [`{self.topic}`]: `{message}`")
             else:
                 print(f"Failed to send message: `{message}`")
+
+            if message == "logout":
+                is_logged_out = True
 
     def subscribe(self):
         print("Subscribing...")
@@ -98,8 +104,8 @@ class Mqtt(threading.Thread):
 if __name__ == '__main__':
     # Input client id (mqtt-[machine]-4)
     print("Starting MQTT client...")
-    recv_client = Mqtt("cg4002/4/u96_viz", "viz_recv")
-    pub_client = Mqtt("cg4002/4/viz_u96", "viz_pub")
+    recv_client = Mqtt("cg4002/4/u96_viz1", "viz_recv")
+    pub_client = Mqtt("cg4002/4/viz_u961", "viz_pub")
 
     # Receive messages
     recv_client.subscribe()
@@ -109,10 +115,9 @@ if __name__ == '__main__':
     pub_thread.start()
 
     message = ""
-    while message != "logout":
+    while message != "logout" and not is_logged_out:
         if len(input_buffer):
             message = input_buffer.pop(0)
-            time.sleep(2)  # do sth here
             print(f"Received message: ", message)
 
     print("Ending MQTT client...")
