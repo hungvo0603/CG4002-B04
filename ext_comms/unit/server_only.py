@@ -2,7 +2,6 @@
 # - ml model, comm visualiser, comm eval, comm relay
 import threading
 import socket
-import time
 import sys
 
 
@@ -24,22 +23,13 @@ class Server(threading.Thread):
         self.conn, client_address = self.socket.accept()
         print('connection from', client_address)
 
-    # def stop(self):
-    #     try:
-    #         self.conn.shutdown(SHUT_RDWR)
-    #         self.conn.close()
-    #     except OSError:
-    #         # connection already closed
-    #         pass
-
-    def send_data(self, message):
-        # encrypted_text = self.encrypt_message(message)
-        encrypted_text = bytes(str(message), encoding="utf8")
-        # _ is used as delimiter between len and content
-        packet_size = (str(len(encrypted_text)) + '_').encode("utf-8")
-        # print("[Client] encrypted_text:", encrypted_text)
-        self.conn.sendall(packet_size)
-        self.conn.sendall(encrypted_text)
+    def end_client_connection(self):
+        try:
+            self.conn.shutdown(socket.SHUT_RDWR)
+            self.conn.close()
+        except OSError:
+            # Already closed
+            pass
 
     def receive_data(self):  # blocking call
         try:
@@ -70,33 +60,22 @@ class Server(threading.Thread):
                 self.end_client_connection()
             message = data.decode("utf8")  # Decode raw bytes to UTF-8
 
-            print("[Client] decoded_text:", message)
-            ### Update game state :D ###
-
         except ConnectionResetError:
             print('Connection Reset')
-            self.client.end_client_connection()
+            self.end_client_connection()
         return message
 
     def run(self):
 
-        # self.expecting_packet.clear() #if want to use event later -> sth like conditional variable
-
         self.setup_connection()
-
         message = ""
 
         while message != "logout":
             # received data from eval_server is unencrypted
             message = self.receive_data()
+            print("Received message: ", message)
 
-            # do sth to data
-            time.sleep(2)
-
-            self.send_data(message)
-            print("[Client] Sent data:", message)
-
-        self.conn.close()
+        self.end_client_connection()
 
 
 if __name__ == '__main__':
@@ -109,3 +88,5 @@ if __name__ == '__main__':
 
     my_server = Server(port_num, group_id)
     my_server.start()
+
+    my_server.join()

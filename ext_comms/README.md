@@ -5,9 +5,10 @@ Qn:
 - for video demo, need individual parts or jsut integrated?
 
 Todo:
+- Remove error at server_only (logout cmd)
 - Receiver at u96
 - check requirement for full subsystem check (canvas)
-- mqqt two way connection (need to do phone app)
+- mqqt two way connection (need to do phone app) + test it out too (tgt+alone)
 - connect to visualizer
 - confirm data received by internal comms
 

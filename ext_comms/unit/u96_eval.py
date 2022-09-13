@@ -13,7 +13,7 @@ import json
 import os
 import dotenv
 
-# python laptop_u96.py 127.0.0.1 1 4 1234567890123456 secret_key (16-digit)
+# python u96_eval.py localhost 4 4 1234567890123456 secret_key (16-digit)
 # p1 100 grenade 1 1 1 1 1 1
 
 # Player JSON format
@@ -135,7 +135,7 @@ class Client(threading.Thread):
             if is_encrypted:
                 message = self.decrypt_message(message)
 
-            print("[Client] decoded_text:", message)
+            print("[Client] Received text:", message)
             ### Update game state :D ###
 
         except ConnectionResetError:
