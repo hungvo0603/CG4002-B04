@@ -1,16 +1,14 @@
 Qn:
 - how are we demoing the eval server conn in thurs?
 - how the 2nd layer tunnel act work?
-- is ti possbile to make one client publish and subscribe to same topic in mqtt? i tried by failed
 - on logout, do we still need to send state to eval_server? (curr implementation jsut directly terminate)
+- for video demo, need individual parts or jsut integrated?
 
 Todo:
-- Establish tunnel to u96
 - Receiver at u96
 - check requirement for full subsystem check (canvas)
-- mqqt two way connection
+- mqqt two way connection (need to do phone app)
 - connect to visualizer
-- threading u96
 - confirm data received by internal comms
 
 Main idea:
