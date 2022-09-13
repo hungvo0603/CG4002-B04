@@ -8,18 +8,18 @@ public class ShieldDetector : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI shieldDetectionText;
     public bool hasShieldEnemy;
-    [SerializeField] private ShieldController sc;
+    [SerializeField] private ShieldController shieldController;
     private bool _isShieldActivatedPlayer2;
 
     void Start()
     {
         hasShieldEnemy = false;
-        _isShieldActivatedPlayer2 = sc.isShieldActivatedPlayer2;
+        _isShieldActivatedPlayer2 = shieldController.isShieldActivatedPlayer2;
     }
 
     void Update()
     {
-        _isShieldActivatedPlayer2 = sc.isShieldActivatedPlayer2;
+        _isShieldActivatedPlayer2 = shieldController.isShieldActivatedPlayer2;
         ShieldDetected();
         StartCoroutine(DelayHalfSec());
     }

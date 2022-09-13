@@ -320,117 +320,139 @@ extern void Player_TakeDamagePlayer2_mA00130D01ED741B4334CE04346B010EED08D505B (
 extern void Player__ctor_m0A83E0706592FC871B0CF188B37AFC6649F3D85D (void);
 // 0x0000009A System.Void ShieldController::Start()
 extern void ShieldController_Start_m1282A0AEE70C97AA0540F00019067B2F0FA398E3 (void);
-// 0x0000009B System.Void ShieldController::ActivateShieldPlayer2()
+// 0x0000009B System.Void ShieldController::ActivateShieldPlayer1()
+extern void ShieldController_ActivateShieldPlayer1_m74C7DFF9BBD35A8F61FF6DD8B1039539B9E28A48 (void);
+// 0x0000009C System.Void ShieldController::ActivateShieldPlayer2()
 extern void ShieldController_ActivateShieldPlayer2_mAD9B725903E6D7DD3B271B6D4F05D68D506C611D (void);
-// 0x0000009C System.Collections.IEnumerator ShieldController::DeactivateShieldPlayer2()
+// 0x0000009D System.Collections.IEnumerator ShieldController::DeactivateShieldPlayer1()
+extern void ShieldController_DeactivateShieldPlayer1_m90B0C5AC2567AD8F6DB940E6387FA1E3C14C548A (void);
+// 0x0000009E System.Collections.IEnumerator ShieldController::DeactivateShieldPlayer2()
 extern void ShieldController_DeactivateShieldPlayer2_m39F7E6203C862CCBAAB4B674E51D07E2CCBE6897 (void);
-// 0x0000009D System.Void ShieldController::SetShieldHealth(System.Int32)
-extern void ShieldController_SetShieldHealth_m73286F46D9A59668262691B14B279286F6C00283 (void);
-// 0x0000009E System.Void ShieldController::.ctor()
+// 0x0000009F System.Void ShieldController::.ctor()
 extern void ShieldController__ctor_m81CD176B75E61B72A466293B71995508624BEC17 (void);
-// 0x0000009F System.Void ShieldController/<DeactivateShieldPlayer2>d__7::.ctor(System.Int32)
-extern void U3CDeactivateShieldPlayer2U3Ed__7__ctor_m10638F0F36927C9CF8413273F726797D968D070B (void);
-// 0x000000A0 System.Void ShieldController/<DeactivateShieldPlayer2>d__7::System.IDisposable.Dispose()
-extern void U3CDeactivateShieldPlayer2U3Ed__7_System_IDisposable_Dispose_m97039ACAFF23742E245A6927219D1F70C0D4E678 (void);
-// 0x000000A1 System.Boolean ShieldController/<DeactivateShieldPlayer2>d__7::MoveNext()
-extern void U3CDeactivateShieldPlayer2U3Ed__7_MoveNext_m57C6F4DEDD637FECE12FECDAAB7B840E43E7B9CB (void);
-// 0x000000A2 System.Object ShieldController/<DeactivateShieldPlayer2>d__7::System.Collections.Generic.IEnumerator<System.Object>.get_Current()
-extern void U3CDeactivateShieldPlayer2U3Ed__7_System_Collections_Generic_IEnumeratorU3CSystem_ObjectU3E_get_Current_m905539794C9ACAE4572E8FCF8877F90FAC12936C (void);
-// 0x000000A3 System.Void ShieldController/<DeactivateShieldPlayer2>d__7::System.Collections.IEnumerator.Reset()
-extern void U3CDeactivateShieldPlayer2U3Ed__7_System_Collections_IEnumerator_Reset_m1FEC30D09A87485B26524B9D5CDC36332974916F (void);
-// 0x000000A4 System.Object ShieldController/<DeactivateShieldPlayer2>d__7::System.Collections.IEnumerator.get_Current()
-extern void U3CDeactivateShieldPlayer2U3Ed__7_System_Collections_IEnumerator_get_Current_m7A6DBEE2EAF95E7FC30CCEA9B9E1A73030220089 (void);
-// 0x000000A5 System.Void ShieldCountdown::Start()
+// 0x000000A0 System.Void ShieldController/<DeactivateShieldPlayer1>d__11::.ctor(System.Int32)
+extern void U3CDeactivateShieldPlayer1U3Ed__11__ctor_m6187458967E2B1CBA0D90826A1EA40B2FBD6DE29 (void);
+// 0x000000A1 System.Void ShieldController/<DeactivateShieldPlayer1>d__11::System.IDisposable.Dispose()
+extern void U3CDeactivateShieldPlayer1U3Ed__11_System_IDisposable_Dispose_m378520CE7875961D77BAC199BADE70CDA3A38A82 (void);
+// 0x000000A2 System.Boolean ShieldController/<DeactivateShieldPlayer1>d__11::MoveNext()
+extern void U3CDeactivateShieldPlayer1U3Ed__11_MoveNext_m7BC1762F29930023AF42985E3660FA2712A91314 (void);
+// 0x000000A3 System.Object ShieldController/<DeactivateShieldPlayer1>d__11::System.Collections.Generic.IEnumerator<System.Object>.get_Current()
+extern void U3CDeactivateShieldPlayer1U3Ed__11_System_Collections_Generic_IEnumeratorU3CSystem_ObjectU3E_get_Current_mF7233F0C6DA7B9EEB12CF9F80B56DD9297AF80FC (void);
+// 0x000000A4 System.Void ShieldController/<DeactivateShieldPlayer1>d__11::System.Collections.IEnumerator.Reset()
+extern void U3CDeactivateShieldPlayer1U3Ed__11_System_Collections_IEnumerator_Reset_mC95A36E85C16EAC56D99E490164A4DD60CDE5D43 (void);
+// 0x000000A5 System.Object ShieldController/<DeactivateShieldPlayer1>d__11::System.Collections.IEnumerator.get_Current()
+extern void U3CDeactivateShieldPlayer1U3Ed__11_System_Collections_IEnumerator_get_Current_m286D560A5ED735628B818A4FCF0DE3341EB518F0 (void);
+// 0x000000A6 System.Void ShieldController/<DeactivateShieldPlayer2>d__12::.ctor(System.Int32)
+extern void U3CDeactivateShieldPlayer2U3Ed__12__ctor_m0E5337AF3CC2070318887719EE26CCC96F220719 (void);
+// 0x000000A7 System.Void ShieldController/<DeactivateShieldPlayer2>d__12::System.IDisposable.Dispose()
+extern void U3CDeactivateShieldPlayer2U3Ed__12_System_IDisposable_Dispose_mBA4EFFA3AE347AFD2723F1B893D0DEBDE703ABAF (void);
+// 0x000000A8 System.Boolean ShieldController/<DeactivateShieldPlayer2>d__12::MoveNext()
+extern void U3CDeactivateShieldPlayer2U3Ed__12_MoveNext_m3030D69D05459F132C21AA6B236386F5C5C0ED2E (void);
+// 0x000000A9 System.Object ShieldController/<DeactivateShieldPlayer2>d__12::System.Collections.Generic.IEnumerator<System.Object>.get_Current()
+extern void U3CDeactivateShieldPlayer2U3Ed__12_System_Collections_Generic_IEnumeratorU3CSystem_ObjectU3E_get_Current_mD0EC80BBD9B16C50A47B640B7BA6FF1DBE866F4C (void);
+// 0x000000AA System.Void ShieldController/<DeactivateShieldPlayer2>d__12::System.Collections.IEnumerator.Reset()
+extern void U3CDeactivateShieldPlayer2U3Ed__12_System_Collections_IEnumerator_Reset_m708D36FA78E7B8C02253E530CB5ACDDB652543FD (void);
+// 0x000000AB System.Object ShieldController/<DeactivateShieldPlayer2>d__12::System.Collections.IEnumerator.get_Current()
+extern void U3CDeactivateShieldPlayer2U3Ed__12_System_Collections_IEnumerator_get_Current_mBCE2074174A5A0F35828B631097B85FA5032E6A3 (void);
+// 0x000000AC System.Void ShieldCountdown::Start()
 extern void ShieldCountdown_Start_m3300B919D68ADC7E42A1C924BAF8E538AB089894 (void);
-// 0x000000A6 System.Void ShieldCountdown::Update()
+// 0x000000AD System.Void ShieldCountdown::Update()
 extern void ShieldCountdown_Update_m38DD222DA46184464AF74C512BFCF3A8D2A3FC76 (void);
-// 0x000000A7 System.Void ShieldCountdown::ActivateShieldPlayer1()
+// 0x000000AE System.Void ShieldCountdown::ActivateShieldPlayer1()
 extern void ShieldCountdown_ActivateShieldPlayer1_mCACC1E0CE18343E564B456D3D037FE41C494E04F (void);
-// 0x000000A8 System.Void ShieldCountdown::.ctor()
+// 0x000000AF System.Void ShieldCountdown::.ctor()
 extern void ShieldCountdown__ctor_m2731C3B2183BA500E7059762D992FDB921B58446 (void);
-// 0x000000A9 System.Void ShieldDetector::Start()
+// 0x000000B0 System.Void ShieldDetector::Start()
 extern void ShieldDetector_Start_m85B1469BF95656286293FCD710CD9CD04B2747E6 (void);
-// 0x000000AA System.Void ShieldDetector::Update()
+// 0x000000B1 System.Void ShieldDetector::Update()
 extern void ShieldDetector_Update_m00588A68436E26079E31B246CA0531FCCC6CBD09 (void);
-// 0x000000AB System.Void ShieldDetector::ShieldDetected()
+// 0x000000B2 System.Void ShieldDetector::ShieldDetected()
 extern void ShieldDetector_ShieldDetected_m7D7D37BC58964E2E4FD694A77CCF766F57AAFD8D (void);
-// 0x000000AC System.Void ShieldDetector::ShieldLost()
+// 0x000000B3 System.Void ShieldDetector::ShieldLost()
 extern void ShieldDetector_ShieldLost_m352EE169C7D862BA4B5A4A95D033525957FC5F10 (void);
-// 0x000000AD System.Collections.IEnumerator ShieldDetector::DelayHalfSec()
+// 0x000000B4 System.Collections.IEnumerator ShieldDetector::DelayHalfSec()
 extern void ShieldDetector_DelayHalfSec_m43736109EF9E2A697F45D88FA0074B2457EF6075 (void);
-// 0x000000AE System.Void ShieldDetector::.ctor()
+// 0x000000B5 System.Void ShieldDetector::.ctor()
 extern void ShieldDetector__ctor_mFDBB6B91DA4E4F9744E33A8A07EC2818C450652F (void);
-// 0x000000AF System.Void ShieldDetector/<DelayHalfSec>d__8::.ctor(System.Int32)
+// 0x000000B6 System.Void ShieldDetector/<DelayHalfSec>d__8::.ctor(System.Int32)
 extern void U3CDelayHalfSecU3Ed__8__ctor_mF2CB38A31B9345088D62FF09F0ACFF0D059D277B (void);
-// 0x000000B0 System.Void ShieldDetector/<DelayHalfSec>d__8::System.IDisposable.Dispose()
+// 0x000000B7 System.Void ShieldDetector/<DelayHalfSec>d__8::System.IDisposable.Dispose()
 extern void U3CDelayHalfSecU3Ed__8_System_IDisposable_Dispose_m14EB662C3C174D108282E32750914223C931B88E (void);
-// 0x000000B1 System.Boolean ShieldDetector/<DelayHalfSec>d__8::MoveNext()
+// 0x000000B8 System.Boolean ShieldDetector/<DelayHalfSec>d__8::MoveNext()
 extern void U3CDelayHalfSecU3Ed__8_MoveNext_mFCB5271A68361BACD2F48198D9ABEFA8CE18EF6E (void);
-// 0x000000B2 System.Object ShieldDetector/<DelayHalfSec>d__8::System.Collections.Generic.IEnumerator<System.Object>.get_Current()
+// 0x000000B9 System.Object ShieldDetector/<DelayHalfSec>d__8::System.Collections.Generic.IEnumerator<System.Object>.get_Current()
 extern void U3CDelayHalfSecU3Ed__8_System_Collections_Generic_IEnumeratorU3CSystem_ObjectU3E_get_Current_m88E63183847712A18A0E0BA9CB1C5D6C2511E38D (void);
-// 0x000000B3 System.Void ShieldDetector/<DelayHalfSec>d__8::System.Collections.IEnumerator.Reset()
+// 0x000000BA System.Void ShieldDetector/<DelayHalfSec>d__8::System.Collections.IEnumerator.Reset()
 extern void U3CDelayHalfSecU3Ed__8_System_Collections_IEnumerator_Reset_m31D17BAB77DD3423B7E2A9732D02604581FD0335 (void);
-// 0x000000B4 System.Object ShieldDetector/<DelayHalfSec>d__8::System.Collections.IEnumerator.get_Current()
+// 0x000000BB System.Object ShieldDetector/<DelayHalfSec>d__8::System.Collections.IEnumerator.get_Current()
 extern void U3CDelayHalfSecU3Ed__8_System_Collections_IEnumerator_get_Current_mDDB0EC769E51AA05EA8067F7C2B16ED0344EC5DE (void);
-// 0x000000B5 System.Void ShieldDisplay::Start()
+// 0x000000BC System.Void ShieldDisplay::Start()
 extern void ShieldDisplay_Start_m6EB66C2071A99A7806AB75029EA288D738DDEF93 (void);
-// 0x000000B6 System.Void ShieldDisplay::Update()
+// 0x000000BD System.Void ShieldDisplay::Update()
 extern void ShieldDisplay_Update_m9B402663F072293FD09626957F4A7DF26C16748D (void);
-// 0x000000B7 System.Void ShieldDisplay::.ctor()
+// 0x000000BE System.Void ShieldDisplay::.ctor()
 extern void ShieldDisplay__ctor_mFBC6DAC8491E30460CB4261BF6624B954A6DEF78 (void);
-// 0x000000B8 System.Void ShieldHealthController::Start()
+// 0x000000BF System.Void ShieldHealthController::Start()
 extern void ShieldHealthController_Start_m01C24A65CA253257F4430EC08FF7A3373355E37E (void);
-// 0x000000B9 System.Void ShieldHealthController::InitShieldHealthPlayer1()
+// 0x000000C0 System.Void ShieldHealthController::Update()
+extern void ShieldHealthController_Update_m4EFF3846A89F2B596FE8BF3F3B9FAAD36D25FFEC (void);
+// 0x000000C1 System.Void ShieldHealthController::ColorUpdate()
+extern void ShieldHealthController_ColorUpdate_mABE6954CFC6BB32BFE26AE6FC41EDD0CDD430056 (void);
+// 0x000000C2 System.Void ShieldHealthController::InitShieldHealthPlayer1()
 extern void ShieldHealthController_InitShieldHealthPlayer1_m381F854FF6640EC333A4928D326F26C120845E01 (void);
-// 0x000000BA System.Void ShieldHealthController::InitShieldHealthPlayer2()
+// 0x000000C3 System.Void ShieldHealthController::InitShieldHealthPlayer2()
 extern void ShieldHealthController_InitShieldHealthPlayer2_m33F3E8807E5DEC36EAD22DCA09E2783F9E847307 (void);
-// 0x000000BB System.Void ShieldHealthController::.ctor()
+// 0x000000C4 System.Void ShieldHealthController::SetShieldHealthPlayer1(System.Int32)
+extern void ShieldHealthController_SetShieldHealthPlayer1_mFEB8A354615E5E3154E86478D724E8D340F136F8 (void);
+// 0x000000C5 System.Void ShieldHealthController::SetShieldHealthPlayer2(System.Int32)
+extern void ShieldHealthController_SetShieldHealthPlayer2_mDC19A3230F272C359AC3DE7D0BE01ADABA0B33D5 (void);
+// 0x000000C6 System.Void ShieldHealthController::.ctor()
 extern void ShieldHealthController__ctor_m0D4DFDC92B9BA839C552C4467773A29E1C82926F (void);
-// 0x000000BC System.Void ShieldTriggerAnimation::Start()
+// 0x000000C7 System.Void ShieldTriggerAnimation::Start()
 extern void ShieldTriggerAnimation_Start_m5F127D288AB5628969F98527FE8ABBCB27A75841 (void);
-// 0x000000BD System.Void ShieldTriggerAnimation::Update()
+// 0x000000C8 System.Void ShieldTriggerAnimation::Update()
 extern void ShieldTriggerAnimation_Update_m50E8465ACB3CF485C9074BAAC4234214FF31C2EC (void);
-// 0x000000BE System.Void ShieldTriggerAnimation::TriggerAnimation()
+// 0x000000C9 System.Void ShieldTriggerAnimation::TriggerAnimation()
 extern void ShieldTriggerAnimation_TriggerAnimation_mB79F91D39532227F5A0AD77530E99F8EBFB7440E (void);
-// 0x000000BF System.Collections.IEnumerator ShieldTriggerAnimation::DeactivateShieldPlayer1()
+// 0x000000CA System.Collections.IEnumerator ShieldTriggerAnimation::DeactivateShieldPlayer1()
 extern void ShieldTriggerAnimation_DeactivateShieldPlayer1_mC25CDD4F8DE0B6B00ADDA7E316B9FA68DB25A776 (void);
-// 0x000000C0 System.Void ShieldTriggerAnimation::.ctor()
+// 0x000000CB System.Void ShieldTriggerAnimation::.ctor()
 extern void ShieldTriggerAnimation__ctor_m5F24E515E5548C2174AA23B9A3607FC7E16D6F20 (void);
-// 0x000000C1 System.Void ShieldTriggerAnimation/<DeactivateShieldPlayer1>d__6::.ctor(System.Int32)
+// 0x000000CC System.Void ShieldTriggerAnimation/<DeactivateShieldPlayer1>d__6::.ctor(System.Int32)
 extern void U3CDeactivateShieldPlayer1U3Ed__6__ctor_mF41E5431AB71A48FC04222F2C29603B4FC744908 (void);
-// 0x000000C2 System.Void ShieldTriggerAnimation/<DeactivateShieldPlayer1>d__6::System.IDisposable.Dispose()
+// 0x000000CD System.Void ShieldTriggerAnimation/<DeactivateShieldPlayer1>d__6::System.IDisposable.Dispose()
 extern void U3CDeactivateShieldPlayer1U3Ed__6_System_IDisposable_Dispose_m0685D52447FFB9E60A7F6FBF35E85E2F193C36FB (void);
-// 0x000000C3 System.Boolean ShieldTriggerAnimation/<DeactivateShieldPlayer1>d__6::MoveNext()
+// 0x000000CE System.Boolean ShieldTriggerAnimation/<DeactivateShieldPlayer1>d__6::MoveNext()
 extern void U3CDeactivateShieldPlayer1U3Ed__6_MoveNext_m243259E0CFBBC86375AB8EA7E526A0BF942246EA (void);
-// 0x000000C4 System.Object ShieldTriggerAnimation/<DeactivateShieldPlayer1>d__6::System.Collections.Generic.IEnumerator<System.Object>.get_Current()
+// 0x000000CF System.Object ShieldTriggerAnimation/<DeactivateShieldPlayer1>d__6::System.Collections.Generic.IEnumerator<System.Object>.get_Current()
 extern void U3CDeactivateShieldPlayer1U3Ed__6_System_Collections_Generic_IEnumeratorU3CSystem_ObjectU3E_get_Current_mE0DF35CF8902C4683068CEC4BC6C6AFE03907A95 (void);
-// 0x000000C5 System.Void ShieldTriggerAnimation/<DeactivateShieldPlayer1>d__6::System.Collections.IEnumerator.Reset()
+// 0x000000D0 System.Void ShieldTriggerAnimation/<DeactivateShieldPlayer1>d__6::System.Collections.IEnumerator.Reset()
 extern void U3CDeactivateShieldPlayer1U3Ed__6_System_Collections_IEnumerator_Reset_m9534031776D32F652D73D65913019284DFC996D7 (void);
-// 0x000000C6 System.Object ShieldTriggerAnimation/<DeactivateShieldPlayer1>d__6::System.Collections.IEnumerator.get_Current()
+// 0x000000D1 System.Object ShieldTriggerAnimation/<DeactivateShieldPlayer1>d__6::System.Collections.IEnumerator.get_Current()
 extern void U3CDeactivateShieldPlayer1U3Ed__6_System_Collections_IEnumerator_get_Current_m8A4CA63C9BFE52C58778BDF56616B8F4199D506B (void);
-// 0x000000C7 System.Void ShootController::Start()
+// 0x000000D2 System.Void ShootController::Start()
 extern void ShootController_Start_mA20C52B5BE2C46630486948A1D89AFE3A91F0ECA (void);
-// 0x000000C8 System.Void ShootController::Update()
+// 0x000000D3 System.Void ShootController::Update()
 extern void ShootController_Update_m3722D12524EFC191A069694C3A836112B463C1E7 (void);
-// 0x000000C9 System.Void ShootController::GunShot()
+// 0x000000D4 System.Void ShootController::GunShot()
 extern void ShootController_GunShot_m0F71B7B2735864E0248F0507B56853CC95B153E2 (void);
-// 0x000000CA System.Void ShootController::.ctor()
+// 0x000000D5 System.Void ShootController::.ctor()
 extern void ShootController__ctor_mDF9AEE5CE1F84BB6930D4F8009B9CE588E643FB8 (void);
-// 0x000000CB System.Void StatisticsManager::Start()
+// 0x000000D6 System.Void StatisticsManager::Start()
 extern void StatisticsManager_Start_m183C7694874F9F0423CAF8E7AA2D85F9C8AF502C (void);
-// 0x000000CC System.Void StatisticsManager::HealthDownButtonPress()
+// 0x000000D7 System.Void StatisticsManager::HealthDownButtonPress()
 extern void StatisticsManager_HealthDownButtonPress_mC0A19D2F3C1D1636F133EBBE0321BF9280E5C340 (void);
-// 0x000000CD System.Void StatisticsManager::.ctor()
+// 0x000000D8 System.Void StatisticsManager::.ctor()
 extern void StatisticsManager__ctor_m4EFBC6076F8D6D9ED0B25796F23C43FE66D5E6AD (void);
-// 0x000000CE System.Void GunController::PlayGunShotSound()
+// 0x000000D9 System.Void GunController::PlayGunShotSound()
 extern void GunController_PlayGunShotSound_m8BBAF5B9176728FB6596AF9E30A1DAF2CEADC769 (void);
-// 0x000000CF System.Void GunController::.ctor()
+// 0x000000DA System.Void GunController::.ctor()
 extern void GunController__ctor_m909818F6EA5301033F25095C923F38FF13B3934A (void);
-// 0x000000D0 System.Void Readme::.ctor()
+// 0x000000DB System.Void Readme::.ctor()
 extern void Readme__ctor_m69C325C4C171DCB0312B646A9034AA91EA8C39C6 (void);
-// 0x000000D1 System.Void Readme/Section::.ctor()
+// 0x000000DC System.Void Readme/Section::.ctor()
 extern void Section__ctor_m5F732533E4DFC0167D965E5F5DB332E46055399B (void);
-static Il2CppMethodPointer s_methodPointers[209] = 
+static Il2CppMethodPointer s_methodPointers[220] = 
 {
 	csDemoScenceControl_Start_mD9C3744087422621CCAF019CBAA8E8C2CB4DC6B6,
 	csDemoScenceControl_Update_mEF83FE0C464295458904552A02C61E1EDAF91D8F,
@@ -586,16 +608,23 @@ static Il2CppMethodPointer s_methodPointers[209] =
 	Player_TakeDamagePlayer2_mA00130D01ED741B4334CE04346B010EED08D505B,
 	Player__ctor_m0A83E0706592FC871B0CF188B37AFC6649F3D85D,
 	ShieldController_Start_m1282A0AEE70C97AA0540F00019067B2F0FA398E3,
+	ShieldController_ActivateShieldPlayer1_m74C7DFF9BBD35A8F61FF6DD8B1039539B9E28A48,
 	ShieldController_ActivateShieldPlayer2_mAD9B725903E6D7DD3B271B6D4F05D68D506C611D,
+	ShieldController_DeactivateShieldPlayer1_m90B0C5AC2567AD8F6DB940E6387FA1E3C14C548A,
 	ShieldController_DeactivateShieldPlayer2_m39F7E6203C862CCBAAB4B674E51D07E2CCBE6897,
-	ShieldController_SetShieldHealth_m73286F46D9A59668262691B14B279286F6C00283,
 	ShieldController__ctor_m81CD176B75E61B72A466293B71995508624BEC17,
-	U3CDeactivateShieldPlayer2U3Ed__7__ctor_m10638F0F36927C9CF8413273F726797D968D070B,
-	U3CDeactivateShieldPlayer2U3Ed__7_System_IDisposable_Dispose_m97039ACAFF23742E245A6927219D1F70C0D4E678,
-	U3CDeactivateShieldPlayer2U3Ed__7_MoveNext_m57C6F4DEDD637FECE12FECDAAB7B840E43E7B9CB,
-	U3CDeactivateShieldPlayer2U3Ed__7_System_Collections_Generic_IEnumeratorU3CSystem_ObjectU3E_get_Current_m905539794C9ACAE4572E8FCF8877F90FAC12936C,
-	U3CDeactivateShieldPlayer2U3Ed__7_System_Collections_IEnumerator_Reset_m1FEC30D09A87485B26524B9D5CDC36332974916F,
-	U3CDeactivateShieldPlayer2U3Ed__7_System_Collections_IEnumerator_get_Current_m7A6DBEE2EAF95E7FC30CCEA9B9E1A73030220089,
+	U3CDeactivateShieldPlayer1U3Ed__11__ctor_m6187458967E2B1CBA0D90826A1EA40B2FBD6DE29,
+	U3CDeactivateShieldPlayer1U3Ed__11_System_IDisposable_Dispose_m378520CE7875961D77BAC199BADE70CDA3A38A82,
+	U3CDeactivateShieldPlayer1U3Ed__11_MoveNext_m7BC1762F29930023AF42985E3660FA2712A91314,
+	U3CDeactivateShieldPlayer1U3Ed__11_System_Collections_Generic_IEnumeratorU3CSystem_ObjectU3E_get_Current_mF7233F0C6DA7B9EEB12CF9F80B56DD9297AF80FC,
+	U3CDeactivateShieldPlayer1U3Ed__11_System_Collections_IEnumerator_Reset_mC95A36E85C16EAC56D99E490164A4DD60CDE5D43,
+	U3CDeactivateShieldPlayer1U3Ed__11_System_Collections_IEnumerator_get_Current_m286D560A5ED735628B818A4FCF0DE3341EB518F0,
+	U3CDeactivateShieldPlayer2U3Ed__12__ctor_m0E5337AF3CC2070318887719EE26CCC96F220719,
+	U3CDeactivateShieldPlayer2U3Ed__12_System_IDisposable_Dispose_mBA4EFFA3AE347AFD2723F1B893D0DEBDE703ABAF,
+	U3CDeactivateShieldPlayer2U3Ed__12_MoveNext_m3030D69D05459F132C21AA6B236386F5C5C0ED2E,
+	U3CDeactivateShieldPlayer2U3Ed__12_System_Collections_Generic_IEnumeratorU3CSystem_ObjectU3E_get_Current_mD0EC80BBD9B16C50A47B640B7BA6FF1DBE866F4C,
+	U3CDeactivateShieldPlayer2U3Ed__12_System_Collections_IEnumerator_Reset_m708D36FA78E7B8C02253E530CB5ACDDB652543FD,
+	U3CDeactivateShieldPlayer2U3Ed__12_System_Collections_IEnumerator_get_Current_mBCE2074174A5A0F35828B631097B85FA5032E6A3,
 	ShieldCountdown_Start_m3300B919D68ADC7E42A1C924BAF8E538AB089894,
 	ShieldCountdown_Update_m38DD222DA46184464AF74C512BFCF3A8D2A3FC76,
 	ShieldCountdown_ActivateShieldPlayer1_mCACC1E0CE18343E564B456D3D037FE41C494E04F,
@@ -616,8 +645,12 @@ static Il2CppMethodPointer s_methodPointers[209] =
 	ShieldDisplay_Update_m9B402663F072293FD09626957F4A7DF26C16748D,
 	ShieldDisplay__ctor_mFBC6DAC8491E30460CB4261BF6624B954A6DEF78,
 	ShieldHealthController_Start_m01C24A65CA253257F4430EC08FF7A3373355E37E,
+	ShieldHealthController_Update_m4EFF3846A89F2B596FE8BF3F3B9FAAD36D25FFEC,
+	ShieldHealthController_ColorUpdate_mABE6954CFC6BB32BFE26AE6FC41EDD0CDD430056,
 	ShieldHealthController_InitShieldHealthPlayer1_m381F854FF6640EC333A4928D326F26C120845E01,
 	ShieldHealthController_InitShieldHealthPlayer2_m33F3E8807E5DEC36EAD22DCA09E2783F9E847307,
+	ShieldHealthController_SetShieldHealthPlayer1_mFEB8A354615E5E3154E86478D724E8D340F136F8,
+	ShieldHealthController_SetShieldHealthPlayer2_mDC19A3230F272C359AC3DE7D0BE01ADABA0B33D5,
 	ShieldHealthController__ctor_m0D4DFDC92B9BA839C552C4467773A29E1C82926F,
 	ShieldTriggerAnimation_Start_m5F127D288AB5628969F98527FE8ABBCB27A75841,
 	ShieldTriggerAnimation_Update_m50E8465ACB3CF485C9074BAAC4234214FF31C2EC,
@@ -642,7 +675,7 @@ static Il2CppMethodPointer s_methodPointers[209] =
 	Readme__ctor_m69C325C4C171DCB0312B646A9034AA91EA8C39C6,
 	Section__ctor_m5F732533E4DFC0167D965E5F5DB332E46055399B,
 };
-static const int32_t s_InvokerIndices[209] = 
+static const int32_t s_InvokerIndices[220] = 
 {
 	5097,
 	5097,
@@ -799,9 +832,16 @@ static const int32_t s_InvokerIndices[209] =
 	5097,
 	5097,
 	5097,
+	5097,
 	4990,
+	4990,
+	5097,
 	4022,
 	5097,
+	4916,
+	4990,
+	5097,
+	4990,
 	4022,
 	5097,
 	4916,
@@ -830,6 +870,10 @@ static const int32_t s_InvokerIndices[209] =
 	5097,
 	5097,
 	5097,
+	5097,
+	5097,
+	4022,
+	4022,
 	5097,
 	5097,
 	5097,
@@ -858,7 +902,7 @@ IL2CPP_EXTERN_C const Il2CppCodeGenModule g_AssemblyU2DCSharp_CodeGenModule;
 const Il2CppCodeGenModule g_AssemblyU2DCSharp_CodeGenModule = 
 {
 	"Assembly-CSharp.dll",
-	209,
+	220,
 	s_methodPointers,
 	0,
 	NULL,

@@ -386,7 +386,7 @@ ScriptsOnlyBuild:
     className: RawImage
   - hash:
       serializedVersion: 2
-      Hash: 0b8b439d86cdc4361e9acd6d3d5896e6
+      Hash: 28ba38b49b6cc6d914dc21898d0767d1
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: ShieldHealthController
@@ -1190,7 +1190,7 @@ ScriptsOnlyBuild:
     className: UnityOnDropdownValueChangedMessageListener
   - hash:
       serializedVersion: 2
-      Hash: 7a453bbe5ab6b1bb4e90c24ddd4129dd
+      Hash: 3187b5f09bd311cc3ca9a3447642e4a8
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: ShieldController
@@ -2942,7 +2942,7 @@ ScriptsOnlyBuild:
     className: SignalEmitter
   - hash:
       serializedVersion: 2
-      Hash: 2c054b75f19d678cdf98da95afe7a546
+      Hash: 957e6305c6d818acf8b64343c4543d41
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: ShieldDetector
@@ -2979,4 +2979,4 @@ ScriptsOnlyBuild:
   platform: 9
   scenePathNames:
   - Assets/Scenes/MainScene.unity
-  playerPath: C:/Users/Hungggggg/NUSwork/Y4S1/CG4002/build-ios/build-ios-9
+  playerPath: C:/Users/Hungggggg/NUSwork/Y4S1/CG4002/build-ios/build-ios-6

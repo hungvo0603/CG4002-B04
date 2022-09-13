@@ -5,18 +5,31 @@ using UnityEngine.UI;
 
 public class ShieldController : MonoBehaviour
 {
+    public GameObject shieldPlayer1;
+    public GameObject shieldBarPlayer1;
+    public Button shieldActivateButtonPlayer1;
+    public bool isShieldActivatedPlayer1;
+
     public GameObject shieldPlayer2;
+    public GameObject shieldBarPlayer2;
     public Button shieldActivateButtonPlayer2;
     public bool isShieldActivatedPlayer2;
 
-    public Slider shieldBarSlider;
-    public Image fill;
-
     void Start ()
     {
+        shieldActivateButtonPlayer1.onClick.AddListener(ActivateShieldPlayer1);
         shieldActivateButtonPlayer2.onClick.AddListener(ActivateShieldPlayer2);
+        shieldPlayer1.gameObject.SetActive(false);
         shieldPlayer2.gameObject.SetActive(false);
+        isShieldActivatedPlayer1 = false;
         isShieldActivatedPlayer2 = false;
+    }
+
+    public void ActivateShieldPlayer1()
+    {
+        shieldPlayer1.gameObject.SetActive(true);
+        isShieldActivatedPlayer1 = true;
+        StartCoroutine(DeactivateShieldPlayer1());
     }
     
     public void ActivateShieldPlayer2()
@@ -26,16 +39,18 @@ public class ShieldController : MonoBehaviour
         StartCoroutine(DeactivateShieldPlayer2());
     }
 
+    IEnumerator DeactivateShieldPlayer1()
+    {
+        yield return new WaitForSeconds(10f);
+        shieldPlayer1.gameObject.SetActive(false);
+        isShieldActivatedPlayer1 = false;
+    }
+
     IEnumerator DeactivateShieldPlayer2()
     {
         yield return new WaitForSeconds(10f);
         shieldPlayer2.gameObject.SetActive(false);
         isShieldActivatedPlayer2 = false;
-    }
-
-    public void SetShieldHealth(int shieldHealth)
-    {
-        shieldBarSlider.value = shieldHealth / 10;
     }
 
 }

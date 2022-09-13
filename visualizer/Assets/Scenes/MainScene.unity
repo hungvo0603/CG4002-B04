@@ -213,7 +213,6 @@ GameObject:
   - component: {fileID: 88264816}
   - component: {fileID: 88264821}
   - component: {fileID: 88264820}
-  - component: {fileID: 88264822}
   m_Layer: 0
   m_Name: ImageTarget
   m_TagString: Untagged
@@ -403,24 +402,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   shieldDetectionText: {fileID: 292849702}
   hasShieldEnemy: 0
-  sc: {fileID: 88264822}
---- !u!114 &88264822
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 88264815}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a143cdfd91e16d142b5f49b2de6d912b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  shieldPlayer2: {fileID: 142674863}
-  shieldActivateButtonPlayer2: {fileID: 408032985}
-  isShieldActivatedPlayer2: 0
-  shieldBarSlider: {fileID: 689883170}
-  fill: {fileID: 1856941114}
+  shieldController: {fileID: 988623232}
 --- !u!1 &98183983
 GameObject:
   m_ObjectHideFlags: 0
@@ -1272,7 +1254,7 @@ RectTransform:
   m_Children:
   - {fileID: 1300931724}
   m_Father: {fileID: 1836541406}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -2453,7 +2435,6 @@ GameObject:
   m_Component:
   - component: {fileID: 689883168}
   - component: {fileID: 689883170}
-  - component: {fileID: 689883171}
   m_Layer: 5
   m_Name: 1_ShieldBar
   m_TagString: Untagged
@@ -2477,7 +2458,7 @@ RectTransform:
   - {fileID: 981035788}
   - {fileID: 138513375}
   m_Father: {fileID: 988623231}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
@@ -2535,21 +2516,6 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &689883171
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 689883167}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 29f4384a9ec779745ada9686be6af678, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  shieldPlayer1Button: {fileID: 1241635615}
-  shieldPlayer2Button: {fileID: 0}
-  shieldController: {fileID: 88264822}
 --- !u!1 &743688998
 GameObject:
   m_ObjectHideFlags: 0
@@ -3600,6 +3566,7 @@ GameObject:
   - component: {fileID: 988623229}
   - component: {fileID: 988623228}
   - component: {fileID: 988623232}
+  - component: {fileID: 988623233}
   m_Layer: 5
   m_Name: ShieldCanvas
   m_TagString: Untagged
@@ -3680,8 +3647,8 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1182915704}
   - {fileID: 689883168}
+  - {fileID: 1182915704}
   - {fileID: 959621804}
   - {fileID: 1686400637}
   - {fileID: 510654979}
@@ -3706,11 +3673,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a143cdfd91e16d142b5f49b2de6d912b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  shieldPlayer1: {fileID: 254058491}
+  shieldBarPlayer1: {fileID: 689883167}
+  shieldActivateButtonPlayer1: {fileID: 1241635615}
+  isShieldActivatedPlayer1: 0
   shieldPlayer2: {fileID: 142674863}
+  shieldBarPlayer2: {fileID: 1686400636}
   shieldActivateButtonPlayer2: {fileID: 408032985}
   isShieldActivatedPlayer2: 0
-  shieldBarSlider: {fileID: 689883170}
-  fill: {fileID: 1856941114}
+--- !u!114 &988623233
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 988623227}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 29f4384a9ec779745ada9686be6af678, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shieldPlayer1Button: {fileID: 1241635615}
+  shieldPlayer2Button: {fileID: 408032985}
+  shieldController: {fileID: 988623232}
+  shieldBarSliderPlayer1: {fileID: 689883170}
+  shieldBarSliderPlayer2: {fileID: 1686400639}
+  fillShieldPlayer1: {fileID: 1856941114}
+  fillShieldPlayer2: {fileID: 98183985}
+  activateColor: {r: 0.25882354, g: 0.5803922, b: 1, a: 0}
+  inactivateColor: {r: 0.5686275, g: 0.5568628, b: 0.54509807, a: 0}
 --- !u!1001 &1013438441
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4079,7 +4070,7 @@ RectTransform:
   - {fileID: 302241515}
   - {fileID: 1087273888}
   m_Father: {fileID: 988623231}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -4135,7 +4126,7 @@ RectTransform:
   m_Children:
   - {fileID: 290137965}
   m_Father: {fileID: 1836541406}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -4257,7 +4248,7 @@ RectTransform:
   m_Children:
   - {fileID: 2140666229}
   m_Father: {fileID: 1836541406}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -4977,7 +4968,7 @@ RectTransform:
   m_Children:
   - {fileID: 958532105}
   m_Father: {fileID: 1836541406}
-  m_RootOrder: 5
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -6284,7 +6275,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1686400637}
   - component: {fileID: 1686400639}
-  - component: {fileID: 1686400640}
   m_Layer: 5
   m_Name: 2_ShieldBar
   m_TagString: Untagged
@@ -6366,21 +6356,6 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &1686400640
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1686400636}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 29f4384a9ec779745ada9686be6af678, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  shieldPlayer1Button: {fileID: 0}
-  shieldPlayer2Button: {fileID: 0}
-  shieldController: {fileID: 0}
 --- !u!1001 &1712827359
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6916,7 +6891,7 @@ RectTransform:
   m_Children:
   - {fileID: 1590451421}
   m_Father: {fileID: 1836541406}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -7352,11 +7327,11 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 491453811}
+  - {fileID: 1401274391}
   - {fileID: 1826213841}
   - {fileID: 1230697008}
   - {fileID: 1241635613}
   - {fileID: 408032984}
-  - {fileID: 1401274391}
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: -19.183, z: 0}
