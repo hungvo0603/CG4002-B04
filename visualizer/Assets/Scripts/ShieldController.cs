@@ -6,12 +6,15 @@ using UnityEngine.UI;
 public class ShieldController : MonoBehaviour
 {
     public GameObject shieldPlayer2;
-    public Button shieldActivateButton;
+    public Button shieldActivateButtonPlayer2;
     public bool isShieldActivatedPlayer2;
+
+    public Slider shieldBarSlider;
+    public Image fill;
 
     void Start ()
     {
-        shieldActivateButton.onClick.AddListener(ActivateShieldPlayer2);
+        shieldActivateButtonPlayer2.onClick.AddListener(ActivateShieldPlayer2);
         shieldPlayer2.gameObject.SetActive(false);
         isShieldActivatedPlayer2 = false;
     }
@@ -28,6 +31,11 @@ public class ShieldController : MonoBehaviour
         yield return new WaitForSeconds(10f);
         shieldPlayer2.gameObject.SetActive(false);
         isShieldActivatedPlayer2 = false;
+    }
+
+    public void SetShieldHealth(int shieldHealth)
+    {
+        shieldBarSlider.value = shieldHealth / 10;
     }
 
 }
