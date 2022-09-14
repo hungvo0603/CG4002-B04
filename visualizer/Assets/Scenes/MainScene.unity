@@ -705,7 +705,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 223229225}
-  - component: {fileID: 223229226}
   m_Layer: 0
   m_Name: 2_Player
   m_TagString: Untagged
@@ -728,20 +727,6 @@ Transform:
   m_Father: {fileID: 920191648}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &223229226
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 223229224}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ee64ddf87dd8d934b870607fe203fd25, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  healthBarPlayer1: {fileID: 106694199}
-  healthBarPlayer2: {fileID: 1409162116}
 --- !u!1 &254058491
 GameObject:
   m_ObjectHideFlags: 0
@@ -1850,7 +1835,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 37d0303b59ada7342ab3e6a3c1ceaacf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pl: {fileID: 1633802249}
+  pl: {fileID: 920191649}
   enemy: {fileID: 88264820}
   player1Bullet: 0
 --- !u!114 &491453813
@@ -2974,7 +2959,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player1KillText: {fileID: 1555777125}
   player2KillText: {fileID: 1394930843}
-  pl: {fileID: 1633802249}
+  pl: {fileID: 0}
 --- !u!1 &858022855
 GameObject:
   m_ObjectHideFlags: 0
@@ -3196,6 +3181,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 920191648}
+  - component: {fileID: 920191649}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -3220,6 +3206,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &920191649
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 920191647}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee64ddf87dd8d934b870607fe203fd25, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  healthBarPlayer1: {fileID: 106694199}
+  healthBarPlayer2: {fileID: 1409162116}
 --- !u!1 &932589316
 GameObject:
   m_ObjectHideFlags: 0
@@ -6092,7 +6092,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1633802250}
-  - component: {fileID: 1633802249}
   m_Layer: 0
   m_Name: 1_Player
   m_TagString: Untagged
@@ -6100,20 +6099,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1633802249
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1633802248}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ee64ddf87dd8d934b870607fe203fd25, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  healthBarPlayer1: {fileID: 106694199}
-  healthBarPlayer2: {fileID: 1409162116}
 --- !u!4 &1633802250
 Transform:
   m_ObjectHideFlags: 0
@@ -7006,7 +6991,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   explosionParticles: {fileID: 1456397085}
   grenadeExplosionSound: {fileID: 1826213847}
-  pl: {fileID: 1633802249}
+  pl: {fileID: 920191649}
   enemy: {fileID: 88264820}
   player1Grenade: 0
 --- !u!82 &1826213847

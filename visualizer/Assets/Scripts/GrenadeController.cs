@@ -8,7 +8,7 @@ public class GrenadeController : MonoBehaviour
     public AudioSource grenadeExplosionSound;
     private const int MAX_GRENADE = 2;
     private const int GRENADE_DAMAGE = 30;
-    public Player pl;
+    public Player player2;
 
     public EnemyDetector enemy;
     private bool hasEnemy;
@@ -49,7 +49,7 @@ public class GrenadeController : MonoBehaviour
         hasEnemy = enemy.hasEnemy;
         if (hasEnemy)
         {
-            pl.TakeDamagePlayer2(GRENADE_DAMAGE);
+            player2.TakeDamagePlayer2(GRENADE_DAMAGE);
         }
     }
 }
