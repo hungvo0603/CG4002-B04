@@ -115,13 +115,22 @@ ScriptsOnlyBuild:
     methodName: EnemyLost
   - assembly: Assembly-CSharp
     fullTypeName: ShootController
-    methodName: GunShot
+    methodName: GunShotPlayer1
   - assembly: UnityEngine.AudioModule
     fullTypeName: UnityEngine.AudioSource
     methodName: Play
   - assembly: Assembly-CSharp
     fullTypeName: GrenadeController
-    methodName: ExplosionButtonPress
+    methodName: ExplosionButtonPressPlayer2
+  - assembly: Assembly-CSharp
+    fullTypeName: ShootController
+    methodName: GunShotPlayer2
+  - assembly: UnityEngine.AudioModule
+    fullTypeName: UnityEngine.AudioSource
+    methodName: Play
+  - assembly: Assembly-CSharp
+    fullTypeName: GrenadeController
+    methodName: ExplosionButtonPressPlayer1
   sceneClasses:
     Assets/Scenes/MainScene.unity:
     - Class: 1
@@ -283,7 +292,7 @@ ScriptsOnlyBuild:
     className: PanelRaycaster
   - hash:
       serializedVersion: 2
-      Hash: b540af202c9d3ac87d0273fa16911739
+      Hash: 5d168837eafb79582542dd0e45362344
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: GrenadeTriggerAnimation
@@ -1333,7 +1342,7 @@ ScriptsOnlyBuild:
     className: UnityOnCollisionExit2DMessageListener
   - hash:
       serializedVersion: 2
-      Hash: efb4559bfa83f9bb5457c258c79ee139
+      Hash: a0261436ed50a45fe5f80b31c1279101
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: EnemyGrenadeTriggerAnimation
@@ -1807,7 +1816,7 @@ ScriptsOnlyBuild:
     className: CFX_AutoDestructShuriken
   - hash:
       serializedVersion: 2
-      Hash: 3720bc538226f5a6fb9c7576019d9f13
+      Hash: cf3dd713a1073525a932c0d48f980000
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: ShootController
@@ -2996,4 +3005,4 @@ ScriptsOnlyBuild:
   platform: 9
   scenePathNames:
   - Assets/Scenes/MainScene.unity
-  playerPath: C:/Users/Hungggggg/NUSwork/Y4S1/CG4002/build-ios/build-ios-7
+  playerPath: C:/Users/Hungggggg/NUSwork/Y4S1/CG4002/build-ios/build-ios-0

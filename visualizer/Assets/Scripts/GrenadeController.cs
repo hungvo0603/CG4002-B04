@@ -37,11 +37,11 @@ public class GrenadeController : MonoBehaviour
         // _isShieldActivatedPlayer2 = shieldController.isShieldActivatedPlayer2;
     }
 
-    public void ExplosionButtonPress()
+    public void ExplosionButtonPressPlayer1()
     {
         if (player1Grenade > 0)
         {
-            StartCoroutine(PlayGrenadeExplosionPlayer1());
+            StartCoroutine(ThrowGrenadePlayer1());
         }
         else
         {
@@ -49,7 +49,12 @@ public class GrenadeController : MonoBehaviour
         }
     }
 
-    IEnumerator PlayGrenadeExplosionPlayer1() 
+    public void ExplosionButtonPressPlayer2()
+    {
+        StartCoroutine(ThrowGrenadePlayer2());
+    }
+
+    IEnumerator ThrowGrenadePlayer1() 
     {
         hasEnemy = enemyDetector.hasEnemy;
         hasShield = shieldDetector.hasShieldEnemy;
@@ -77,5 +82,11 @@ public class GrenadeController : MonoBehaviour
                 player2.TakeDamagePlayer2(GRENADE_DAMAGE);
             }
         }
+    }
+
+    IEnumerator ThrowGrenadePlayer2()
+    {
+        yield return new WaitForSeconds(2.01f);
+        player1.TakeDamagePlayer1(GRENADE_DAMAGE);
     }
 }

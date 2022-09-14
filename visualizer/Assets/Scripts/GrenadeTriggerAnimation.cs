@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class GrenadeTriggerAnimation : MonoBehaviour
 {
     [SerializeField] private Button launchGrenade;
-    public GrenadeController gc;
+    public GrenadeController grenadeController;
     int whichGrenade;
 
     public ParticleSystem explosionParticles;
@@ -23,7 +23,7 @@ public class GrenadeTriggerAnimation : MonoBehaviour
 
     void Update()
     {
-        whichGrenade = gc.player1Grenade;
+        whichGrenade = grenadeController.player1Grenade;
     }
 
     void TriggerAnimation()

@@ -49,12 +49,12 @@ public class ShieldHealthController : MonoBehaviour
 
     void ShieldStatusUpdate()
     {
-        if (currentShieldHealthPlayer1 <= 0) // <= 0
+        if (currentShieldHealthPlayer1 <= 0)
         {
             shieldController.BreakShieldPlayer1();
         }
 
-        if (currentShieldHealthPlayer2 <= 0) // <= 0
+        if (currentShieldHealthPlayer2 <= 0)
         {
             shieldController.BreakShieldPlayer2();
         }

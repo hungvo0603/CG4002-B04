@@ -34,6 +34,7 @@ public class ShieldController : MonoBehaviour
     {
         shieldPlayer1.gameObject.SetActive(true);
         isShieldActivatedPlayer1 = true;
+        shieldActivateButtonPlayer1.interactable = false;
         StartCoroutine(DeactivateShieldPlayer1());
     }
     
@@ -41,6 +42,7 @@ public class ShieldController : MonoBehaviour
     {
         shieldPlayer2.gameObject.SetActive(true);
         isShieldActivatedPlayer2 = true;
+        shieldActivateButtonPlayer2.interactable = false;
         StartCoroutine(DeactivateShieldPlayer2());
     }
 
@@ -59,6 +61,7 @@ public class ShieldController : MonoBehaviour
     IEnumerator DeactivateShieldPlayer1()
     {
         yield return new WaitForSeconds(10f);
+        shieldActivateButtonPlayer1.interactable = true;
         shieldPlayer1.gameObject.SetActive(false);
         isShieldActivatedPlayer1 = false;
     }
@@ -66,6 +69,7 @@ public class ShieldController : MonoBehaviour
     IEnumerator DeactivateShieldPlayer2()
     {
         yield return new WaitForSeconds(10f);
+        shieldActivateButtonPlayer2.interactable = true;
         shieldPlayer2.gameObject.SetActive(false);
         isShieldActivatedPlayer2 = false;
     }

@@ -6,7 +6,7 @@ using TMPro;
 
 public class ShootController : MonoBehaviour
 {
-    // public Player player1;
+    public Player player1;
     public Player player2;
     [SerializeField] private ShieldController shieldController;
     [SerializeField] private ShieldHealthController shieldHealthController;
@@ -40,7 +40,7 @@ public class ShootController : MonoBehaviour
         _isShieldActivatedPlayer2 = shieldController.isShieldActivatedPlayer2;
     }
 
-    public void GunShot()
+    public void GunShotPlayer1()
     {
         hasEnemy = enemy.hasEnemy;
         player1Bullet -= 1;
@@ -62,6 +62,11 @@ public class ShootController : MonoBehaviour
             }
 
         }
+    }
+
+    public void GunShotPlayer2()
+    {
+        player1.TakeDamagePlayer1(SHOOT_DAMAGE);
     }
 
 }
