@@ -37,27 +37,25 @@ SUNFIRE_HOST = 'stu.comp.nus.edu.sg'
 
 
 class Client(threading.Thread):
-    def __init__(self, port_num, group_id):
+    def __init__(self, local_port, remote_port, group_id):
         super().__init__()  # init parent (Thread)
         self.conn = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.port_num = port_num
+        self.local_port = local_port
+        self.remote_port = remote_port
         self.group_id = group_id
-        self.tunnel_dest = None
-
-    def run(self):
-        # open tunnel to port 22 in local
+        # Open tunnel and connect
         self.tunnel_dest = self.create_tunnel()
         self.conn.connect(self.tunnel_dest)
+        self.daemon = True
 
+    def run(self):
         message = ""
-
         while message != "logout":
-            message = input("[Client] Enter message: ")
-            self.send_data(message)
-            print("[Client] Sent data:", message)
-
-            # received data from eval_server is unencrypted
-            # self.receive_data()
+            if len(relay_buffer):
+                relay_lock.acquire()
+                message = relay_buffer.pop(0)
+                relay_lock.release()
+                self.send_data(message)
 
         self.end_client_connection()
 
@@ -75,10 +73,10 @@ class Client(threading.Thread):
         # relay to u96 (this part is sort of like creating another tunnel on curr machine to pass through the xilinx pwd)
         tunnel_xilinx = sshtunnel.open_tunnel(
             ssh_address_or_host=('localhost', tunnel_sunfire.local_bind_port),
-            remote_bind_address=('localhost', self.port_num),
+            remote_bind_address=('localhost', self.remote_port),
             ssh_username="xilinx",
             ssh_password=XILINX_PWD,
-            local_bind_address=('localhost', self.port_num)
+            local_bind_address=('localhost', self.local_port)
         )
         tunnel_xilinx.start()
         print(tunnel_xilinx.tunnel_is_up, flush=True)
@@ -144,16 +142,24 @@ class Client(threading.Thread):
 
 
 if __name__ == '__main__':
-    if len(sys.argv) != 3:
+    if len(sys.argv) != 4:
         print('[Client] Invalid number of arguments')
         sys.exit()
 
-    port_num = int(sys.argv[1])
-    group_id = sys.argv[2]
+    local_port = int(sys.argv[1])
+    remote_port = int(sys.argv[2])
+    group_id = sys.argv[3]
 
-    conn_u96 = Client(port_num, group_id)
+    conn_u96 = Client(local_port, remote_port, group_id)
     conn_u96.start()
 
-    # Receive data from bettles
-    while True:
-        time.sleep(1)
+    # Simulate receive data from bettles
+    message = ""
+
+    while message != "logout":
+        message = input("[Client] Enter message: ")
+        relay_lock.acquire()
+        relay_buffer.append(message)
+        relay_lock.release()
+
+    conn_u96.join()

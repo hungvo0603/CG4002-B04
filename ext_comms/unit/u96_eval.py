@@ -1,20 +1,26 @@
+# TODO:
+# remove env xilinx host (input or env)
+# try out client remote
+
 from Crypto.Util.Padding import pad, unpad
 from Crypto.Cipher import AES
 from Crypto import Random
 import threading
 import sys
 import base64
-import time
 import socket
 import json
+import os
+import dotenv
 
-# python client_local.py localhost 1234 4 secret_key (16-digit)
+# python u96_eval.py localhost 4 4 1234567890123456 secret_key (16-digit)
 # p1 100 grenade 1 1 1 1 1 1
 
 # Player JSON format
 # {
 # 	"hp":           integer value of current player health,
 # 	"action":       string representing the current action performed by the player
+
 # Taking values from "grenade, reload, shoot, logout, shield",
 # 	"bullets":      integer value of number of bullets left in the magazine,
 # 	"grenades":     integer value of number of grenades left,
@@ -40,16 +46,24 @@ INITIAL_STATE = {
     "p2": DEFAULT_STATE
 }
 
+# Load environment variables
+dotenv.load_dotenv()
+XILINX_HOST = os.getenv('XILINX_HOST')
+SUNFIRE_USER = os.getenv('SUNFIRE_USER')
+SUNFIRE_PWD = os.getenv('SUNFIRE_PWD')
+SUNFIRE_HOST = 'stu.comp.nus.edu.sg'
+
 
 class Client(threading.Thread):
     def __init__(self, ip_addr, port_num, group_id, secret_key):
         super().__init__()  # init parent (Thread)
         self.conn = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.server_address = (ip_addr, port_num)
+        self.dest_address = (ip_addr, port_num)
         self.group_id = group_id
         self.secret_key = secret_key
-        self.conn.connect(self.server_address)
-        print("[Client] Connection established to:", self.server_address)
+
+        self.conn.connect(self.dest_address)
+        print("[Client] Connection established to:", self.dest_address)
 
     def jsonify_state(self, player_num, hp, action, bullets, grenades, shield_time, shield_health, num_deaths, num_shield):
         curr_state[player_num] = {
@@ -121,7 +135,7 @@ class Client(threading.Thread):
             if is_encrypted:
                 message = self.decrypt_message(message)
 
-            print("[Client] decoded_text:", message)
+            print("[Client] Received text:", message)
             ### Update game state :D ###
 
         except ConnectionResetError:
@@ -145,7 +159,7 @@ if __name__ == '__main__':
     if len(sys.argv) != 5:
         print('[Client] Invalid number of arguments')
         print(
-            'python client_local.py [IP address] [Port] [groupID] [secret key]')
+            'python u96_val.py [IP address] [Port] [groupID] [secret key]')
         sys.exit()
 
     ip_addr = sys.argv[1]
@@ -166,7 +180,6 @@ if __name__ == '__main__':
         my_client.send_data(player_num, hp, action, bullets, grenades,
                             shield_time, shield_health, num_deaths, num_shield)
         print("[Client] Sent data:", message)
-        time.sleep(2)
 
         # received data from eval_server is unencrypted
         my_client.receive_data(False)

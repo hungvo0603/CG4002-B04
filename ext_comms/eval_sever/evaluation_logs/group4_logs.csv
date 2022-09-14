@@ -27,3 +27,8 @@ timestamp,id,p1_action,gt_p1_action,p2_action,gt_p2_action,response_time,is_p1_a
 1662884189.802717,8490,None,None,None,None,60.01684641838074,True,True
 1662884249.8160748,8490,None,None,None,None,60.006362199783325,True,True
 1662884309.8327618,8490,None,None,None,None,60.01169013977051,True,True
+1663075438.4987214,5036,grenade,shoot,none,none,43.855956077575684,False,True
+1663075498.533598,5036,None,None,None,None,60.010881185531616,True,True
+1663075534.8602042,6227,grenade,shield,none,none,0.0,False,True
+1663075550.2852983,6227,grenade,shield,none,none,15.40109658241272,False,True
+1663075566.570633,6227,grenade,grenade,none,none,16.277316331863403,True,True
