@@ -1835,7 +1835,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 37d0303b59ada7342ab3e6a3c1ceaacf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pl: {fileID: 920191649}
+  player2: {fileID: 920191649}
+  shieldController: {fileID: 988623232}
+  shieldHealthController: {fileID: 988623233}
   enemy: {fileID: 88264820}
   player1Bullet: 0
 --- !u!114 &491453813
@@ -2959,7 +2961,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player1KillText: {fileID: 1555777125}
   player2KillText: {fileID: 1394930843}
-  pl: {fileID: 0}
+  player: {fileID: 920191649}
 --- !u!1 &858022855
 GameObject:
   m_ObjectHideFlags: 0
@@ -3693,15 +3695,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29f4384a9ec779745ada9686be6af678, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  shieldController: {fileID: 988623232}
   shieldPlayer1Button: {fileID: 1241635615}
   shieldPlayer2Button: {fileID: 408032985}
-  shieldController: {fileID: 988623232}
   shieldBarSliderPlayer1: {fileID: 689883170}
   shieldBarSliderPlayer2: {fileID: 1686400639}
   fillShieldPlayer1: {fileID: 1856941114}
   fillShieldPlayer2: {fileID: 98183985}
   activateColor: {r: 0.25882354, g: 0.5803922, b: 1, a: 0}
   inactivateColor: {r: 0.5686275, g: 0.5568628, b: 0.54509807, a: 0}
+  currentShieldHealthPlayer1: 0
+  currentShieldHealthPlayer2: 0
 --- !u!1001 &1013438441
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6989,9 +6993,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: afe28f4bbabf5034eb3caaf973c1dfe8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player2: {fileID: 920191649}
+  shieldController: {fileID: 988623232}
+  shieldHealthController: {fileID: 988623233}
   explosionParticles: {fileID: 1456397085}
   grenadeExplosionSound: {fileID: 1826213847}
-  pl: {fileID: 920191649}
   enemy: {fileID: 88264820}
   player1Grenade: 0
 --- !u!82 &1826213847

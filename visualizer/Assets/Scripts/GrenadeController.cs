@@ -5,6 +5,10 @@ using UnityEngine;
 public class GrenadeController : MonoBehaviour
 {
     public Player player2;
+
+    [SerializeField] private ShieldController shieldController;
+    [SerializeField] private ShieldHealthController shieldHealthController;
+    private bool _isShieldActivatedPlayer1, _isShieldActivatedPlayer2;
     
     public ParticleSystem explosionParticles;
     public AudioSource grenadeExplosionSound;
@@ -23,11 +27,14 @@ public class GrenadeController : MonoBehaviour
         explosionParticles.Stop();
         explosionParticles.Clear();
         hasEnemy = false;
+        _isShieldActivatedPlayer1 = false;
+        _isShieldActivatedPlayer2 = false;
     }
 
     void Update()
     {
-
+        _isShieldActivatedPlayer1 = shieldController.isShieldActivatedPlayer1;
+        _isShieldActivatedPlayer2 = shieldController.isShieldActivatedPlayer2;
     }
 
     public void ExplosionButtonPress()
@@ -43,6 +50,8 @@ public class GrenadeController : MonoBehaviour
     IEnumerator PlayExplosionEffect() 
     {
         yield return new WaitForSeconds(2.01f);
+        int currentShieldHealthPlayer2 = shieldHealthController.currentShieldHealthPlayer2;
+        int shieldHealthPlayer2;
         player1Grenade -= 1;
         explosionParticles.Play();
         grenadeExplosionSound.Play();
@@ -50,7 +59,20 @@ public class GrenadeController : MonoBehaviour
         hasEnemy = enemy.hasEnemy;
         if (hasEnemy)
         {
-            player2.TakeDamagePlayer2(GRENADE_DAMAGE);
+            if (_isShieldActivatedPlayer2)
+            {
+                shieldHealthPlayer2 = currentShieldHealthPlayer2 - GRENADE_DAMAGE;
+                if (shieldHealthPlayer2 <= 0)
+                {
+                    shieldHealthController.SetShieldHealthPlayer2(0);
+                    player2.TakeDamagePlayer2(shieldHealthPlayer2);
+                }
+            }
+            else
+            {
+                player2.TakeDamagePlayer2(GRENADE_DAMAGE);
+            }
         }
+
     }
 }

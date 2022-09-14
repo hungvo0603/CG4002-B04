@@ -308,7 +308,7 @@ ScriptsOnlyBuild:
     className: Selectable
   - hash:
       serializedVersion: 2
-      Hash: e62547a935eaba1a916d0f6cfa53a431
+      Hash: c134e10bfd8e9addebec73c5adf6db85
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: GrenadeController
@@ -386,7 +386,7 @@ ScriptsOnlyBuild:
     className: RawImage
   - hash:
       serializedVersion: 2
-      Hash: 28ba38b49b6cc6d914dc21898d0767d1
+      Hash: 0e0a98bb02f356b58237240be9126b2f
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: ShieldHealthController
@@ -1388,7 +1388,7 @@ ScriptsOnlyBuild:
     className: PhysicsRaycaster
   - hash:
       serializedVersion: 2
-      Hash: 6e4702cdb34417c1b180a64f7c6c1c60
+      Hash: 01af6df09cdedececbd342ca35271d6a
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: KDAController
@@ -1790,7 +1790,7 @@ ScriptsOnlyBuild:
     className: CFX_AutoDestructShuriken
   - hash:
       serializedVersion: 2
-      Hash: 8a3af9b9edc86d9e84eb82bded6b5ac1
+      Hash: 3720bc538226f5a6fb9c7576019d9f13
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: ShootController
@@ -2979,4 +2979,4 @@ ScriptsOnlyBuild:
   platform: 9
   scenePathNames:
   - Assets/Scenes/MainScene.unity
-  playerPath: C:/Users/Hungggggg/NUSwork/Y4S1/CG4002/build-ios/build-ios-6
+  playerPath: C:/Users/Hungggggg/NUSwork/Y4S1/CG4002/build-ios/build-ios-0
