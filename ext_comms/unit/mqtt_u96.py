@@ -102,10 +102,9 @@ class Mqtt(threading.Thread):
 
 
 if __name__ == '__main__':
-    # Input client id (mqtt-[machine]-4)
     print("Starting MQTT client...")
-    recv_client = Mqtt("cg4002/4/u96_viz1", "viz_recv")
-    pub_client = Mqtt("cg4002/4/viz_u961", "viz_pub")
+    recv_client = Mqtt("cg4002/4/u96_viz", "dssdaf")
+    pub_client = Mqtt("cg4002/4/viz_u96", "sdfv")
 
     # Receive messages
     recv_client.subscribe()

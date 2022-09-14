@@ -1,6 +1,5 @@
 # Processes:
 # - ml model, comm visualiser, comm eval, comm relay
-from email import message
 from random import random
 from Crypto.Util.Padding import pad
 from Crypto.Cipher import AES
@@ -360,8 +359,8 @@ if __name__ == '__main__':
     conn_eval.start()
 
     # Connection to visualizer
-    recv_client = Mqtt("cg4002/4/viz_u96", "u96_recv")
-    pub_client = Mqtt("cg4002/4/u96_viz", "u96_pub")
+    recv_client = Mqtt("cg4002/4/u96_viz", "u96_recv")
+    pub_client = Mqtt("cg4002/4/viz_u96", "u96_pub")
 
     # Receive messages
     recv_client.subscribe()

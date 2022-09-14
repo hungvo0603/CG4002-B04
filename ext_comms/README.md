@@ -3,6 +3,7 @@ Qn:
 - how the 2nd layer tunnel act work?
 - on logout, do we still need to send state to eval_server? (curr implementation jsut directly terminate)
 - for video demo, need individual parts or jsut integrated?
+- cannot use same clientid for diff topics?
 
 Todo:
 - Remove error at server_only (logout cmd)

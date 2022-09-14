@@ -150,12 +150,12 @@ namespace ConsoleApp1
         static void Main(string[] args)
         {
             Console.WriteLine("Start Mqtt");
-            App pub = new App("cg4002/4/u96_viz1", "ghjk");
+            App pub = new App("cg4002/4/u96_viz", "ghjk");
 
             Thread pub_thread = new Thread(pub.publish);
             pub_thread.Start();
 
-            App sub = new App("cg4002/4/viz_u961", "trjk");
+            App sub = new App("cg4002/4/viz_u96", "trjk");
             sub.subscribe();
 
             // Visualiser
