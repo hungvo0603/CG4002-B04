@@ -1524,25 +1524,25 @@ struct UnityXRBridge_t551826E7037E54E943A945B24D6059B9206611EF  : public Runtime
 	Action_tD00B0A84D7945E50C2DFFC28EFEE6ED44ED2AD07* ___OnTrackingOriginUpdated_0;
 };
 
-// ShieldController/<DeactivateShieldPlayer1>d__11
-struct U3CDeactivateShieldPlayer1U3Ed__11_tF4A71F8AEA42D550034FF059F932E518272BF976  : public RuntimeObject
+// ShieldController/<DeactivateShieldPlayer1>d__14
+struct U3CDeactivateShieldPlayer1U3Ed__14_tD286474C5EEC15B11444A2621A6C5F1032D9A619  : public RuntimeObject
 {
-	// System.Int32 ShieldController/<DeactivateShieldPlayer1>d__11::<>1__state
+	// System.Int32 ShieldController/<DeactivateShieldPlayer1>d__14::<>1__state
 	int32_t ___U3CU3E1__state_0;
-	// System.Object ShieldController/<DeactivateShieldPlayer1>d__11::<>2__current
+	// System.Object ShieldController/<DeactivateShieldPlayer1>d__14::<>2__current
 	RuntimeObject* ___U3CU3E2__current_1;
-	// ShieldController ShieldController/<DeactivateShieldPlayer1>d__11::<>4__this
+	// ShieldController ShieldController/<DeactivateShieldPlayer1>d__14::<>4__this
 	ShieldController_t19627352128E3B17DA85712DEAFCDFD4D7885F7E* ___U3CU3E4__this_2;
 };
 
-// ShieldController/<DeactivateShieldPlayer2>d__12
-struct U3CDeactivateShieldPlayer2U3Ed__12_tADE0FD947D799BE18D0BA7B105F47894C2FA8690  : public RuntimeObject
+// ShieldController/<DeactivateShieldPlayer2>d__15
+struct U3CDeactivateShieldPlayer2U3Ed__15_tCF16A59F7C63D4453E731C90242668A7F21351B7  : public RuntimeObject
 {
-	// System.Int32 ShieldController/<DeactivateShieldPlayer2>d__12::<>1__state
+	// System.Int32 ShieldController/<DeactivateShieldPlayer2>d__15::<>1__state
 	int32_t ___U3CU3E1__state_0;
-	// System.Object ShieldController/<DeactivateShieldPlayer2>d__12::<>2__current
+	// System.Object ShieldController/<DeactivateShieldPlayer2>d__15::<>2__current
 	RuntimeObject* ___U3CU3E2__current_1;
-	// ShieldController ShieldController/<DeactivateShieldPlayer2>d__12::<>4__this
+	// ShieldController ShieldController/<DeactivateShieldPlayer2>d__15::<>4__this
 	ShieldController_t19627352128E3B17DA85712DEAFCDFD4D7885F7E* ___U3CU3E4__this_2;
 };
 
@@ -7775,10 +7775,10 @@ IL2CPP_EXTERN_C const int32_t g_FieldOffsetTable6362[9] =
 	0,0,0,static_cast<int32_t>(offsetof(Player_tF98BD09D3495D2FF1922E5D34866AEAC6AE2DF74, ___healthBarPlayer1_7)),static_cast<int32_t>(offsetof(Player_tF98BD09D3495D2FF1922E5D34866AEAC6AE2DF74, ___healthBarPlayer2_8)),static_cast<int32_t>(offsetof(Player_tF98BD09D3495D2FF1922E5D34866AEAC6AE2DF74, ___player1CurrentHealth_9)),static_cast<int32_t>(offsetof(Player_tF98BD09D3495D2FF1922E5D34866AEAC6AE2DF74, ___player2CurrentHealth_10)),static_cast<int32_t>(offsetof(Player_tF98BD09D3495D2FF1922E5D34866AEAC6AE2DF74, ___player1KillStatistic_11)),static_cast<int32_t>(offsetof(Player_tF98BD09D3495D2FF1922E5D34866AEAC6AE2DF74, ___player2KillStatistic_12)),};
 IL2CPP_EXTERN_C const int32_t g_FieldOffsetTable6363[3] = 
 {
-	static_cast<int32_t>(offsetof(U3CDeactivateShieldPlayer1U3Ed__11_tF4A71F8AEA42D550034FF059F932E518272BF976, ___U3CU3E1__state_0)),static_cast<int32_t>(offsetof(U3CDeactivateShieldPlayer1U3Ed__11_tF4A71F8AEA42D550034FF059F932E518272BF976, ___U3CU3E2__current_1)),static_cast<int32_t>(offsetof(U3CDeactivateShieldPlayer1U3Ed__11_tF4A71F8AEA42D550034FF059F932E518272BF976, ___U3CU3E4__this_2)),};
+	static_cast<int32_t>(offsetof(U3CDeactivateShieldPlayer1U3Ed__14_tD286474C5EEC15B11444A2621A6C5F1032D9A619, ___U3CU3E1__state_0)),static_cast<int32_t>(offsetof(U3CDeactivateShieldPlayer1U3Ed__14_tD286474C5EEC15B11444A2621A6C5F1032D9A619, ___U3CU3E2__current_1)),static_cast<int32_t>(offsetof(U3CDeactivateShieldPlayer1U3Ed__14_tD286474C5EEC15B11444A2621A6C5F1032D9A619, ___U3CU3E4__this_2)),};
 IL2CPP_EXTERN_C const int32_t g_FieldOffsetTable6364[3] = 
 {
-	static_cast<int32_t>(offsetof(U3CDeactivateShieldPlayer2U3Ed__12_tADE0FD947D799BE18D0BA7B105F47894C2FA8690, ___U3CU3E1__state_0)),static_cast<int32_t>(offsetof(U3CDeactivateShieldPlayer2U3Ed__12_tADE0FD947D799BE18D0BA7B105F47894C2FA8690, ___U3CU3E2__current_1)),static_cast<int32_t>(offsetof(U3CDeactivateShieldPlayer2U3Ed__12_tADE0FD947D799BE18D0BA7B105F47894C2FA8690, ___U3CU3E4__this_2)),};
+	static_cast<int32_t>(offsetof(U3CDeactivateShieldPlayer2U3Ed__15_tCF16A59F7C63D4453E731C90242668A7F21351B7, ___U3CU3E1__state_0)),static_cast<int32_t>(offsetof(U3CDeactivateShieldPlayer2U3Ed__15_tCF16A59F7C63D4453E731C90242668A7F21351B7, ___U3CU3E2__current_1)),static_cast<int32_t>(offsetof(U3CDeactivateShieldPlayer2U3Ed__15_tCF16A59F7C63D4453E731C90242668A7F21351B7, ___U3CU3E4__this_2)),};
 IL2CPP_EXTERN_C const int32_t g_FieldOffsetTable6365[8] = 
 {
 	static_cast<int32_t>(offsetof(ShieldController_t19627352128E3B17DA85712DEAFCDFD4D7885F7E, ___shieldPlayer1_4)),static_cast<int32_t>(offsetof(ShieldController_t19627352128E3B17DA85712DEAFCDFD4D7885F7E, ___shieldBarPlayer1_5)),static_cast<int32_t>(offsetof(ShieldController_t19627352128E3B17DA85712DEAFCDFD4D7885F7E, ___shieldActivateButtonPlayer1_6)),static_cast<int32_t>(offsetof(ShieldController_t19627352128E3B17DA85712DEAFCDFD4D7885F7E, ___isShieldActivatedPlayer1_7)),static_cast<int32_t>(offsetof(ShieldController_t19627352128E3B17DA85712DEAFCDFD4D7885F7E, ___shieldPlayer2_8)),static_cast<int32_t>(offsetof(ShieldController_t19627352128E3B17DA85712DEAFCDFD4D7885F7E, ___shieldBarPlayer2_9)),static_cast<int32_t>(offsetof(ShieldController_t19627352128E3B17DA85712DEAFCDFD4D7885F7E, ___shieldActivateButtonPlayer2_10)),static_cast<int32_t>(offsetof(ShieldController_t19627352128E3B17DA85712DEAFCDFD4D7885F7E, ___isShieldActivatedPlayer2_11)),};

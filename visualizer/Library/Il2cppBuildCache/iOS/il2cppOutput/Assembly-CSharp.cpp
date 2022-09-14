@@ -343,10 +343,10 @@ struct U3CPlayExplosionEffectU3Ed__15_tDD0665FE6334F7CB67B59F74E20D19092015C570;
 struct CullStateChangedEvent_t6073CD0D951EC1256BF74B8F9107D68FC89B99B8;
 // Readme/Section
 struct Section_t50C894D0A717C2368EBAAE5477D4E8626D0B5401;
-// ShieldController/<DeactivateShieldPlayer1>d__11
-struct U3CDeactivateShieldPlayer1U3Ed__11_tF4A71F8AEA42D550034FF059F932E518272BF976;
-// ShieldController/<DeactivateShieldPlayer2>d__12
-struct U3CDeactivateShieldPlayer2U3Ed__12_tADE0FD947D799BE18D0BA7B105F47894C2FA8690;
+// ShieldController/<DeactivateShieldPlayer1>d__14
+struct U3CDeactivateShieldPlayer1U3Ed__14_tD286474C5EEC15B11444A2621A6C5F1032D9A619;
+// ShieldController/<DeactivateShieldPlayer2>d__15
+struct U3CDeactivateShieldPlayer2U3Ed__15_tCF16A59F7C63D4453E731C90242668A7F21351B7;
 // ShieldDetector/<DelayHalfSec>d__8
 struct U3CDelayHalfSecU3Ed__8_t34DC8BD98F6C4A8A4D678C67B3DD5606627BA219;
 // ShieldTriggerAnimation/<DeactivateShieldPlayer1>d__6
@@ -380,9 +380,9 @@ IL2CPP_EXTERN_C RuntimeClass* Single_t4530F2FF86FCB0DC29F35385CA1BD21BE294761C_i
 IL2CPP_EXTERN_C RuntimeClass* StringU5BU5D_t7674CD946EC0CE7B3AE0BE70E6EE85F2ECD9F248_il2cpp_TypeInfo_var;
 IL2CPP_EXTERN_C RuntimeClass* U3CCheckForDeletedParticlesU3Ed__41_tD503C8C257CFBD1EC17763EF5DD2717CF9CEBB6C_il2cpp_TypeInfo_var;
 IL2CPP_EXTERN_C RuntimeClass* U3CCheckIfAliveU3Ed__2_t80D6733F2C8C2AB5A29AB0073CC245C84EAC3511_il2cpp_TypeInfo_var;
-IL2CPP_EXTERN_C RuntimeClass* U3CDeactivateShieldPlayer1U3Ed__11_tF4A71F8AEA42D550034FF059F932E518272BF976_il2cpp_TypeInfo_var;
+IL2CPP_EXTERN_C RuntimeClass* U3CDeactivateShieldPlayer1U3Ed__14_tD286474C5EEC15B11444A2621A6C5F1032D9A619_il2cpp_TypeInfo_var;
 IL2CPP_EXTERN_C RuntimeClass* U3CDeactivateShieldPlayer1U3Ed__6_t6391D0C50044B6F54D322AF4E152F57B18B8727B_il2cpp_TypeInfo_var;
-IL2CPP_EXTERN_C RuntimeClass* U3CDeactivateShieldPlayer2U3Ed__12_tADE0FD947D799BE18D0BA7B105F47894C2FA8690_il2cpp_TypeInfo_var;
+IL2CPP_EXTERN_C RuntimeClass* U3CDeactivateShieldPlayer2U3Ed__15_tCF16A59F7C63D4453E731C90242668A7F21351B7_il2cpp_TypeInfo_var;
 IL2CPP_EXTERN_C RuntimeClass* U3CDelayHalfSecU3Ed__8_t34DC8BD98F6C4A8A4D678C67B3DD5606627BA219_il2cpp_TypeInfo_var;
 IL2CPP_EXTERN_C RuntimeClass* U3CFlickerU3Ed__3_tE17276BBE11EAC311559A0D3F64F931399235496_il2cpp_TypeInfo_var;
 IL2CPP_EXTERN_C RuntimeClass* U3CPlayExplosionEffectU3Ed__15_tDD0665FE6334F7CB67B59F74E20D19092015C570_il2cpp_TypeInfo_var;
@@ -500,9 +500,9 @@ IL2CPP_EXTERN_C const RuntimeMethod* ShieldHealthController_InitShieldHealthPlay
 IL2CPP_EXTERN_C const RuntimeMethod* ShieldTriggerAnimation_TriggerAnimation_mB79F91D39532227F5A0AD77530E99F8EBFB7440E_RuntimeMethod_var;
 IL2CPP_EXTERN_C const RuntimeMethod* U3CCheckForDeletedParticlesU3Ed__41_System_Collections_IEnumerator_Reset_m60E1BC10AD8CACCBAABAE43F703C8AC38AE31741_RuntimeMethod_var;
 IL2CPP_EXTERN_C const RuntimeMethod* U3CCheckIfAliveU3Ed__2_System_Collections_IEnumerator_Reset_m8659443A2B072F0CFA4D0D77AFD3821588EE1068_RuntimeMethod_var;
-IL2CPP_EXTERN_C const RuntimeMethod* U3CDeactivateShieldPlayer1U3Ed__11_System_Collections_IEnumerator_Reset_mC95A36E85C16EAC56D99E490164A4DD60CDE5D43_RuntimeMethod_var;
+IL2CPP_EXTERN_C const RuntimeMethod* U3CDeactivateShieldPlayer1U3Ed__14_System_Collections_IEnumerator_Reset_m84E153B08A469AD96AA33CDA0E2EAC3B686F12A0_RuntimeMethod_var;
 IL2CPP_EXTERN_C const RuntimeMethod* U3CDeactivateShieldPlayer1U3Ed__6_System_Collections_IEnumerator_Reset_m9534031776D32F652D73D65913019284DFC996D7_RuntimeMethod_var;
-IL2CPP_EXTERN_C const RuntimeMethod* U3CDeactivateShieldPlayer2U3Ed__12_System_Collections_IEnumerator_Reset_m708D36FA78E7B8C02253E530CB5ACDDB652543FD_RuntimeMethod_var;
+IL2CPP_EXTERN_C const RuntimeMethod* U3CDeactivateShieldPlayer2U3Ed__15_System_Collections_IEnumerator_Reset_mAF6E5BEEF8828A51C72F3F14D9086DEBB0555443_RuntimeMethod_var;
 IL2CPP_EXTERN_C const RuntimeMethod* U3CDelayHalfSecU3Ed__8_System_Collections_IEnumerator_Reset_m31D17BAB77DD3423B7E2A9732D02604581FD0335_RuntimeMethod_var;
 IL2CPP_EXTERN_C const RuntimeMethod* U3CFlickerU3Ed__3_System_Collections_IEnumerator_Reset_m4D53771CEA3E6CA61DD48905AA2989B9053A1158_RuntimeMethod_var;
 IL2CPP_EXTERN_C const RuntimeMethod* U3CPlayExplosionEffectU3Ed__15_System_Collections_IEnumerator_Reset_m5F0BA67CE257C086665F83E2B2D536F82A22BC2F_RuntimeMethod_var;
@@ -752,25 +752,25 @@ struct Section_t50C894D0A717C2368EBAAE5477D4E8626D0B5401  : public RuntimeObject
 	String_t* ___url_3;
 };
 
-// ShieldController/<DeactivateShieldPlayer1>d__11
-struct U3CDeactivateShieldPlayer1U3Ed__11_tF4A71F8AEA42D550034FF059F932E518272BF976  : public RuntimeObject
+// ShieldController/<DeactivateShieldPlayer1>d__14
+struct U3CDeactivateShieldPlayer1U3Ed__14_tD286474C5EEC15B11444A2621A6C5F1032D9A619  : public RuntimeObject
 {
-	// System.Int32 ShieldController/<DeactivateShieldPlayer1>d__11::<>1__state
+	// System.Int32 ShieldController/<DeactivateShieldPlayer1>d__14::<>1__state
 	int32_t ___U3CU3E1__state_0;
-	// System.Object ShieldController/<DeactivateShieldPlayer1>d__11::<>2__current
+	// System.Object ShieldController/<DeactivateShieldPlayer1>d__14::<>2__current
 	RuntimeObject* ___U3CU3E2__current_1;
-	// ShieldController ShieldController/<DeactivateShieldPlayer1>d__11::<>4__this
+	// ShieldController ShieldController/<DeactivateShieldPlayer1>d__14::<>4__this
 	ShieldController_t19627352128E3B17DA85712DEAFCDFD4D7885F7E* ___U3CU3E4__this_2;
 };
 
-// ShieldController/<DeactivateShieldPlayer2>d__12
-struct U3CDeactivateShieldPlayer2U3Ed__12_tADE0FD947D799BE18D0BA7B105F47894C2FA8690  : public RuntimeObject
+// ShieldController/<DeactivateShieldPlayer2>d__15
+struct U3CDeactivateShieldPlayer2U3Ed__15_tCF16A59F7C63D4453E731C90242668A7F21351B7  : public RuntimeObject
 {
-	// System.Int32 ShieldController/<DeactivateShieldPlayer2>d__12::<>1__state
+	// System.Int32 ShieldController/<DeactivateShieldPlayer2>d__15::<>1__state
 	int32_t ___U3CU3E1__state_0;
-	// System.Object ShieldController/<DeactivateShieldPlayer2>d__12::<>2__current
+	// System.Object ShieldController/<DeactivateShieldPlayer2>d__15::<>2__current
 	RuntimeObject* ___U3CU3E2__current_1;
-	// ShieldController ShieldController/<DeactivateShieldPlayer2>d__12::<>4__this
+	// ShieldController ShieldController/<DeactivateShieldPlayer2>d__15::<>4__this
 	ShieldController_t19627352128E3B17DA85712DEAFCDFD4D7885F7E* ___U3CU3E4__this_2;
 };
 
@@ -4625,10 +4625,10 @@ IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void HealthBarController_SetHealth_mCBEADAD13
 IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR RuntimeObject* ShieldController_DeactivateShieldPlayer1_m90B0C5AC2567AD8F6DB940E6387FA1E3C14C548A (ShieldController_t19627352128E3B17DA85712DEAFCDFD4D7885F7E* __this, const RuntimeMethod* method) ;
 // System.Collections.IEnumerator ShieldController::DeactivateShieldPlayer2()
 IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR RuntimeObject* ShieldController_DeactivateShieldPlayer2_m39F7E6203C862CCBAAB4B674E51D07E2CCBE6897 (ShieldController_t19627352128E3B17DA85712DEAFCDFD4D7885F7E* __this, const RuntimeMethod* method) ;
-// System.Void ShieldController/<DeactivateShieldPlayer1>d__11::.ctor(System.Int32)
-IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void U3CDeactivateShieldPlayer1U3Ed__11__ctor_m6187458967E2B1CBA0D90826A1EA40B2FBD6DE29 (U3CDeactivateShieldPlayer1U3Ed__11_tF4A71F8AEA42D550034FF059F932E518272BF976* __this, int32_t ___U3CU3E1__state0, const RuntimeMethod* method) ;
-// System.Void ShieldController/<DeactivateShieldPlayer2>d__12::.ctor(System.Int32)
-IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void U3CDeactivateShieldPlayer2U3Ed__12__ctor_m0E5337AF3CC2070318887719EE26CCC96F220719 (U3CDeactivateShieldPlayer2U3Ed__12_tADE0FD947D799BE18D0BA7B105F47894C2FA8690* __this, int32_t ___U3CU3E1__state0, const RuntimeMethod* method) ;
+// System.Void ShieldController/<DeactivateShieldPlayer1>d__14::.ctor(System.Int32)
+IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void U3CDeactivateShieldPlayer1U3Ed__14__ctor_mC1C0644A3B193BD656175E29775AEB989C6C8E8D (U3CDeactivateShieldPlayer1U3Ed__14_tD286474C5EEC15B11444A2621A6C5F1032D9A619* __this, int32_t ___U3CU3E1__state0, const RuntimeMethod* method) ;
+// System.Void ShieldController/<DeactivateShieldPlayer2>d__15::.ctor(System.Int32)
+IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void U3CDeactivateShieldPlayer2U3Ed__15__ctor_mC6B2A6C17D98DF247A66B30635E8A7FEEEBE095A (U3CDeactivateShieldPlayer2U3Ed__15_tCF16A59F7C63D4453E731C90242668A7F21351B7* __this, int32_t ___U3CU3E1__state0, const RuntimeMethod* method) ;
 // System.Void UnityEngine.UI.Image::set_fillAmount(System.Single)
 IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void Image_set_fillAmount_m8A9B55F47F966A3214EAC4ACBFE198776A98FAA7 (Image_tBC1D03F63BF71132E9A5E472B8742F172A011E7E* __this, float ___value0, const RuntimeMethod* method) ;
 // System.Void ShieldDetector::ShieldDetected()
@@ -4639,6 +4639,16 @@ IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR RuntimeObject* ShieldDetector_DelayHalfSec_m4
 IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void U3CDelayHalfSecU3Ed__8__ctor_mF2CB38A31B9345088D62FF09F0ACFF0D059D277B (U3CDelayHalfSecU3Ed__8_t34DC8BD98F6C4A8A4D678C67B3DD5606627BA219* __this, int32_t ___U3CU3E1__state0, const RuntimeMethod* method) ;
 // System.Void ShieldHealthController::ColorUpdate()
 IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void ShieldHealthController_ColorUpdate_mABE6954CFC6BB32BFE26AE6FC41EDD0CDD430056 (ShieldHealthController_tDB6A603096CBA1C7DEAAF1CBB314EA10FF32D695* __this, const RuntimeMethod* method) ;
+// System.Void ShieldHealthController::ShieldStatusUpdate()
+IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void ShieldHealthController_ShieldStatusUpdate_mD122F393E00F44F2E533441904B25295032C1890 (ShieldHealthController_tDB6A603096CBA1C7DEAAF1CBB314EA10FF32D695* __this, const RuntimeMethod* method) ;
+// System.Void ShieldController::BreakShieldPlayer1()
+IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void ShieldController_BreakShieldPlayer1_m6D208373CF58C6F7A381EC73BAA63EA9AAB16F5E (ShieldController_t19627352128E3B17DA85712DEAFCDFD4D7885F7E* __this, const RuntimeMethod* method) ;
+// System.Void ShieldHealthController::InitShieldHealthPlayer1()
+IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void ShieldHealthController_InitShieldHealthPlayer1_m381F854FF6640EC333A4928D326F26C120845E01 (ShieldHealthController_tDB6A603096CBA1C7DEAAF1CBB314EA10FF32D695* __this, const RuntimeMethod* method) ;
+// System.Void ShieldController::BreakShieldPlayer2()
+IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void ShieldController_BreakShieldPlayer2_m52C40A58647B41E1563551C28DF0FCA839B7BBC9 (ShieldController_t19627352128E3B17DA85712DEAFCDFD4D7885F7E* __this, const RuntimeMethod* method) ;
+// System.Void ShieldHealthController::InitShieldHealthPlayer2()
+IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void ShieldHealthController_InitShieldHealthPlayer2_m33F3E8807E5DEC36EAD22DCA09E2783F9E847307 (ShieldHealthController_tDB6A603096CBA1C7DEAAF1CBB314EA10FF32D695* __this, const RuntimeMethod* method) ;
 // System.Void ShieldHealthController::SetShieldHealthPlayer1(System.Int32)
 IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void ShieldHealthController_SetShieldHealthPlayer1_mFEB8A354615E5E3154E86478D724E8D340F136F8 (ShieldHealthController_tDB6A603096CBA1C7DEAAF1CBB314EA10FF32D695* __this, int32_t ___shieldHealth0, const RuntimeMethod* method) ;
 // System.Collections.IEnumerator ShieldTriggerAnimation::DeactivateShieldPlayer1()
@@ -12957,6 +12967,14 @@ IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void ShieldController_Start_m1282A0AEE70C97AA
 		return;
 	}
 }
+// System.Void ShieldController::Update()
+IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void ShieldController_Update_mC5DD8104B6E140B7979AC36D1AFB72BBD029A13F (ShieldController_t19627352128E3B17DA85712DEAFCDFD4D7885F7E* __this, const RuntimeMethod* method) 
+{
+	{
+		// }
+		return;
+	}
+}
 // System.Void ShieldController::ActivateShieldPlayer1()
 IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void ShieldController_ActivateShieldPlayer1_m74C7DFF9BBD35A8F61FF6DD8B1039539B9E28A48 (ShieldController_t19627352128E3B17DA85712DEAFCDFD4D7885F7E* __this, const RuntimeMethod* method) 
 {
@@ -13001,20 +13019,54 @@ IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void ShieldController_ActivateShieldPlayer2_m
 		return;
 	}
 }
+// System.Void ShieldController::BreakShieldPlayer1()
+IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void ShieldController_BreakShieldPlayer1_m6D208373CF58C6F7A381EC73BAA63EA9AAB16F5E (ShieldController_t19627352128E3B17DA85712DEAFCDFD4D7885F7E* __this, const RuntimeMethod* method) 
+{
+	{
+		// shieldPlayer1.gameObject.SetActive(false);
+		GameObject_t76FEDD663AB33C991A9C9A23129337651094216F* L_0 = __this->___shieldPlayer1_4;
+		NullCheck(L_0);
+		GameObject_t76FEDD663AB33C991A9C9A23129337651094216F* L_1;
+		L_1 = GameObject_get_gameObject_m0878015B8CF7F5D432B583C187725810D27B57DC(L_0, NULL);
+		NullCheck(L_1);
+		GameObject_SetActive_m638E92E1E75E519E5B24CF150B08CA8E0CDFAB92(L_1, (bool)0, NULL);
+		// isShieldActivatedPlayer1 = false;
+		__this->___isShieldActivatedPlayer1_7 = (bool)0;
+		// }
+		return;
+	}
+}
+// System.Void ShieldController::BreakShieldPlayer2()
+IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void ShieldController_BreakShieldPlayer2_m52C40A58647B41E1563551C28DF0FCA839B7BBC9 (ShieldController_t19627352128E3B17DA85712DEAFCDFD4D7885F7E* __this, const RuntimeMethod* method) 
+{
+	{
+		// shieldPlayer2.gameObject.SetActive(false);
+		GameObject_t76FEDD663AB33C991A9C9A23129337651094216F* L_0 = __this->___shieldPlayer2_8;
+		NullCheck(L_0);
+		GameObject_t76FEDD663AB33C991A9C9A23129337651094216F* L_1;
+		L_1 = GameObject_get_gameObject_m0878015B8CF7F5D432B583C187725810D27B57DC(L_0, NULL);
+		NullCheck(L_1);
+		GameObject_SetActive_m638E92E1E75E519E5B24CF150B08CA8E0CDFAB92(L_1, (bool)0, NULL);
+		// isShieldActivatedPlayer2 = false;
+		__this->___isShieldActivatedPlayer2_11 = (bool)0;
+		// }
+		return;
+	}
+}
 // System.Collections.IEnumerator ShieldController::DeactivateShieldPlayer1()
 IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR RuntimeObject* ShieldController_DeactivateShieldPlayer1_m90B0C5AC2567AD8F6DB940E6387FA1E3C14C548A (ShieldController_t19627352128E3B17DA85712DEAFCDFD4D7885F7E* __this, const RuntimeMethod* method) 
 {
 	static bool s_Il2CppMethodInitialized;
 	if (!s_Il2CppMethodInitialized)
 	{
-		il2cpp_codegen_initialize_runtime_metadata((uintptr_t*)&U3CDeactivateShieldPlayer1U3Ed__11_tF4A71F8AEA42D550034FF059F932E518272BF976_il2cpp_TypeInfo_var);
+		il2cpp_codegen_initialize_runtime_metadata((uintptr_t*)&U3CDeactivateShieldPlayer1U3Ed__14_tD286474C5EEC15B11444A2621A6C5F1032D9A619_il2cpp_TypeInfo_var);
 		s_Il2CppMethodInitialized = true;
 	}
 	{
-		U3CDeactivateShieldPlayer1U3Ed__11_tF4A71F8AEA42D550034FF059F932E518272BF976* L_0 = (U3CDeactivateShieldPlayer1U3Ed__11_tF4A71F8AEA42D550034FF059F932E518272BF976*)il2cpp_codegen_object_new(U3CDeactivateShieldPlayer1U3Ed__11_tF4A71F8AEA42D550034FF059F932E518272BF976_il2cpp_TypeInfo_var);
+		U3CDeactivateShieldPlayer1U3Ed__14_tD286474C5EEC15B11444A2621A6C5F1032D9A619* L_0 = (U3CDeactivateShieldPlayer1U3Ed__14_tD286474C5EEC15B11444A2621A6C5F1032D9A619*)il2cpp_codegen_object_new(U3CDeactivateShieldPlayer1U3Ed__14_tD286474C5EEC15B11444A2621A6C5F1032D9A619_il2cpp_TypeInfo_var);
 		NullCheck(L_0);
-		U3CDeactivateShieldPlayer1U3Ed__11__ctor_m6187458967E2B1CBA0D90826A1EA40B2FBD6DE29(L_0, 0, NULL);
-		U3CDeactivateShieldPlayer1U3Ed__11_tF4A71F8AEA42D550034FF059F932E518272BF976* L_1 = L_0;
+		U3CDeactivateShieldPlayer1U3Ed__14__ctor_mC1C0644A3B193BD656175E29775AEB989C6C8E8D(L_0, 0, NULL);
+		U3CDeactivateShieldPlayer1U3Ed__14_tD286474C5EEC15B11444A2621A6C5F1032D9A619* L_1 = L_0;
 		NullCheck(L_1);
 		L_1->___U3CU3E4__this_2 = __this;
 		Il2CppCodeGenWriteBarrier((void**)(&L_1->___U3CU3E4__this_2), (void*)__this);
@@ -13027,14 +13079,14 @@ IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR RuntimeObject* ShieldController_DeactivateShi
 	static bool s_Il2CppMethodInitialized;
 	if (!s_Il2CppMethodInitialized)
 	{
-		il2cpp_codegen_initialize_runtime_metadata((uintptr_t*)&U3CDeactivateShieldPlayer2U3Ed__12_tADE0FD947D799BE18D0BA7B105F47894C2FA8690_il2cpp_TypeInfo_var);
+		il2cpp_codegen_initialize_runtime_metadata((uintptr_t*)&U3CDeactivateShieldPlayer2U3Ed__15_tCF16A59F7C63D4453E731C90242668A7F21351B7_il2cpp_TypeInfo_var);
 		s_Il2CppMethodInitialized = true;
 	}
 	{
-		U3CDeactivateShieldPlayer2U3Ed__12_tADE0FD947D799BE18D0BA7B105F47894C2FA8690* L_0 = (U3CDeactivateShieldPlayer2U3Ed__12_tADE0FD947D799BE18D0BA7B105F47894C2FA8690*)il2cpp_codegen_object_new(U3CDeactivateShieldPlayer2U3Ed__12_tADE0FD947D799BE18D0BA7B105F47894C2FA8690_il2cpp_TypeInfo_var);
+		U3CDeactivateShieldPlayer2U3Ed__15_tCF16A59F7C63D4453E731C90242668A7F21351B7* L_0 = (U3CDeactivateShieldPlayer2U3Ed__15_tCF16A59F7C63D4453E731C90242668A7F21351B7*)il2cpp_codegen_object_new(U3CDeactivateShieldPlayer2U3Ed__15_tCF16A59F7C63D4453E731C90242668A7F21351B7_il2cpp_TypeInfo_var);
 		NullCheck(L_0);
-		U3CDeactivateShieldPlayer2U3Ed__12__ctor_m0E5337AF3CC2070318887719EE26CCC96F220719(L_0, 0, NULL);
-		U3CDeactivateShieldPlayer2U3Ed__12_tADE0FD947D799BE18D0BA7B105F47894C2FA8690* L_1 = L_0;
+		U3CDeactivateShieldPlayer2U3Ed__15__ctor_mC6B2A6C17D98DF247A66B30635E8A7FEEEBE095A(L_0, 0, NULL);
+		U3CDeactivateShieldPlayer2U3Ed__15_tCF16A59F7C63D4453E731C90242668A7F21351B7* L_1 = L_0;
 		NullCheck(L_1);
 		L_1->___U3CU3E4__this_2 = __this;
 		Il2CppCodeGenWriteBarrier((void**)(&L_1->___U3CU3E4__this_2), (void*)__this);
@@ -13057,8 +13109,8 @@ IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void ShieldController__ctor_m81CD176B75E61B72
 #pragma clang diagnostic ignored "-Winvalid-offsetof"
 #pragma clang diagnostic ignored "-Wunused-variable"
 #endif
-// System.Void ShieldController/<DeactivateShieldPlayer1>d__11::.ctor(System.Int32)
-IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void U3CDeactivateShieldPlayer1U3Ed__11__ctor_m6187458967E2B1CBA0D90826A1EA40B2FBD6DE29 (U3CDeactivateShieldPlayer1U3Ed__11_tF4A71F8AEA42D550034FF059F932E518272BF976* __this, int32_t ___U3CU3E1__state0, const RuntimeMethod* method) 
+// System.Void ShieldController/<DeactivateShieldPlayer1>d__14::.ctor(System.Int32)
+IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void U3CDeactivateShieldPlayer1U3Ed__14__ctor_mC1C0644A3B193BD656175E29775AEB989C6C8E8D (U3CDeactivateShieldPlayer1U3Ed__14_tD286474C5EEC15B11444A2621A6C5F1032D9A619* __this, int32_t ___U3CU3E1__state0, const RuntimeMethod* method) 
 {
 	{
 		Object__ctor_mE837C6B9FA8C6D5D109F4B2EC885D79919AC0EA2(__this, NULL);
@@ -13067,15 +13119,15 @@ IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void U3CDeactivateShieldPlayer1U3Ed__11__ctor
 		return;
 	}
 }
-// System.Void ShieldController/<DeactivateShieldPlayer1>d__11::System.IDisposable.Dispose()
-IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void U3CDeactivateShieldPlayer1U3Ed__11_System_IDisposable_Dispose_m378520CE7875961D77BAC199BADE70CDA3A38A82 (U3CDeactivateShieldPlayer1U3Ed__11_tF4A71F8AEA42D550034FF059F932E518272BF976* __this, const RuntimeMethod* method) 
+// System.Void ShieldController/<DeactivateShieldPlayer1>d__14::System.IDisposable.Dispose()
+IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void U3CDeactivateShieldPlayer1U3Ed__14_System_IDisposable_Dispose_mC0C6C084C8571BB468AED60CEC15DDC49B663362 (U3CDeactivateShieldPlayer1U3Ed__14_tD286474C5EEC15B11444A2621A6C5F1032D9A619* __this, const RuntimeMethod* method) 
 {
 	{
 		return;
 	}
 }
-// System.Boolean ShieldController/<DeactivateShieldPlayer1>d__11::MoveNext()
-IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR bool U3CDeactivateShieldPlayer1U3Ed__11_MoveNext_m7BC1762F29930023AF42985E3660FA2712A91314 (U3CDeactivateShieldPlayer1U3Ed__11_tF4A71F8AEA42D550034FF059F932E518272BF976* __this, const RuntimeMethod* method) 
+// System.Boolean ShieldController/<DeactivateShieldPlayer1>d__14::MoveNext()
+IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR bool U3CDeactivateShieldPlayer1U3Ed__14_MoveNext_m2590C60E2AB5206A5B55CEE5AC6B4A369E2B9A60 (U3CDeactivateShieldPlayer1U3Ed__14_tD286474C5EEC15B11444A2621A6C5F1032D9A619* __this, const RuntimeMethod* method) 
 {
 	static bool s_Il2CppMethodInitialized;
 	if (!s_Il2CppMethodInitialized)
@@ -13140,26 +13192,26 @@ IL_0037:
 		return (bool)0;
 	}
 }
-// System.Object ShieldController/<DeactivateShieldPlayer1>d__11::System.Collections.Generic.IEnumerator<System.Object>.get_Current()
-IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR RuntimeObject* U3CDeactivateShieldPlayer1U3Ed__11_System_Collections_Generic_IEnumeratorU3CSystem_ObjectU3E_get_Current_mF7233F0C6DA7B9EEB12CF9F80B56DD9297AF80FC (U3CDeactivateShieldPlayer1U3Ed__11_tF4A71F8AEA42D550034FF059F932E518272BF976* __this, const RuntimeMethod* method) 
+// System.Object ShieldController/<DeactivateShieldPlayer1>d__14::System.Collections.Generic.IEnumerator<System.Object>.get_Current()
+IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR RuntimeObject* U3CDeactivateShieldPlayer1U3Ed__14_System_Collections_Generic_IEnumeratorU3CSystem_ObjectU3E_get_Current_m7147EF346217425F1A5EC4F4D1538FB3039F7D8D (U3CDeactivateShieldPlayer1U3Ed__14_tD286474C5EEC15B11444A2621A6C5F1032D9A619* __this, const RuntimeMethod* method) 
 {
 	{
 		RuntimeObject* L_0 = __this->___U3CU3E2__current_1;
 		return L_0;
 	}
 }
-// System.Void ShieldController/<DeactivateShieldPlayer1>d__11::System.Collections.IEnumerator.Reset()
-IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void U3CDeactivateShieldPlayer1U3Ed__11_System_Collections_IEnumerator_Reset_mC95A36E85C16EAC56D99E490164A4DD60CDE5D43 (U3CDeactivateShieldPlayer1U3Ed__11_tF4A71F8AEA42D550034FF059F932E518272BF976* __this, const RuntimeMethod* method) 
+// System.Void ShieldController/<DeactivateShieldPlayer1>d__14::System.Collections.IEnumerator.Reset()
+IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void U3CDeactivateShieldPlayer1U3Ed__14_System_Collections_IEnumerator_Reset_m84E153B08A469AD96AA33CDA0E2EAC3B686F12A0 (U3CDeactivateShieldPlayer1U3Ed__14_tD286474C5EEC15B11444A2621A6C5F1032D9A619* __this, const RuntimeMethod* method) 
 {
 	{
 		NotSupportedException_t1429765983D409BD2986508963C98D214E4EBF4A* L_0 = (NotSupportedException_t1429765983D409BD2986508963C98D214E4EBF4A*)il2cpp_codegen_object_new(((RuntimeClass*)il2cpp_codegen_initialize_runtime_metadata_inline((uintptr_t*)&NotSupportedException_t1429765983D409BD2986508963C98D214E4EBF4A_il2cpp_TypeInfo_var)));
 		NullCheck(L_0);
 		NotSupportedException__ctor_m1398D0CDE19B36AA3DE9392879738C1EA2439CDF(L_0, NULL);
-		IL2CPP_RAISE_MANAGED_EXCEPTION(L_0, ((RuntimeMethod*)il2cpp_codegen_initialize_runtime_metadata_inline((uintptr_t*)&U3CDeactivateShieldPlayer1U3Ed__11_System_Collections_IEnumerator_Reset_mC95A36E85C16EAC56D99E490164A4DD60CDE5D43_RuntimeMethod_var)));
+		IL2CPP_RAISE_MANAGED_EXCEPTION(L_0, ((RuntimeMethod*)il2cpp_codegen_initialize_runtime_metadata_inline((uintptr_t*)&U3CDeactivateShieldPlayer1U3Ed__14_System_Collections_IEnumerator_Reset_m84E153B08A469AD96AA33CDA0E2EAC3B686F12A0_RuntimeMethod_var)));
 	}
 }
-// System.Object ShieldController/<DeactivateShieldPlayer1>d__11::System.Collections.IEnumerator.get_Current()
-IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR RuntimeObject* U3CDeactivateShieldPlayer1U3Ed__11_System_Collections_IEnumerator_get_Current_m286D560A5ED735628B818A4FCF0DE3341EB518F0 (U3CDeactivateShieldPlayer1U3Ed__11_tF4A71F8AEA42D550034FF059F932E518272BF976* __this, const RuntimeMethod* method) 
+// System.Object ShieldController/<DeactivateShieldPlayer1>d__14::System.Collections.IEnumerator.get_Current()
+IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR RuntimeObject* U3CDeactivateShieldPlayer1U3Ed__14_System_Collections_IEnumerator_get_Current_m6FA251906ABB8DF42FE36FEF7431BD0C7A7B4432 (U3CDeactivateShieldPlayer1U3Ed__14_tD286474C5EEC15B11444A2621A6C5F1032D9A619* __this, const RuntimeMethod* method) 
 {
 	{
 		RuntimeObject* L_0 = __this->___U3CU3E2__current_1;
@@ -13174,8 +13226,8 @@ IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR RuntimeObject* U3CDeactivateShieldPlayer1U3Ed
 #pragma clang diagnostic ignored "-Winvalid-offsetof"
 #pragma clang diagnostic ignored "-Wunused-variable"
 #endif
-// System.Void ShieldController/<DeactivateShieldPlayer2>d__12::.ctor(System.Int32)
-IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void U3CDeactivateShieldPlayer2U3Ed__12__ctor_m0E5337AF3CC2070318887719EE26CCC96F220719 (U3CDeactivateShieldPlayer2U3Ed__12_tADE0FD947D799BE18D0BA7B105F47894C2FA8690* __this, int32_t ___U3CU3E1__state0, const RuntimeMethod* method) 
+// System.Void ShieldController/<DeactivateShieldPlayer2>d__15::.ctor(System.Int32)
+IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void U3CDeactivateShieldPlayer2U3Ed__15__ctor_mC6B2A6C17D98DF247A66B30635E8A7FEEEBE095A (U3CDeactivateShieldPlayer2U3Ed__15_tCF16A59F7C63D4453E731C90242668A7F21351B7* __this, int32_t ___U3CU3E1__state0, const RuntimeMethod* method) 
 {
 	{
 		Object__ctor_mE837C6B9FA8C6D5D109F4B2EC885D79919AC0EA2(__this, NULL);
@@ -13184,15 +13236,15 @@ IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void U3CDeactivateShieldPlayer2U3Ed__12__ctor
 		return;
 	}
 }
-// System.Void ShieldController/<DeactivateShieldPlayer2>d__12::System.IDisposable.Dispose()
-IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void U3CDeactivateShieldPlayer2U3Ed__12_System_IDisposable_Dispose_mBA4EFFA3AE347AFD2723F1B893D0DEBDE703ABAF (U3CDeactivateShieldPlayer2U3Ed__12_tADE0FD947D799BE18D0BA7B105F47894C2FA8690* __this, const RuntimeMethod* method) 
+// System.Void ShieldController/<DeactivateShieldPlayer2>d__15::System.IDisposable.Dispose()
+IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void U3CDeactivateShieldPlayer2U3Ed__15_System_IDisposable_Dispose_mF90D7EB3E10FB82FF0942209C3F81E12D5D20C7D (U3CDeactivateShieldPlayer2U3Ed__15_tCF16A59F7C63D4453E731C90242668A7F21351B7* __this, const RuntimeMethod* method) 
 {
 	{
 		return;
 	}
 }
-// System.Boolean ShieldController/<DeactivateShieldPlayer2>d__12::MoveNext()
-IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR bool U3CDeactivateShieldPlayer2U3Ed__12_MoveNext_m3030D69D05459F132C21AA6B236386F5C5C0ED2E (U3CDeactivateShieldPlayer2U3Ed__12_tADE0FD947D799BE18D0BA7B105F47894C2FA8690* __this, const RuntimeMethod* method) 
+// System.Boolean ShieldController/<DeactivateShieldPlayer2>d__15::MoveNext()
+IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR bool U3CDeactivateShieldPlayer2U3Ed__15_MoveNext_mD78BDE6FAEB037BB8F58FF68F6E8900D92C50253 (U3CDeactivateShieldPlayer2U3Ed__15_tCF16A59F7C63D4453E731C90242668A7F21351B7* __this, const RuntimeMethod* method) 
 {
 	static bool s_Il2CppMethodInitialized;
 	if (!s_Il2CppMethodInitialized)
@@ -13257,26 +13309,26 @@ IL_0037:
 		return (bool)0;
 	}
 }
-// System.Object ShieldController/<DeactivateShieldPlayer2>d__12::System.Collections.Generic.IEnumerator<System.Object>.get_Current()
-IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR RuntimeObject* U3CDeactivateShieldPlayer2U3Ed__12_System_Collections_Generic_IEnumeratorU3CSystem_ObjectU3E_get_Current_mD0EC80BBD9B16C50A47B640B7BA6FF1DBE866F4C (U3CDeactivateShieldPlayer2U3Ed__12_tADE0FD947D799BE18D0BA7B105F47894C2FA8690* __this, const RuntimeMethod* method) 
+// System.Object ShieldController/<DeactivateShieldPlayer2>d__15::System.Collections.Generic.IEnumerator<System.Object>.get_Current()
+IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR RuntimeObject* U3CDeactivateShieldPlayer2U3Ed__15_System_Collections_Generic_IEnumeratorU3CSystem_ObjectU3E_get_Current_m30E61D207D8DF51D073E8188381C959C2CE5C42B (U3CDeactivateShieldPlayer2U3Ed__15_tCF16A59F7C63D4453E731C90242668A7F21351B7* __this, const RuntimeMethod* method) 
 {
 	{
 		RuntimeObject* L_0 = __this->___U3CU3E2__current_1;
 		return L_0;
 	}
 }
-// System.Void ShieldController/<DeactivateShieldPlayer2>d__12::System.Collections.IEnumerator.Reset()
-IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void U3CDeactivateShieldPlayer2U3Ed__12_System_Collections_IEnumerator_Reset_m708D36FA78E7B8C02253E530CB5ACDDB652543FD (U3CDeactivateShieldPlayer2U3Ed__12_tADE0FD947D799BE18D0BA7B105F47894C2FA8690* __this, const RuntimeMethod* method) 
+// System.Void ShieldController/<DeactivateShieldPlayer2>d__15::System.Collections.IEnumerator.Reset()
+IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void U3CDeactivateShieldPlayer2U3Ed__15_System_Collections_IEnumerator_Reset_mAF6E5BEEF8828A51C72F3F14D9086DEBB0555443 (U3CDeactivateShieldPlayer2U3Ed__15_tCF16A59F7C63D4453E731C90242668A7F21351B7* __this, const RuntimeMethod* method) 
 {
 	{
 		NotSupportedException_t1429765983D409BD2986508963C98D214E4EBF4A* L_0 = (NotSupportedException_t1429765983D409BD2986508963C98D214E4EBF4A*)il2cpp_codegen_object_new(((RuntimeClass*)il2cpp_codegen_initialize_runtime_metadata_inline((uintptr_t*)&NotSupportedException_t1429765983D409BD2986508963C98D214E4EBF4A_il2cpp_TypeInfo_var)));
 		NullCheck(L_0);
 		NotSupportedException__ctor_m1398D0CDE19B36AA3DE9392879738C1EA2439CDF(L_0, NULL);
-		IL2CPP_RAISE_MANAGED_EXCEPTION(L_0, ((RuntimeMethod*)il2cpp_codegen_initialize_runtime_metadata_inline((uintptr_t*)&U3CDeactivateShieldPlayer2U3Ed__12_System_Collections_IEnumerator_Reset_m708D36FA78E7B8C02253E530CB5ACDDB652543FD_RuntimeMethod_var)));
+		IL2CPP_RAISE_MANAGED_EXCEPTION(L_0, ((RuntimeMethod*)il2cpp_codegen_initialize_runtime_metadata_inline((uintptr_t*)&U3CDeactivateShieldPlayer2U3Ed__15_System_Collections_IEnumerator_Reset_mAF6E5BEEF8828A51C72F3F14D9086DEBB0555443_RuntimeMethod_var)));
 	}
 }
-// System.Object ShieldController/<DeactivateShieldPlayer2>d__12::System.Collections.IEnumerator.get_Current()
-IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR RuntimeObject* U3CDeactivateShieldPlayer2U3Ed__12_System_Collections_IEnumerator_get_Current_mBCE2074174A5A0F35828B631097B85FA5032E6A3 (U3CDeactivateShieldPlayer2U3Ed__12_tADE0FD947D799BE18D0BA7B105F47894C2FA8690* __this, const RuntimeMethod* method) 
+// System.Object ShieldController/<DeactivateShieldPlayer2>d__15::System.Collections.IEnumerator.get_Current()
+IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR RuntimeObject* U3CDeactivateShieldPlayer2U3Ed__15_System_Collections_IEnumerator_get_Current_mC4BA07D123B37B0973E5CD8B906723BB67DE31BD (U3CDeactivateShieldPlayer2U3Ed__15_tCF16A59F7C63D4453E731C90242668A7F21351B7* __this, const RuntimeMethod* method) 
 {
 	{
 		RuntimeObject* L_0 = __this->___U3CU3E2__current_1;
@@ -13853,16 +13905,10 @@ IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void ShieldHealthController_Start_m01C24A65CA
 		__this->___currentShieldHealthPlayer1_15 = 0;
 		// currentShieldHealthPlayer2 = 0;
 		__this->___currentShieldHealthPlayer2_16 = 0;
-		// _isShieldActivatedPlayer1 = shieldController.isShieldActivatedPlayer1;
-		ShieldController_t19627352128E3B17DA85712DEAFCDFD4D7885F7E* L_12 = __this->___shieldController_4;
-		NullCheck(L_12);
-		bool L_13 = L_12->___isShieldActivatedPlayer1_7;
-		__this->____isShieldActivatedPlayer1_7 = L_13;
-		// _isShieldActivatedPlayer2 = shieldController.isShieldActivatedPlayer2;
-		ShieldController_t19627352128E3B17DA85712DEAFCDFD4D7885F7E* L_14 = __this->___shieldController_4;
-		NullCheck(L_14);
-		bool L_15 = L_14->___isShieldActivatedPlayer2_11;
-		__this->____isShieldActivatedPlayer2_8 = L_15;
+		// _isShieldActivatedPlayer1 = false;
+		__this->____isShieldActivatedPlayer1_7 = (bool)0;
+		// _isShieldActivatedPlayer2 = false;
+		__this->____isShieldActivatedPlayer2_8 = (bool)0;
 		// }
 		return;
 	}
@@ -13873,6 +13919,52 @@ IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void ShieldHealthController_Update_m4EFF3846A
 	{
 		// ColorUpdate();
 		ShieldHealthController_ColorUpdate_mABE6954CFC6BB32BFE26AE6FC41EDD0CDD430056(__this, NULL);
+		// ShieldStatusUpdate();
+		ShieldHealthController_ShieldStatusUpdate_mD122F393E00F44F2E533441904B25295032C1890(__this, NULL);
+		// }
+		return;
+	}
+}
+// System.Void ShieldHealthController::ShieldStatusUpdate()
+IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void ShieldHealthController_ShieldStatusUpdate_mD122F393E00F44F2E533441904B25295032C1890 (ShieldHealthController_tDB6A603096CBA1C7DEAAF1CBB314EA10FF32D695* __this, const RuntimeMethod* method) 
+{
+	{
+		// if (currentShieldHealthPlayer1 == 0)
+		int32_t L_0 = __this->___currentShieldHealthPlayer1_15;
+		if (L_0)
+		{
+			goto IL_0019;
+		}
+	}
+	{
+		// shieldController.BreakShieldPlayer1();
+		ShieldController_t19627352128E3B17DA85712DEAFCDFD4D7885F7E* L_1 = __this->___shieldController_4;
+		NullCheck(L_1);
+		ShieldController_BreakShieldPlayer1_m6D208373CF58C6F7A381EC73BAA63EA9AAB16F5E(L_1, NULL);
+		// InitShieldHealthPlayer1();
+		ShieldHealthController_InitShieldHealthPlayer1_m381F854FF6640EC333A4928D326F26C120845E01(__this, NULL);
+	}
+
+IL_0019:
+	{
+		// if (currentShieldHealthPlayer2 == 0)
+		int32_t L_2 = __this->___currentShieldHealthPlayer2_16;
+		if (L_2)
+		{
+			goto IL_0032;
+		}
+	}
+	{
+		// shieldController.BreakShieldPlayer2();
+		ShieldController_t19627352128E3B17DA85712DEAFCDFD4D7885F7E* L_3 = __this->___shieldController_4;
+		NullCheck(L_3);
+		ShieldController_BreakShieldPlayer2_m52C40A58647B41E1563551C28DF0FCA839B7BBC9(L_3, NULL);
+		// InitShieldHealthPlayer2();
+		ShieldHealthController_InitShieldHealthPlayer2_m33F3E8807E5DEC36EAD22DCA09E2783F9E847307(__this, NULL);
+	}
+
+IL_0032:
+	{
 		// }
 		return;
 	}

@@ -25,6 +25,11 @@ public class ShieldController : MonoBehaviour
         isShieldActivatedPlayer2 = false;
     }
 
+    void Update ()
+    {
+        
+    }
+
     public void ActivateShieldPlayer1()
     {
         shieldPlayer1.gameObject.SetActive(true);
@@ -37,6 +42,18 @@ public class ShieldController : MonoBehaviour
         shieldPlayer2.gameObject.SetActive(true);
         isShieldActivatedPlayer2 = true;
         StartCoroutine(DeactivateShieldPlayer2());
+    }
+
+    public void BreakShieldPlayer1()
+    {
+        shieldPlayer1.gameObject.SetActive(false);
+        isShieldActivatedPlayer1 = false;
+    }
+
+    public void BreakShieldPlayer2()
+    {
+        shieldPlayer2.gameObject.SetActive(false);
+        isShieldActivatedPlayer2 = false;
     }
 
     IEnumerator DeactivateShieldPlayer1()

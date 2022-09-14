@@ -37,13 +37,29 @@ public class ShieldHealthController : MonoBehaviour
         fillShieldPlayer2.color = inactivateColor;
         currentShieldHealthPlayer1 = 0;
         currentShieldHealthPlayer2 = 0;
-        _isShieldActivatedPlayer1 = shieldController.isShieldActivatedPlayer1;
-        _isShieldActivatedPlayer2 = shieldController.isShieldActivatedPlayer2;
+        _isShieldActivatedPlayer1 = false;
+        _isShieldActivatedPlayer2 = false;
     }
 
     void Update()
     {
         ColorUpdate();
+        ShieldStatusUpdate();
+    }
+
+    void ShieldStatusUpdate()
+    {
+        if (currentShieldHealthPlayer1 == 0)
+        {
+            shieldController.BreakShieldPlayer1();
+            InitShieldHealthPlayer1();
+        }
+
+        if (currentShieldHealthPlayer2 == 0)
+        {
+            shieldController.BreakShieldPlayer2();
+            InitShieldHealthPlayer2();
+        }
     }
 
     void ColorUpdate() 
