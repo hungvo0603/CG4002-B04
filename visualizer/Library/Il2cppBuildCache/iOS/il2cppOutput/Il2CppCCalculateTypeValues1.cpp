@@ -3301,28 +3301,30 @@ struct U3CU3Ec_tFE23038B63E5E9EDD95FF07844C136230AED9FFC_StaticFields
 	Comparison_1_t236C83451572505C1D483C9DFB0550F3470A17B8* ___U3CU3E9__27_0_1;
 };
 
-// GrenadeController/<ThrowGrenadePlayer1>d__15
-struct U3CThrowGrenadePlayer1U3Ed__15_t250EE339E8800111305E91AB7E2AAF14E15A0CC5  : public RuntimeObject
+// GrenadeController/<ThrowGrenadePlayer1>d__17
+struct U3CThrowGrenadePlayer1U3Ed__17_tBE8AF88472A8AF0E33521BC437DF01ADFA089C65  : public RuntimeObject
 {
-	// System.Int32 GrenadeController/<ThrowGrenadePlayer1>d__15::<>1__state
+	// System.Int32 GrenadeController/<ThrowGrenadePlayer1>d__17::<>1__state
 	int32_t ___U3CU3E1__state_0;
-	// System.Object GrenadeController/<ThrowGrenadePlayer1>d__15::<>2__current
+	// System.Object GrenadeController/<ThrowGrenadePlayer1>d__17::<>2__current
 	RuntimeObject* ___U3CU3E2__current_1;
-	// GrenadeController GrenadeController/<ThrowGrenadePlayer1>d__15::<>4__this
+	// GrenadeController GrenadeController/<ThrowGrenadePlayer1>d__17::<>4__this
 	GrenadeController_tD655B70B7729DAC8400C67394E735308A8040CA4* ___U3CU3E4__this_2;
-	// System.Int32 GrenadeController/<ThrowGrenadePlayer1>d__15::<currentShieldHealthPlayer2>5__2
+	// System.Int32 GrenadeController/<ThrowGrenadePlayer1>d__17::<currentShieldHealthPlayer2>5__2
 	int32_t ___U3CcurrentShieldHealthPlayer2U3E5__2_3;
 };
 
-// GrenadeController/<ThrowGrenadePlayer2>d__16
-struct U3CThrowGrenadePlayer2U3Ed__16_tC3D35032FAA860887CF8CC2CAFD000C12B2D2742  : public RuntimeObject
+// GrenadeController/<ThrowGrenadePlayer2>d__18
+struct U3CThrowGrenadePlayer2U3Ed__18_t16093057AC605DD82B7C440A858DB1B3265EEA00  : public RuntimeObject
 {
-	// System.Int32 GrenadeController/<ThrowGrenadePlayer2>d__16::<>1__state
+	// System.Int32 GrenadeController/<ThrowGrenadePlayer2>d__18::<>1__state
 	int32_t ___U3CU3E1__state_0;
-	// System.Object GrenadeController/<ThrowGrenadePlayer2>d__16::<>2__current
+	// System.Object GrenadeController/<ThrowGrenadePlayer2>d__18::<>2__current
 	RuntimeObject* ___U3CU3E2__current_1;
-	// GrenadeController GrenadeController/<ThrowGrenadePlayer2>d__16::<>4__this
+	// GrenadeController GrenadeController/<ThrowGrenadePlayer2>d__18::<>4__this
 	GrenadeController_tD655B70B7729DAC8400C67394E735308A8040CA4* ___U3CU3E4__this_2;
+	// System.Int32 GrenadeController/<ThrowGrenadePlayer2>d__18::<currentShieldHealthPlayer1>5__2
+	int32_t ___U3CcurrentShieldHealthPlayer1U3E5__2_3;
 };
 
 // GrenadeTriggerAnimation/<TriggerExplosion>d__8
@@ -14976,16 +14978,20 @@ struct GrenadeController_tD655B70B7729DAC8400C67394E735308A8040CA4  : public Mon
 	ShieldController_t19627352128E3B17DA85712DEAFCDFD4D7885F7E* ___shieldController_6;
 	// ShieldHealthController GrenadeController::shieldHealthController
 	ShieldHealthController_tDB6A603096CBA1C7DEAAF1CBB314EA10FF32D695* ___shieldHealthController_7;
+	// System.Boolean GrenadeController::_isShieldActivatedPlayer1
+	bool ____isShieldActivatedPlayer1_8;
+	// System.Boolean GrenadeController::_isShieldActivatedPlayer2
+	bool ____isShieldActivatedPlayer2_9;
 	// EnemyDetector GrenadeController::enemyDetector
-	EnemyDetector_t00FA635CED95F15130150D3E8253735B3130D0F6* ___enemyDetector_10;
+	EnemyDetector_t00FA635CED95F15130150D3E8253735B3130D0F6* ___enemyDetector_12;
 	// ShieldDetector GrenadeController::shieldDetector
-	ShieldDetector_tD47685B19EF7C634A78040AC44504EBD4A5F656C* ___shieldDetector_11;
+	ShieldDetector_tD47685B19EF7C634A78040AC44504EBD4A5F656C* ___shieldDetector_13;
 	// System.Boolean GrenadeController::hasEnemy
-	bool ___hasEnemy_12;
+	bool ___hasEnemy_14;
 	// System.Boolean GrenadeController::hasShield
-	bool ___hasShield_13;
+	bool ___hasShield_15;
 	// System.Int32 GrenadeController::player1Grenade
-	int32_t ___player1Grenade_14;
+	int32_t ___player1Grenade_16;
 };
 
 // GrenadeDisplay
@@ -15186,14 +15192,16 @@ struct ShootController_t0E03774116F4ADAC3D3E3A3D6A8F86B1D32151A6  : public MonoB
 	ShieldController_t19627352128E3B17DA85712DEAFCDFD4D7885F7E* ___shieldController_6;
 	// ShieldHealthController ShootController::shieldHealthController
 	ShieldHealthController_tDB6A603096CBA1C7DEAAF1CBB314EA10FF32D695* ___shieldHealthController_7;
+	// System.Boolean ShootController::_isShieldActivatedPlayer1
+	bool ____isShieldActivatedPlayer1_8;
 	// System.Boolean ShootController::_isShieldActivatedPlayer2
-	bool ____isShieldActivatedPlayer2_8;
+	bool ____isShieldActivatedPlayer2_9;
 	// EnemyDetector ShootController::enemy
-	EnemyDetector_t00FA635CED95F15130150D3E8253735B3130D0F6* ___enemy_11;
+	EnemyDetector_t00FA635CED95F15130150D3E8253735B3130D0F6* ___enemy_12;
 	// System.Boolean ShootController::hasEnemy
-	bool ___hasEnemy_12;
+	bool ___hasEnemy_13;
 	// System.Int32 ShootController::player1Bullet
-	int32_t ___player1Bullet_13;
+	int32_t ___player1Bullet_14;
 };
 
 // StatisticsManager
@@ -18366,9 +18374,9 @@ const Il2CppTypeDefinitionSizes g_typeDefinitionSize6355 = { sizeof(U3CTriggerEx
 extern const Il2CppTypeDefinitionSizes g_typeDefinitionSize6356;
 const Il2CppTypeDefinitionSizes g_typeDefinitionSize6356 = { sizeof(EnemyGrenadeTriggerAnimation_t21A6E8FCA8E04251AE4D31211F5A299D8D04DBEE), -1, 0, 0 };
 extern const Il2CppTypeDefinitionSizes g_typeDefinitionSize6357;
-const Il2CppTypeDefinitionSizes g_typeDefinitionSize6357 = { sizeof(U3CThrowGrenadePlayer1U3Ed__15_t250EE339E8800111305E91AB7E2AAF14E15A0CC5), -1, 0, 0 };
+const Il2CppTypeDefinitionSizes g_typeDefinitionSize6357 = { sizeof(U3CThrowGrenadePlayer1U3Ed__17_tBE8AF88472A8AF0E33521BC437DF01ADFA089C65), -1, 0, 0 };
 extern const Il2CppTypeDefinitionSizes g_typeDefinitionSize6358;
-const Il2CppTypeDefinitionSizes g_typeDefinitionSize6358 = { sizeof(U3CThrowGrenadePlayer2U3Ed__16_tC3D35032FAA860887CF8CC2CAFD000C12B2D2742), -1, 0, 0 };
+const Il2CppTypeDefinitionSizes g_typeDefinitionSize6358 = { sizeof(U3CThrowGrenadePlayer2U3Ed__18_t16093057AC605DD82B7C440A858DB1B3265EEA00), -1, 0, 0 };
 extern const Il2CppTypeDefinitionSizes g_typeDefinitionSize6359;
 const Il2CppTypeDefinitionSizes g_typeDefinitionSize6359 = { sizeof(GrenadeController_tD655B70B7729DAC8400C67394E735308A8040CA4), -1, 0, 0 };
 extern const Il2CppTypeDefinitionSizes g_typeDefinitionSize6360;

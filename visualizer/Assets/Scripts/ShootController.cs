@@ -10,7 +10,7 @@ public class ShootController : MonoBehaviour
     public Player player2;
     [SerializeField] private ShieldController shieldController;
     [SerializeField] private ShieldHealthController shieldHealthController;
-    // private bool _isShieldActivatedPlayer1;
+    private bool _isShieldActivatedPlayer1;
     private bool _isShieldActivatedPlayer2;
 
     private const int MAX_BULLET = 6;
@@ -36,7 +36,7 @@ public class ShootController : MonoBehaviour
         {
             player1Bullet = MAX_BULLET;
         }
-        // _isShieldActivatedPlayer1 = shieldController.isShieldActivatedPlayer1;
+        _isShieldActivatedPlayer1 = shieldController.isShieldActivatedPlayer1;
         _isShieldActivatedPlayer2 = shieldController.isShieldActivatedPlayer2;
     }
 
@@ -66,7 +66,20 @@ public class ShootController : MonoBehaviour
 
     public void GunShotPlayer2()
     {
-        player1.TakeDamagePlayer1(SHOOT_DAMAGE);
+        int currentShieldHealthPlayer1 = shieldHealthController.currentShieldHealthPlayer1;
+        int shieldHealthPlayer1;
+        if (_isShieldActivatedPlayer1)
+        {
+            shieldHealthPlayer1 = currentShieldHealthPlayer1 - SHOOT_DAMAGE;
+            if (shieldHealthPlayer1 >= 0)
+            {
+                shieldHealthController.SetShieldHealthPlayer1(shieldHealthPlayer1);
+            }
+        }
+        else
+        {
+            player1.TakeDamagePlayer1(SHOOT_DAMAGE);
+        }
     }
 
 }

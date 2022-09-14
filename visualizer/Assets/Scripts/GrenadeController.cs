@@ -9,7 +9,8 @@ public class GrenadeController : MonoBehaviour
 
     [SerializeField] private ShieldController shieldController;
     [SerializeField] private ShieldHealthController shieldHealthController;
-    // private bool _isShieldActivatedPlayer1, _isShieldActivatedPlayer2;
+    private bool _isShieldActivatedPlayer1;
+    private bool _isShieldActivatedPlayer2;
     
     private const int MAX_GRENADE = 2;
     private const int GRENADE_DAMAGE = 30;
@@ -86,7 +87,26 @@ public class GrenadeController : MonoBehaviour
 
     IEnumerator ThrowGrenadePlayer2()
     {
+        _isShieldActivatedPlayer1 = shieldController.isShieldActivatedPlayer1;
+
+        int currentShieldHealthPlayer1 = shieldHealthController.currentShieldHealthPlayer1;
+        int shieldHealthPlayer1;
+
         yield return new WaitForSeconds(2.01f);
-        player1.TakeDamagePlayer1(GRENADE_DAMAGE);
+        
+        if (_isShieldActivatedPlayer1)
+        {
+            shieldHealthPlayer1 = currentShieldHealthPlayer1 - GRENADE_DAMAGE;
+            if (shieldHealthPlayer1 <= 0)
+            {
+                shieldHealthController.SetShieldHealthPlayer1(0);
+                player1.TakeDamagePlayer1(-shieldHealthPlayer1);
+            }
+        }
+        else
+        {
+            player1.TakeDamagePlayer1(GRENADE_DAMAGE);
+        }
+
     }
 }
