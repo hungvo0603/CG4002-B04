@@ -51,7 +51,7 @@ public class ShootController : MonoBehaviour
             if (_isShieldActivatedPlayer2)
             {
                 shieldHealthPlayer2 = currentShieldHealthPlayer2 - SHOOT_DAMAGE;
-                if (shieldHealthPlayer2 > 0)
+                if (shieldHealthPlayer2 >= 0)
                 {
                     shieldHealthController.SetShieldHealthPlayer2(shieldHealthPlayer2);
                 }

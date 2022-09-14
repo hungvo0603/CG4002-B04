@@ -4,6 +4,7 @@ ScriptsOnlyBuild:
     - BulletDisplay
     - CFX_AutoDestructShuriken
     - EnemyDetector
+    - EnemyGrenadeTriggerAnimation
     - GrenadeController
     - GrenadeDisplay
     - GrenadeTriggerAnimation
@@ -26,6 +27,14 @@ ScriptsOnlyBuild:
     - TMPro.TMP_SpriteAsset
     - TMPro.TMP_StyleSheet
     - TMPro.TextMeshProUGUI
+    UnityEditor.Graphs.dll:
+    - UnityEditor.Graphs.AnimationBlendTree.Graph
+    - UnityEditor.Graphs.AnimationBlendTree.GraphGUI
+    - UnityEditor.Graphs.AnimationStateMachine.AnyStateNode
+    - UnityEditor.Graphs.AnimationStateMachine.Graph
+    - UnityEditor.Graphs.AnimationStateMachine.GraphGUI
+    - UnityEditor.Graphs.AnimationStateMachine.StateNode
+    - UnityEditor.Graphs.AnimatorControllerTool
     UnityEditor.TestRunner.dll:
     - UnityEditor.TestTools.TestRunner.Api.CallbacksHolder
     - UnityEditor.TestTools.TestRunner.TestListCacheData
@@ -190,43 +199,45 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 3556}
     - Class: 114
-      Script: {instanceID: 4282}
+      Script: {instanceID: 4048}
     - Class: 114
-      Script: {instanceID: 4538}
+      Script: {instanceID: 4284}
     - Class: 114
-      Script: {instanceID: 4592}
+      Script: {instanceID: 4540}
     - Class: 114
-      Script: {instanceID: 4990}
+      Script: {instanceID: 4594}
     - Class: 114
-      Script: {instanceID: 5014}
+      Script: {instanceID: 4992}
     - Class: 114
-      Script: {instanceID: 5110}
+      Script: {instanceID: 5016}
     - Class: 114
-      Script: {instanceID: 5616}
+      Script: {instanceID: 5112}
     - Class: 114
-      Script: {instanceID: 5656}
+      Script: {instanceID: 5618}
     - Class: 114
-      Script: {instanceID: 5748}
+      Script: {instanceID: 5658}
     - Class: 114
-      Script: {instanceID: 6012}
+      Script: {instanceID: 5750}
     - Class: 114
-      Script: {instanceID: 6354}
+      Script: {instanceID: 6014}
     - Class: 114
-      Script: {instanceID: 6564}
+      Script: {instanceID: 6356}
     - Class: 114
-      Script: {instanceID: 6598}
+      Script: {instanceID: 6566}
     - Class: 114
-      Script: {instanceID: 6678}
+      Script: {instanceID: 6600}
     - Class: 114
-      Script: {instanceID: 6896}
+      Script: {instanceID: 6680}
     - Class: 114
-      Script: {instanceID: 7000}
+      Script: {instanceID: 6898}
     - Class: 114
-      Script: {instanceID: 7304}
+      Script: {instanceID: 7002}
     - Class: 114
-      Script: {instanceID: 7968}
+      Script: {instanceID: 7306}
     - Class: 114
-      Script: {instanceID: 8908}
+      Script: {instanceID: 7970}
+    - Class: 114
+      Script: {instanceID: 8910}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -272,7 +283,7 @@ ScriptsOnlyBuild:
     className: PanelRaycaster
   - hash:
       serializedVersion: 2
-      Hash: 3c7fe9bd746ed6a3c1205121f5997db7
+      Hash: b540af202c9d3ac87d0273fa16911739
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: GrenadeTriggerAnimation
@@ -308,7 +319,7 @@ ScriptsOnlyBuild:
     className: Selectable
   - hash:
       serializedVersion: 2
-      Hash: c134e10bfd8e9addebec73c5adf6db85
+      Hash: f442ee7c5a499eef9ea1665afffe35f7
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: GrenadeController
@@ -1320,6 +1331,12 @@ ScriptsOnlyBuild:
     assemblyName: Unity.VisualScripting.Core.dll
     namespaceName: Unity.VisualScripting
     className: UnityOnCollisionExit2DMessageListener
+  - hash:
+      serializedVersion: 2
+      Hash: efb4559bfa83f9bb5457c258c79ee139
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: EnemyGrenadeTriggerAnimation
   - hash:
       serializedVersion: 2
       Hash: 2574ac7d50617d23cdefe4ad22f5e1ad
@@ -2979,4 +2996,4 @@ ScriptsOnlyBuild:
   platform: 9
   scenePathNames:
   - Assets/Scenes/MainScene.unity
-  playerPath: C:/Users/Hungggggg/NUSwork/Y4S1/CG4002/build-ios/build-ios-1
+  playerPath: C:/Users/Hungggggg/NUSwork/Y4S1/CG4002/build-ios/build-ios-7

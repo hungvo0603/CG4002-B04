@@ -21,7 +21,6 @@ public class ShieldDetector : MonoBehaviour
     {
         _isShieldActivatedPlayer2 = shieldController.isShieldActivatedPlayer2;
         ShieldDetected();
-        StartCoroutine(DelayHalfSec());
     }
 
     public void ShieldDetected()
@@ -40,13 +39,8 @@ public class ShieldDetector : MonoBehaviour
 
     public void ShieldLost()
     {
-        shieldDetectionText.text = "SHIELD NOT ACTIVATED";
+        shieldDetectionText.text = "SHIELD LOST";
         hasShieldEnemy = false;
-    }
-
-    IEnumerator DelayHalfSec()
-    {
-        yield return new WaitForSeconds(.5f);
     }
     
 }

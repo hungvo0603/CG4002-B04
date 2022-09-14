@@ -49,16 +49,14 @@ public class ShieldHealthController : MonoBehaviour
 
     void ShieldStatusUpdate()
     {
-        if (currentShieldHealthPlayer1 == 0)
+        if (currentShieldHealthPlayer1 <= 0) // <= 0
         {
             shieldController.BreakShieldPlayer1();
-            InitShieldHealthPlayer1();
         }
 
-        if (currentShieldHealthPlayer2 == 0)
+        if (currentShieldHealthPlayer2 <= 0) // <= 0
         {
             shieldController.BreakShieldPlayer2();
-            InitShieldHealthPlayer2();
         }
     }
 
@@ -72,6 +70,7 @@ public class ShieldHealthController : MonoBehaviour
         }
         else
         {
+            InitShieldHealthPlayer1();
             fillShieldPlayer1.color = inactivateColor;
         }
 
@@ -81,6 +80,7 @@ public class ShieldHealthController : MonoBehaviour
         }
         else
         {
+            InitShieldHealthPlayer2();
             fillShieldPlayer2.color = inactivateColor;
         }
     }
@@ -99,11 +99,13 @@ public class ShieldHealthController : MonoBehaviour
 
     public void SetShieldHealthPlayer1(int shieldHealth)
     {
+        currentShieldHealthPlayer1 = shieldHealth;
         shieldBarSliderPlayer1.value = shieldHealth / 10;
     }
 
     public void SetShieldHealthPlayer2(int shieldHealth)
     {
+        currentShieldHealthPlayer2 = shieldHealth;
         shieldBarSliderPlayer2.value = shieldHealth / 10;
     }
 }
