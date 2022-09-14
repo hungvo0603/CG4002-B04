@@ -4,11 +4,12 @@ using UnityEngine;
 
 public class GrenadeController : MonoBehaviour
 {
+    public Player player2;
+    
     public ParticleSystem explosionParticles;
     public AudioSource grenadeExplosionSound;
     private const int MAX_GRENADE = 2;
     private const int GRENADE_DAMAGE = 30;
-    public Player player2;
 
     public EnemyDetector enemy;
     private bool hasEnemy;

@@ -5,9 +5,11 @@ using UnityEngine.UI;
 
 public class ShieldHealthController : MonoBehaviour
 {
+    [SerializeField] private ShieldController shieldController;
+    
     [SerializeField] private Button shieldPlayer1Button;
     [SerializeField] private Button shieldPlayer2Button;
-    [SerializeField] private ShieldController shieldController;
+    
     private bool _isShieldActivatedPlayer1;
     private bool _isShieldActivatedPlayer2;
 
@@ -20,8 +22,8 @@ public class ShieldHealthController : MonoBehaviour
     public Color activateColor;
     public Color inactivateColor;
 
-    int currentShieldHealthPlayer1;
-    int currentShieldHealthPlayer2;
+    public int currentShieldHealthPlayer1;
+    public int currentShieldHealthPlayer2;
 
     private const int MAX_SHIELD_HEALTH = 30;
 
@@ -74,17 +76,17 @@ public class ShieldHealthController : MonoBehaviour
     }
 
     void InitShieldHealthPlayer2()
-    {
+    {   
         currentShieldHealthPlayer2 = MAX_SHIELD_HEALTH;
         SetShieldHealthPlayer2(currentShieldHealthPlayer2);
     }
 
-    void SetShieldHealthPlayer1(int shieldHealth)
+    public void SetShieldHealthPlayer1(int shieldHealth)
     {
         shieldBarSliderPlayer1.value = shieldHealth / 10;
     }
 
-    void SetShieldHealthPlayer2(int shieldHealth)
+    public void SetShieldHealthPlayer2(int shieldHealth)
     {
         shieldBarSliderPlayer2.value = shieldHealth / 10;
     }
