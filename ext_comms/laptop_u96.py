@@ -73,6 +73,7 @@ class Client(threading.Thread):
         # relay to u96 (this part is sort of like creating another tunnel on curr machine to pass through the xilinx pwd)
         tunnel_xilinx = sshtunnel.open_tunnel(
             ssh_address_or_host=('localhost', tunnel_sunfire.local_bind_port),
+            # changed from remote
             remote_bind_address=('localhost', self.remote_port),
             ssh_username="xilinx",
             ssh_password=XILINX_PWD,
