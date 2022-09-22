@@ -4,6 +4,7 @@ ScriptsOnlyBuild:
     - BulletDisplay
     - CFX_AutoDestructShuriken
     - EnemyDetector
+    - EnemyGrenadeTriggerAnimation
     - GrenadeController
     - GrenadeDisplay
     - GrenadeTriggerAnimation
@@ -15,6 +16,8 @@ ScriptsOnlyBuild:
     - ShieldCountdown
     - ShieldDetector
     - ShieldDisplay
+    - ShieldHealthController
+    - ShieldTriggerAnimation
     - ShootController
     Unity.Rider.Editor.dll:
     - Packages.Rider.Editor.UnitTesting.CallbackData
@@ -31,6 +34,7 @@ ScriptsOnlyBuild:
     - UnityEditor.Graphs.AnimationStateMachine.Graph
     - UnityEditor.Graphs.AnimationStateMachine.GraphGUI
     - UnityEditor.Graphs.AnimationStateMachine.StateNode
+    - UnityEditor.Graphs.AnimatorControllerTool
     UnityEditor.TestRunner.dll:
     - UnityEditor.TestTools.TestRunner.Api.CallbacksHolder
     - UnityEditor.TestTools.TestRunner.TestListCacheData
@@ -111,13 +115,22 @@ ScriptsOnlyBuild:
     methodName: EnemyLost
   - assembly: Assembly-CSharp
     fullTypeName: ShootController
-    methodName: GunShot
+    methodName: GunShotPlayer1
   - assembly: UnityEngine.AudioModule
     fullTypeName: UnityEngine.AudioSource
     methodName: Play
   - assembly: Assembly-CSharp
     fullTypeName: GrenadeController
-    methodName: ExplosionButtonPress
+    methodName: ExplosionButtonPressPlayer2
+  - assembly: Assembly-CSharp
+    fullTypeName: ShootController
+    methodName: GunShotPlayer2
+  - assembly: UnityEngine.AudioModule
+    fullTypeName: UnityEngine.AudioSource
+    methodName: Play
+  - assembly: Assembly-CSharp
+    fullTypeName: GrenadeController
+    methodName: ExplosionButtonPressPlayer1
   sceneClasses:
     Assets/Scenes/MainScene.unity:
     - Class: 1
@@ -171,63 +184,69 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 2332}
     - Class: 114
-      Script: {instanceID: 2758}
+      Script: {instanceID: 2570}
     - Class: 114
-      Script: {instanceID: 2806}
+      Script: {instanceID: 2760}
     - Class: 114
-      Script: {instanceID: 2882}
+      Script: {instanceID: 2808}
     - Class: 114
       Script: {instanceID: 2884}
     - Class: 114
-      Script: {instanceID: 2956}
+      Script: {instanceID: 2886}
     - Class: 114
       Script: {instanceID: 2958}
     - Class: 114
-      Script: {instanceID: 3386}
+      Script: {instanceID: 2960}
     - Class: 114
-      Script: {instanceID: 3440}
+      Script: {instanceID: 3388}
     - Class: 114
-      Script: {instanceID: 3542}
+      Script: {instanceID: 3422}
     - Class: 114
-      Script: {instanceID: 3552}
+      Script: {instanceID: 3444}
     - Class: 114
-      Script: {instanceID: 4584}
+      Script: {instanceID: 3546}
     - Class: 114
-      Script: {instanceID: 4982}
+      Script: {instanceID: 3556}
     - Class: 114
-      Script: {instanceID: 5006}
+      Script: {instanceID: 4048}
     - Class: 114
-      Script: {instanceID: 5102}
+      Script: {instanceID: 4284}
     - Class: 114
-      Script: {instanceID: 5608}
+      Script: {instanceID: 4540}
     - Class: 114
-      Script: {instanceID: 5648}
+      Script: {instanceID: 4594}
     - Class: 114
-      Script: {instanceID: 5740}
+      Script: {instanceID: 4992}
     - Class: 114
-      Script: {instanceID: 6004}
+      Script: {instanceID: 5016}
     - Class: 114
-      Script: {instanceID: 6346}
+      Script: {instanceID: 5112}
     - Class: 114
-      Script: {instanceID: 6556}
+      Script: {instanceID: 5618}
     - Class: 114
-      Script: {instanceID: 6590}
+      Script: {instanceID: 5658}
     - Class: 114
-      Script: {instanceID: 6886}
+      Script: {instanceID: 5750}
     - Class: 114
-      Script: {instanceID: 6990}
+      Script: {instanceID: 6014}
     - Class: 114
-      Script: {instanceID: 7294}
+      Script: {instanceID: 6356}
     - Class: 114
-      Script: {instanceID: 7958}
+      Script: {instanceID: 6566}
     - Class: 114
-      Script: {instanceID: 46728}
+      Script: {instanceID: 6600}
     - Class: 114
-      Script: {instanceID: 47762}
+      Script: {instanceID: 6680}
     - Class: 114
-      Script: {instanceID: 71022}
+      Script: {instanceID: 6898}
     - Class: 114
-      Script: {instanceID: 91348}
+      Script: {instanceID: 7002}
+    - Class: 114
+      Script: {instanceID: 7306}
+    - Class: 114
+      Script: {instanceID: 7970}
+    - Class: 114
+      Script: {instanceID: 8910}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -273,7 +292,7 @@ ScriptsOnlyBuild:
     className: PanelRaycaster
   - hash:
       serializedVersion: 2
-      Hash: 3c7fe9bd746ed6a3c1205121f5997db7
+      Hash: 5d168837eafb79582542dd0e45362344
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: GrenadeTriggerAnimation
@@ -309,7 +328,7 @@ ScriptsOnlyBuild:
     className: Selectable
   - hash:
       serializedVersion: 2
-      Hash: e62547a935eaba1a916d0f6cfa53a431
+      Hash: f442ee7c5a499eef9ea1665afffe35f7
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: GrenadeController
@@ -385,6 +404,12 @@ ScriptsOnlyBuild:
     assemblyName: UnityEngine.UI.dll
     namespaceName: UnityEngine.UI
     className: RawImage
+  - hash:
+      serializedVersion: 2
+      Hash: 0e0a98bb02f356b58237240be9126b2f
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: ShieldHealthController
   - hash:
       serializedVersion: 2
       Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
@@ -1185,6 +1210,12 @@ ScriptsOnlyBuild:
     className: UnityOnDropdownValueChangedMessageListener
   - hash:
       serializedVersion: 2
+      Hash: 3187b5f09bd311cc3ca9a3447642e4a8
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: ShieldController
+  - hash:
+      serializedVersion: 2
       Hash: 2611e1665146f1c0b2c3816982088aae
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
@@ -1311,6 +1342,12 @@ ScriptsOnlyBuild:
     className: UnityOnCollisionExit2DMessageListener
   - hash:
       serializedVersion: 2
+      Hash: a0261436ed50a45fe5f80b31c1279101
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: EnemyGrenadeTriggerAnimation
+  - hash:
+      serializedVersion: 2
       Hash: 2574ac7d50617d23cdefe4ad22f5e1ad
     assemblyName: Unity.VisualScripting.Flow.dll
     namespaceName: Unity.VisualScripting
@@ -1327,6 +1364,12 @@ ScriptsOnlyBuild:
     assemblyName: Unity.VisualScripting.Core.dll
     namespaceName: Unity.VisualScripting
     className: UnityOnPointerExitMessageListener
+  - hash:
+      serializedVersion: 2
+      Hash: 88507bb0f6249355f8db97ca63d1af7a
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: EnemyDetector
   - hash:
       serializedVersion: 2
       Hash: dd7780efe480b95c7be3094f9d1d4270
@@ -1369,6 +1412,12 @@ ScriptsOnlyBuild:
     assemblyName: UnityEngine.UI.dll
     namespaceName: UnityEngine.EventSystems
     className: PhysicsRaycaster
+  - hash:
+      serializedVersion: 2
+      Hash: 01af6df09cdedececbd342ca35271d6a
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: KDAController
   - hash:
       serializedVersion: 2
       Hash: 0fb27be807aa299702f28ad0bcad1f46
@@ -1767,7 +1816,7 @@ ScriptsOnlyBuild:
     className: CFX_AutoDestructShuriken
   - hash:
       serializedVersion: 2
-      Hash: 8a3af9b9edc86d9e84eb82bded6b5ac1
+      Hash: cf3dd713a1073525a932c0d48f980000
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: ShootController
@@ -1975,6 +2024,12 @@ ScriptsOnlyBuild:
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: HealthBarController
+  - hash:
+      serializedVersion: 2
+      Hash: 01ac1007d27a3a0aebf62386926c75cc
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: ShieldTriggerAnimation
   - hash:
       serializedVersion: 2
       Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
@@ -2865,12 +2920,6 @@ ScriptsOnlyBuild:
     className: ScrollRect
   - hash:
       serializedVersion: 2
-      Hash: cafca531eb7ebb87dd35311c84504255
-    assemblyName: Assembly-CSharp.dll
-    namespaceName: 
-    className: Grenade
-  - hash:
-      serializedVersion: 2
       Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
     assemblyName: Unity.VisualScripting.Core.dll
     namespaceName: Unity.VisualScripting
@@ -2913,16 +2962,16 @@ ScriptsOnlyBuild:
     className: TMP_ScrollbarEventHandler
   - hash:
       serializedVersion: 2
-      Hash: 3874e02d4012335cb1da569ecf002a89
-    assemblyName: Assembly-CSharp.dll
-    namespaceName: 
-    className: GrenadeThrower
-  - hash:
-      serializedVersion: 2
       Hash: 8220b46879dc5e37db1b940c938f5744
     assemblyName: Unity.Timeline.dll
     namespaceName: UnityEngine.Timeline
     className: SignalEmitter
+  - hash:
+      serializedVersion: 2
+      Hash: 957e6305c6d818acf8b64343c4543d41
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: ShieldDetector
   - hash:
       serializedVersion: 2
       Hash: 7d37d09af363b70d55d9408e5fb34050
@@ -2953,30 +3002,6 @@ ScriptsOnlyBuild:
     assemblyName: Unity.VisualScripting.Core.dll
     namespaceName: Unity.VisualScripting
     className: UnityOnSliderValueChangedMessageListener
-  - hash:
-      serializedVersion: 2
-      Hash: 88507bb0f6249355f8db97ca63d1af7a
-    assemblyName: Assembly-CSharp.dll
-    namespaceName: 
-    className: EnemyDetector
-  - hash:
-      serializedVersion: 2
-      Hash: 2c054b75f19d678cdf98da95afe7a546
-    assemblyName: Assembly-CSharp.dll
-    namespaceName: 
-    className: ShieldDetector
-  - hash:
-      serializedVersion: 2
-      Hash: 6abc85dec69a82c6bed66b82752d2478
-    assemblyName: Assembly-CSharp.dll
-    namespaceName: 
-    className: ShieldController
-  - hash:
-      serializedVersion: 2
-      Hash: 6e4702cdb34417c1b180a64f7c6c1c60
-    assemblyName: Assembly-CSharp.dll
-    namespaceName: 
-    className: KDAController
   platform: 9
   scenePathNames:
   - Assets/Scenes/MainScene.unity

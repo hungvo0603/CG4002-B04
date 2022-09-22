@@ -8,20 +8,19 @@ public class ShieldDetector : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI shieldDetectionText;
     public bool hasShieldEnemy;
-    [SerializeField] private ShieldController sc;
+    [SerializeField] private ShieldController shieldController;
     private bool _isShieldActivatedPlayer2;
 
     void Start()
     {
         hasShieldEnemy = false;
-        _isShieldActivatedPlayer2 = sc.isShieldActivatedPlayer2;
+        _isShieldActivatedPlayer2 = shieldController.isShieldActivatedPlayer2;
     }
 
     void Update()
     {
-        _isShieldActivatedPlayer2 = sc.isShieldActivatedPlayer2;
+        _isShieldActivatedPlayer2 = shieldController.isShieldActivatedPlayer2;
         ShieldDetected();
-        StartCoroutine(DelayHalfSec());
     }
 
     public void ShieldDetected()
@@ -40,13 +39,8 @@ public class ShieldDetector : MonoBehaviour
 
     public void ShieldLost()
     {
-        shieldDetectionText.text = "SHIELD NOT ACTIVATED";
+        shieldDetectionText.text = "SHIELD LOST";
         hasShieldEnemy = false;
-    }
-
-    IEnumerator DelayHalfSec()
-    {
-        yield return new WaitForSeconds(.5f);
     }
     
 }

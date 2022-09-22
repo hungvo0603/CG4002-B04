@@ -2190,10 +2190,6 @@ void RegisterAllStrippedInternalCalls()
 		void Register_UnityEngine_Physics_get_defaultPhysicsScene_Injected();
 		Register_UnityEngine_Physics_get_defaultPhysicsScene_Injected();
 
-		//UnityEngine.Collider[] UnityEngine.Physics::OverlapSphere_Internal_Injected(UnityEngine.PhysicsScene&,UnityEngine.Vector3&,System.Single,System.Int32,UnityEngine.QueryTriggerInteraction)
-		void Register_UnityEngine_Physics_OverlapSphere_Internal_Injected();
-		Register_UnityEngine_Physics_OverlapSphere_Internal_Injected();
-
 		//UnityEngine.RaycastHit[] UnityEngine.Physics::Internal_RaycastAll_Injected(UnityEngine.PhysicsScene&,UnityEngine.Ray&,System.Single,System.Int32,UnityEngine.QueryTriggerInteraction)
 		void Register_UnityEngine_Physics_Internal_RaycastAll_Injected();
 		Register_UnityEngine_Physics_Internal_RaycastAll_Injected();
@@ -2661,10 +2657,6 @@ void RegisterAllStrippedInternalCalls()
 	//End Registrations for type : UnityEngine.ResourcesAPIInternal
 
 	//Start Registrations for type : UnityEngine.Rigidbody
-
-		//System.Void UnityEngine.Rigidbody::AddExplosionForce_Injected(System.Single,UnityEngine.Vector3&,System.Single,System.Single,UnityEngine.ForceMode)
-		void Register_UnityEngine_Rigidbody_AddExplosionForce_Injected();
-		Register_UnityEngine_Rigidbody_AddExplosionForce_Injected();
 
 		//System.Void UnityEngine.Rigidbody::set_freezeRotation(System.Boolean)
 		void Register_UnityEngine_Rigidbody_set_freezeRotation();
