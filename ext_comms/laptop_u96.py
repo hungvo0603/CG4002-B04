@@ -6,6 +6,7 @@ import json
 import os
 import dotenv
 import sshtunnel
+from queue import Queue
 
 # python laptop_u96.py 127.0.0.1 1 4 1234567890123456 secret_key (16-digit)
 # p1 100 grenade 1 1 1 1 1 1
@@ -24,8 +25,10 @@ import sshtunnel
 # 	"num_shield":   integer value of number of shield left
 # }
 
-relay_lock = threading.Lock()
-relay_buffer = []  # bool value for grenade hit
+# relay_lock = threading.Lock()
+# relay_buffer = []  # bool value for grenade hit
+
+relay_buffer = Queue()
 
 # Load environment variables
 dotenv.load_dotenv()
@@ -51,10 +54,8 @@ class Client(threading.Thread):
     def run(self):
         message = ""
         while message != "logout":
-            if len(relay_buffer):
-                relay_lock.acquire()
-                message = relay_buffer.pop(0)
-                relay_lock.release()
+            if not relay_buffer.empty():
+                message = relay_buffer.get()
                 self.send_data(message)
 
         self.end_client_connection()
@@ -159,8 +160,6 @@ if __name__ == '__main__':
 
     while message != "logout":
         message = input("[Client] Enter message: ")
-        relay_lock.acquire()
-        relay_buffer.append(message)
-        relay_lock.release()
+        relay_buffer.put(message)
 
     conn_u96.join()

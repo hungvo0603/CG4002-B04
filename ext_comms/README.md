@@ -4,19 +4,18 @@ Qn:
 - on logout, do we still need to send state to eval_server? (curr implementation jsut directly terminate)
 - for video demo, need individual parts or jsut integrated?
 - cannot use same clientid for diff topics?
+- sender + id on viz data
 
 Todo:
-- Remove error at server_only (logout cmd)
+- implement game logic
+- integrate + test with internal
 - Receiver at u96
-- check requirement for full subsystem check (canvas)
-- mqqt two way connection (need to do phone app) + test it out too (tgt+alone)
-- connect to visualizer
-- confirm data received by internal comms
+- confim full subsystem check requirement + demo
 
 Main idea:
 - Internal comms send data to laptop (relay)
 - Socket for u96-eval + relay-u96
-- mqtt for the rest
+- mqtt for the viz
 
 To install:
 `python3 -m venv <virtual_env_name>`

@@ -4,15 +4,14 @@
 import random as rd
 from Crypto.Cipher import AES
 from paho.mqtt import client as mqtt_client
+from Crypto.Util.Padding import pad
 from Crypto import Random
 import threading
 import base64
 import socket
 import sys
 import json
-import time
-
-# p1 100 grenade 1 1 1 1 1 1
+from queue import Queue
 
 mqtt_broker = 'broker.emqx.io'  # Public broker
 mqtt_port = 1883
@@ -21,7 +20,7 @@ DEFAULT_STATE = {
     "hp": 100,
     "action": "none",
     "bullets": 6,
-    "grenades": 1,
+    "grenades": 2,
     "shield_time": 0,
     "shield_health": 0,
     "num_deaths": 0,
@@ -52,29 +51,11 @@ def input_state(data):
 
 
 # Data buffer
-move_res_lock = threading.Lock()
-move_res_buffer = []  # predicted action
-move_data_lock = threading.Lock()
-move_data_buffer = []  # data relayed from internal comms
-eval_lock = threading.Lock()
-eval_buffer = []  # game state
-viz_send_lock = threading.Lock()
-viz_send_buffer = []  # game state
-viz_recv_lock = threading.Lock()
-viz_recv_buffer = []  # bool value for grenade hit
-
-
-def read_data(buffer, lock):
-    lock.acquire()
-    data = buffer.pop(0)
-    lock.release()
-    return data
-
-
-def input_data(buffer, lock, data):
-    lock.acquire()
-    buffer.append(data)
-    lock.release()
+move_res_buffer = Queue()  # predicted action
+move_data_buffer = Queue()  # data relayed from internal comms
+eval_buffer = Queue()  # game state
+viz_send_buffer = Queue()  # game state
+viz_recv_buffer = Queue()  # bool value for grenade hit
 
 
 class MovePredictor(threading.Thread):
@@ -91,12 +72,12 @@ class MovePredictor(threading.Thread):
     def run(self):
         action = ""
         while action != "logout":
-            if len(move_data_buffer):
-                data = read_data(move_data_buffer, move_data_lock)
+            if not move_data_buffer.empty():
+                data = move_data_buffer.get()
                 print("[MovePredictor]Received data: ", data)
                 action = self.pred_action(data)
                 print("[MovePredictor]Generated action: ", action)
-                input_data(move_res_buffer, move_res_lock, action)
+                move_res_buffer.put(action)
 
 
 class Mqtt(threading.Thread):
@@ -121,11 +102,10 @@ class Mqtt(threading.Thread):
 
     def publish(self):
         while True:
-            if len(viz_send_buffer):
-                state = read_data(viz_send_buffer, viz_send_lock)
+            if not viz_send_buffer.empty():
+                state = viz_send_buffer.get()
                 message = json.dumps(state)
                 result = self.client.publish(self.topic, message)
-                print("[Mqtt]Published data: ", message)
                 status = result[0]
                 if status == 0:
                     print("[Mqtt]Published data: ", message)
@@ -134,7 +114,7 @@ class Mqtt(threading.Thread):
 
     def subscribe(self):
         def on_message(client, userdata, msg):
-            input_data(viz_recv_buffer, viz_recv_lock, msg.payload.decode())
+            viz_recv_buffer.put(msg.payload.decode())
             print("[Mqtt]Received data: ", msg.payload.decode())
 
         self.client.on_message = on_message
@@ -159,22 +139,12 @@ class Client(threading.Thread):
     def run(self):
         self.conn.connect(self.server_address)
         print("[Eval server] Connection established to:", self.server_address)
-
+        print("[Eval server] Copy to eval: ", self.secret_key)
         action = ""
 
         while action != "logout":
-            if len(eval_buffer):
-                # message = input(
-                #     "[Client] Enter state [player_num, hp, action, bullets, grenades, shield_time, shield_health, num_deaths, num_shield]: ")
-
-                state = read_data(eval_buffer, eval_lock)
-
-                # player_num, hp, action, bullets, grenades, shield_time, shield_health, num_deaths, num_shield = read_data(
-                #     eval_buffer, eval_lock)
-
-                # self.send_data(player_num, hp, action, bullets, grenades,
-                #                shield_time, shield_health, num_deaths, num_shield)
-
+            if not eval_buffer.empty():
+                state = eval_buffer.get()
                 self.send_data(state)
 
                 # received data from eval_server is unencrypted ground truth
@@ -183,8 +153,8 @@ class Client(threading.Thread):
                 input_state(true_state)
 
                 # send ground truth to visualiser
-                true_state["action"] = ""
-                input_data(viz_send_buffer, viz_send_lock, true_state)
+                true_state["sender"] = "eval"
+                viz_send_buffer.put(true_state)
 
         self.conn.close()
 
@@ -204,18 +174,12 @@ class Client(threading.Thread):
         input_state(state)
         return json.dumps(state)
 
-    # Implementation from https://github.com/pycrypto/pycrypto/blob/master/lib/Crypto/Util/Padding.py
-    def pad_data(self, data_to_pad, block_size):
-        padding_len = block_size - len(data_to_pad) % block_size
-        padding = bytes([padding_len])*padding_len
-        return bytes(data_to_pad, encoding="utf8") + padding
-
     def encrypt_message(self, state):
         # AES.block_size = 16 (default)
         # padding with 0x02 (start of text)
         message = json.dumps(state)
         print("[Eval server] Raw message:", message)
-        padded_msg = self.pad_data(message, AES.block_size)
+        padded_msg = pad(bytes(message, "utf8"), AES.block_size)
         iv = Random.new().read(AES.block_size)  # generate iv
         aes_key = bytes(str(self.secret_key), encoding="utf8")
         cipher = AES.new(aes_key, AES.MODE_CBC, iv)
@@ -230,16 +194,6 @@ class Client(threading.Thread):
         self.conn.sendall(packet_size)
         self.conn.sendall(encrypted_text)
         print("[Eval server] Sent encrypted data:", encrypted_text)
-
-    # def send_data(self, player_num, hp, action, bullets, grenades, shield_time, shield_health, num_deaths, num_shield):
-    #     message = self.jsonify_state(
-    #         player_num, hp, action, bullets, grenades, shield_time, shield_health, num_deaths, num_shield)
-    #     encrypted_text = self.encrypt_message(message)
-    #     # _ is used as delimiter between len and content
-    #     packet_size = (str(len(encrypted_text)) + '_').encode("utf-8")
-    #     self.conn.sendall(packet_size)
-    #     self.conn.sendall(encrypted_text)
-    #     print("[Eval server] Sent encrypted data:", encrypted_text)
 
     def receive_data(self):  # blocking call
         try:
@@ -281,8 +235,9 @@ class Client(threading.Thread):
         self.conn.close()
         print("[Eval server]Connection closed")
 
-
 # Server for relay
+
+
 class Server(threading.Thread):
     def __init__(self, port_num, group_id):
         super().__init__()  # init parent (Thread)
@@ -365,17 +320,13 @@ class Server(threading.Thread):
         message = ""
 
         while True:
-            # received data from eval_server is unencrypted
-            message = self.receive_data()
+            try:
+                # received data from eval_server is unencrypted
+                message = self.receive_data()
+                move_data_buffer.put(message)
 
-            input_data(move_data_buffer, move_data_lock, message)
-            # do sth to data
-            # time.sleep(2)
-
-            # self.send_data(message)
-            # print("[Client] Sent data:", message)
-
-        self.conn.close()
+            except Exception as e:
+                self.conn.close()
 
     def end_client_connection(self):
         self.conn.close()
@@ -399,13 +350,12 @@ if __name__ == '__main__':
     conn_relay.start()
 
     # Connection to eval_server
-    # eval_ip, eval_port = tunnel_addr  # added
     conn_eval = Client(eval_ip, eval_port, group_id, secret_key)
     conn_eval.start()
 
     # Connection to visualizer
-    recv_client = Mqtt("cg4002/4/u96_viz2", "u96_recv")
-    pub_client = Mqtt("cg4002/4/viz_u962", "u96_pub")
+    recv_client = Mqtt("cg4002/4/u96_viz20", "adafd")
+    pub_client = Mqtt("cg4002/4/viz_u9620", "fdgfg")
 
     # Receive messages
     recv_client.subscribe()
@@ -421,28 +371,29 @@ if __name__ == '__main__':
     # Game engine (main thread)
     action = ""
     while action != "logout":
-        if len(move_res_buffer):
-            action = read_data(move_res_buffer, move_res_lock)
+        if not move_res_buffer.empty():
+            action = move_res_buffer.get()
             print("[Game engine] Received action:", action)
 
             state = read_state()
 
-            # do sth based on action
+            # do sth based on action ["grenade", "reload", "shoot", "shield"]
             state["p1"]["action"] = action
 
             input_state(state)
             print("[Game engine] Resulting state:", state)
 
             if action != "grenade":
-                input_data(eval_buffer, eval_lock, state)
+                eval_buffer.put(state)
                 print("[Game engine] Sent to eval:", state)
 
-            input_data(viz_send_buffer, viz_send_lock, state)
+            state["sender"] = "u96"
+            viz_send_buffer.put(state)
             print("[Game engine] Sent to visualiser:", state)
 
-        if len(viz_recv_buffer):
+        if not viz_recv_buffer.empty():
             # Visualizer sends player that is hit by grenade
-            player_hit = read_data(viz_recv_buffer, viz_recv_lock)
+            player_hit = viz_recv_buffer.get()
             print("[Game engine] Received from visualiser:", state)
             state = read_state()
             if player_hit != "none":
@@ -450,7 +401,7 @@ if __name__ == '__main__':
                 state[player_hit]["hp"] -= 20
 
             input_state(state)
-            input_data(eval_buffer, eval_lock, state)
+            eval_buffer.put(state)
             print("[Game engine] Sent to curr state and eval:", state)
 
     pub_client.terminate()
