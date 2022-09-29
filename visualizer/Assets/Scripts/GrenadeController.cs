@@ -22,10 +22,13 @@ public class GrenadeController : MonoBehaviour
 
     public int player1Grenade;
 
+    [SerializeField] private GameObject[] grenadePlayer1;
+
 
     void Start ()
     {
         player1Grenade = MAX_GRENADE;
+        SelfUpdateGrenadeDisplay();
         hasEnemy = false;
         hasShield = false;
         // _isShieldActivatedPlayer1 = false;
@@ -34,8 +37,7 @@ public class GrenadeController : MonoBehaviour
 
     void Update()
     {
-        // _isShieldActivatedPlayer1 = shieldController.isShieldActivatedPlayer1;
-        // _isShieldActivatedPlayer2 = shieldController.isShieldActivatedPlayer2;
+        
     }
 
     public void ExplosionButtonPressPlayer1()
@@ -47,6 +49,7 @@ public class GrenadeController : MonoBehaviour
         else
         {
             player1Grenade = MAX_GRENADE;
+            SelfUpdateGrenadeDisplay();
         }
     }
 
@@ -57,15 +60,16 @@ public class GrenadeController : MonoBehaviour
 
     IEnumerator ThrowGrenadePlayer1() 
     {
+        player1Grenade -= 1;
+        SelfUpdateGrenadeDisplay();
+
         hasEnemy = enemyDetector.hasEnemy;
         hasShield = shieldDetector.hasShieldEnemy;
 
         int currentShieldHealthPlayer2 = shieldHealthController.currentShieldHealthPlayer2;
         int shieldHealthPlayer2;
-        
-        yield return new WaitForSeconds(2.01f);
 
-        player1Grenade -= 1;
+        yield return new WaitForSeconds(2.01f);
 
         if (hasEnemy)
         {
@@ -83,6 +87,7 @@ public class GrenadeController : MonoBehaviour
                 player2.TakeDamagePlayer2(GRENADE_DAMAGE);
             }
         }
+
     }
 
     IEnumerator ThrowGrenadePlayer2()
@@ -108,5 +113,17 @@ public class GrenadeController : MonoBehaviour
             player1.TakeDamagePlayer1(GRENADE_DAMAGE);
         }
 
+    }
+
+    void SelfUpdateGrenadeDisplay()
+    {
+        for (int i = 0; i < player1Grenade; i++)
+        {
+            grenadePlayer1[i].gameObject.SetActive(true);
+        }
+        for (int i = player1Grenade; i < MAX_GRENADE; i++)
+        {   
+            grenadePlayer1[i].gameObject.SetActive(false);
+        }
     }
 }
