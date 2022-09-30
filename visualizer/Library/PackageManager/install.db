@@ -1,13 +1,4 @@
 {
   "schemaVersion": 1,
-  "packages": {
-    "com.ptc.vuforia.engine": {
-      "tarball": {
-        "hash": "7c95fcfcb02e",
-        "mtime": 1659475701000,
-        "size": 238855640,
-        "localPath": "C:\\Users\\Hungggggg\\NUSwork\\Y4S1\\CG4002-B04\\visualizer\\Packages\\com.ptc.vuforia.engine-10.9.3.tgz"
-      }
-    }
-  }
+  "packages": {}
 }
