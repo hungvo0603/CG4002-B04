@@ -1,5 +1,9 @@
 # Processes:
 # - ml model, comm visualiser, comm eval, comm relay
+# Todo:
+# - try execute_action
+# - clarify revive (does this reset all the shield and bullet also?)
+# - debug mqtt connection error -> add clean_session previously
 
 import random as rd
 from Crypto.Cipher import AES
@@ -12,6 +16,8 @@ import socket
 import sys
 import json
 from queue import Queue
+import uuid
+import time
 
 mqtt_broker = 'broker.emqx.io'  # Public broker
 mqtt_port = 1883
@@ -32,8 +38,14 @@ INITIAL_STATE = {
     "p2": DEFAULT_STATE
 }
 
+BULLET_DAMAGE = 10
+GRENADE_DAMAGE = 30
+SHIELD_TIME = 10
+SHIELD_HEALTH = 30
+
 state_lock = threading.Lock()
 curr_state = INITIAL_STATE
+shield_start = {"p1": None, "p2": None}  # both player has no shield
 
 
 def read_state():
@@ -57,6 +69,9 @@ eval_buffer = Queue()  # game state
 viz_send_buffer = Queue()  # game state
 viz_recv_buffer = Queue()  # bool value for grenade hit
 
+# Connections
+conn_relay, recv_client, pub_client, conn_eval = None, None, None, None
+
 
 class MovePredictor(threading.Thread):
     def __init__(self):
@@ -72,12 +87,17 @@ class MovePredictor(threading.Thread):
     def run(self):
         action = ""
         while action != "logout":
-            if not move_data_buffer.empty():
-                data = move_data_buffer.get()
-                print("[MovePredictor]Received data: ", data)
-                action = self.pred_action(data)
-                print("[MovePredictor]Generated action: ", action)
-                move_res_buffer.put(action)
+            try:
+                if not move_data_buffer.empty():
+                    data = move_data_buffer.get()
+                    print("[MovePredictor]Received data: ", data)
+                    action = self.pred_action(data)
+                    print("[MovePredictor]Generated action: ", action)
+                    move_res_buffer.put(action)
+            except KeyboardInterrupt:
+                print("[MovePredictor]Keyboard Interrupt, terminating")
+                terminate_all()
+                break
 
 
 class Mqtt(threading.Thread):
@@ -92,25 +112,36 @@ class Mqtt(threading.Thread):
     def connect_mqtt(self):
         def on_connect(client, broker, port, rc):
             if rc != 0:
-                print("Failed to connect, return code %d\n", rc)
+                print("Failed to connect, return code: ", rc)
 
-        client = mqtt_client.Client(self.client_id)
+        client = mqtt_client.Client(self.client_id, clean_session=True)
 
         client.on_connect = on_connect
-        client.connect(mqtt_broker, mqtt_port)
+        try:
+            client.connect(mqtt_broker, mqtt_port)
+        except:
+            print("[Mqtt] Retry connection of ", self.topic)
+            client.connect(mqtt_broker, mqtt_port)
+
         return client
 
     def publish(self):
         while True:
-            if not viz_send_buffer.empty():
-                state = viz_send_buffer.get()
-                message = json.dumps(state)
-                result = self.client.publish(self.topic, message)
-                status = result[0]
-                if status == 0:
-                    print("[Mqtt]Published data: ", message)
-                else:
-                    print("[Mqtt]Failed to send message: ", message)
+            try:
+                if not viz_send_buffer.empty():
+                    state = viz_send_buffer.get()
+                    message = json.dumps(state)
+                    result = self.client.publish(self.topic, message)
+                    status = result[0]
+                    if status == 0:
+                        print("[Mqtt Pub]Published data: ", message)
+                    else:
+                        print("[Mqtt Pub]Failed to send message: ", message)
+
+            except KeyboardInterrupt:
+                print("[Mqtt Pub]Keyboard Interrupt, terminating")
+                terminate_all()
+                break
 
     def subscribe(self):
         def on_message(client, userdata, msg):
@@ -121,9 +152,9 @@ class Mqtt(threading.Thread):
         self.client.subscribe(self.topic)
 
     def terminate(self):
-        self.client.unsubscribe()
-        self.client.loop_stop()
+        # dont need to unsubs because clean session is true
         self.client.disconnect()
+        self.client.loop_stop()
 
 
 class Client(threading.Thread):
@@ -140,23 +171,25 @@ class Client(threading.Thread):
         self.conn.connect(self.server_address)
         print("[Eval server] Connection established to:", self.server_address)
         print("[Eval server] Copy to eval: ", self.secret_key)
-        action = ""
 
-        while action != "logout":
-            if not eval_buffer.empty():
-                state = eval_buffer.get()
-                self.send_data(state)
+        while True:
+            try:
+                if not eval_buffer.empty():
+                    state = eval_buffer.get()
+                    self.send_data(state)
 
-                # received data from eval_server is unencrypted ground truth
-                data = self.receive_data()
-                true_state = json.loads(data)
-                input_state(true_state)
+                    # received data from eval_server is unencrypted ground truth
+                    data = self.receive_data()
+                    true_state = json.loads(data)
+                    input_state(true_state)
 
-                # send ground truth to visualiser
-                true_state["sender"] = "eval"
-                viz_send_buffer.put(true_state)
-
-        self.conn.close()
+                    # send ground truth to visualiser
+                    true_state["sender"] = "eval"
+                    viz_send_buffer.put(true_state)
+            except KeyboardInterrupt:
+                print("[Eval server] Interrupt received, terminating")
+                terminate_all()
+                break
 
     def jsonify_state(self, player_num, hp, action, bullets, grenades, shield_time, shield_health, num_deaths, num_shield):
         global curr_state
@@ -249,14 +282,18 @@ class Server(threading.Thread):
         self.daemon = True
 
     def setup_connection(self):
-        # 1 is the number of unaccepted connections that the system will allow before refusing new connections
-        self.socket.listen(1)
-
-        # Wait for a connection
-        print('[Relay]Waiting for a connection')
-        self.conn, client_address = self.socket.accept()
-        print('[Relay]Connection from', client_address)
-        return client_address
+        try:
+            # 1 is the number of unaccepted connections that the system will allow before refusing new connections
+            self.socket.listen(1)
+            # Wait for a connection
+            print('[Relay]Waiting for a connection')
+            self.conn, client_address = self.socket.accept()
+            print('[Relay]Connection from', client_address)
+            return client_address
+        except KeyboardInterrupt:
+            print("[Relay]Keyboard Interrupt, terminating")
+            terminate_all()
+            sys.exit(1)
 
     # def stop(self):
     #     try:
@@ -312,25 +349,117 @@ class Server(threading.Thread):
         return message
 
     def run(self):
-
-        # self.expecting_packet.clear() #if want to use event later -> sth like conditional variable
-
-        # self.setup_connection()
-
-        message = ""
-
         while True:
             try:
                 # received data from eval_server is unencrypted
                 message = self.receive_data()
                 move_data_buffer.put(message)
 
-            except Exception as e:
-                self.conn.close()
+            except KeyboardInterrupt:
+                print("[Relay] Keyboard interrupt, terminating")
+                terminate_all()
+                break
 
     def end_client_connection(self):
         self.conn.close()
         print("[Eval server]Connection closed")
+
+# Game engine logic
+
+
+def opp_player(player):
+    if player == "p1":
+        return "p2"
+    else:
+        return "p1"
+
+
+def execute_action(player, action):
+    state = read_state()
+    other_player = opp_player(player)
+    # do sth based on action ["grenade", "reload", "shoot", "shield"]
+    state[player]["action"] = action
+
+    # Recalculate shield time
+    time_elapsed = time.time() - shield_start[player]
+    if time_elapsed >= SHIELD_TIME:
+        shield_start[player] = None
+        state[player]["shield_time"] = 0
+        state[player]["shield_health"] = 0
+
+    time_elapsed = time.time() - shield_start[other_player]
+    if time_elapsed >= SHIELD_TIME:
+        shield_start[other_player] = None
+        state[other_player]["shield_time"] = 0
+        state[other_player]["shield_health"] = 0
+
+    # Execute action
+    if action == "grenade":
+        if state[player]["num_grenade"]:
+            state[player]["num_grenade"] -= 1
+        else:
+            print("[Game engine] Cannot ", action, ". Only have ", state[player]
+                  ["num_grenade"],  " grenade")
+    elif action == "reload":
+        if state[player]["bullets"] <= 0:
+            state[player]["bullets"] = 6
+        else:
+            print("[Game engine] Cannot ", action, ". Still have ", state[player]
+                  ["bullets"],  "bullets")
+    elif action == "shoot":
+        if state[player]["bullets"] <= 0:
+            print("[Game engine] Cannot ", action, ".  Player has ", state[player]
+                  ["bullets"],  "bullet")
+        else:
+            if state[other_player]["shield_health"]:
+                state[other_player]["shield_health"] -= BULLET_DAMAGE
+
+                if state[other_player]["shield_health"] < 0:
+                    state[other_player]["health"] += state[other_player]["shield_health"]
+                    state[other_player]["shield_health"] = 0
+            else:
+                state[other_player]["hp"] -= BULLET_DAMAGE
+    elif action == "shield":
+        if not shield_start[player] and state[player]["num_shield"]:
+            state[player]["shield_time"] = SHIELD_TIME
+            state[player]["shield_health"] = SHIELD_HEALTH
+            state[player]["num_shield"] -= 1
+            shield_start[player] = time.time()
+        else:
+            print("[Game engine] ", int(
+                time.time() - shield_start[player]),  " seconds after previous shield")
+            print("[Game engine] Num shield left: ",
+                  state[player]["num_shield"])
+    else:
+        print("[Game engine] Unknown action: ", action)
+
+    # Revive player if dead
+    if state[other_player]["health"] <= 0:
+        state[other_player]["health"] = 100
+        state[other_player]["num_deaths"] += 1
+        state[other_player]["num_shield"] = 3
+        state[other_player]["num_grenade"] = 2
+
+    if state[player]["health"] <= 0:
+        state[player]["health"] = 100
+        state[player]["num_deaths"] += 1
+        state[player]["num_shield"] = 3
+        state[player]["num_grenade"] = 2
+
+    input_state(state)
+
+
+def terminate_all():
+    if(conn_relay):
+        conn_relay.end_client_connection()
+        print(conn_relay)
+    if(conn_eval):
+        conn_eval.end_client_connection()
+    if(recv_client):
+        recv_client.terminate()
+        print(recv_client)
+    if(pub_client):
+        pub_client.terminate()
 
 
 if __name__ == '__main__':
@@ -354,13 +483,14 @@ if __name__ == '__main__':
     conn_eval.start()
 
     # Connection to visualizer
-    recv_client = Mqtt("cg4002/4/u96_viz20", "adafd")
-    pub_client = Mqtt("cg4002/4/viz_u9620", "fdgfg")
+    recv_client = Mqtt("cg4002/4/u96_viz20", str(uuid.uuid4()))
+    pub_client = Mqtt("cg4002/4/viz_u9620", str(uuid.uuid4()))
 
     # Receive messages
     recv_client.subscribe()
     recv_client.client.loop_start()
 
+    # Publish messages
     pub_thread = threading.Thread(target=pub_client.publish, daemon=True)
     pub_thread.start()
 
@@ -369,40 +499,43 @@ if __name__ == '__main__':
     model_pred.start()
 
     # Game engine (main thread)
-    action = ""
-    while action != "logout":
-        if not move_res_buffer.empty():
-            action = move_res_buffer.get()
-            print("[Game engine] Received action:", action)
+    while True:
+        try:
+            if not move_res_buffer.empty():
+                action = move_res_buffer.get()
+                print("[Game engine] Received action:", action)
+                execute_action("p1", action)
+                print("[Game engine] Resulting state:", state)
 
-            state = read_state()
+                if action != "grenade":
+                    eval_buffer.put(state)
+                    print("[Game engine] Sent to eval:", state)
 
-            # do sth based on action ["grenade", "reload", "shoot", "shield"]
-            state["p1"]["action"] = action
+                state["sender"] = "u96"
+                viz_send_buffer.put(state)
+                print("[Game engine] Sent to visualiser:", state)
 
-            input_state(state)
-            print("[Game engine] Resulting state:", state)
+            if not viz_recv_buffer.empty():
+                # Visualizer sends player that is hit by grenade
+                player_hit = viz_recv_buffer.get()
+                print("[Game engine] Received from visualiser:", state)
+                state = read_state()
+                if player_hit != "none":
+                    # minus health based on grenade hit
+                    if state[player_hit]["shield_health"]:
+                        state[player_hit]["shield_health"] -= GRENADE_DAMAGE
 
-            if action != "grenade":
+                        if state[player_hit]["shield_health"] < 0:
+                            state[player_hit]["health"] += state[player_hit]["shield_health"]
+                            state[player_hit]["shield_health"] = 0
+                    else:
+                        state[player_hit]["hp"] -= GRENADE_DAMAGE
+
+                input_state(state)
                 eval_buffer.put(state)
-                print("[Game engine] Sent to eval:", state)
+                print("[Game engine] Sent to curr state and eval:", state)
+        except KeyboardInterrupt:
+            terminate_all()
+            break
 
-            state["sender"] = "u96"
-            viz_send_buffer.put(state)
-            print("[Game engine] Sent to visualiser:", state)
-
-        if not viz_recv_buffer.empty():
-            # Visualizer sends player that is hit by grenade
-            player_hit = viz_recv_buffer.get()
-            print("[Game engine] Received from visualiser:", state)
-            state = read_state()
-            if player_hit != "none":
-                # minus health based on grenade hit
-                state[player_hit]["hp"] -= 20
-
-            input_state(state)
-            eval_buffer.put(state)
-            print("[Game engine] Sent to curr state and eval:", state)
-
-    pub_client.terminate()
-    recv_client.terminate()
+    print("Program terminated, thanks for playing :D")
