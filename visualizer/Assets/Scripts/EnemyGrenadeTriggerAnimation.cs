@@ -7,6 +7,7 @@ public class EnemyGrenadeTriggerAnimation : MonoBehaviour
 {
     [SerializeField] private Button launchGrenadePlayer2;
     public GrenadeController grenadeController;
+    int grenadeCounter;
 
     public ParticleSystem explosionParticles;
     public AudioSource grenadeExplosionSound;
@@ -17,17 +18,21 @@ public class EnemyGrenadeTriggerAnimation : MonoBehaviour
         explosionParticles.Stop();
         explosionParticles.Clear();
         launchGrenadePlayer2.onClick.AddListener(TriggerAnimation);
+        grenadeCounter = 0;
     }
 
     void Update()
     {
-        
+        grenadeCounter = grenadeController.player2Grenade;
     }
 
     void TriggerAnimation()
     {
-        GetComponent<Animator>().Play("EnemyGrenadeThrowing");
-        StartCoroutine(TriggerExplosion());
+        if (grenadeCounter > 0)
+        {
+            GetComponent<Animator>().Play("EnemyGrenadeThrowing");
+            StartCoroutine(TriggerExplosion());
+        }
     }
 
     IEnumerator TriggerExplosion()

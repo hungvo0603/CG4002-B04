@@ -6,7 +6,6 @@ ScriptsOnlyBuild:
     - EnemyDetector
     - EnemyGrenadeTriggerAnimation
     - GrenadeController
-    - GrenadeDisplay
     - GrenadeTriggerAnimation
     - GunController
     - HealthBarController
@@ -27,14 +26,6 @@ ScriptsOnlyBuild:
     - TMPro.TMP_SpriteAsset
     - TMPro.TMP_StyleSheet
     - TMPro.TextMeshProUGUI
-    UnityEditor.Graphs.dll:
-    - UnityEditor.Graphs.AnimationBlendTree.Graph
-    - UnityEditor.Graphs.AnimationBlendTree.GraphGUI
-    - UnityEditor.Graphs.AnimationStateMachine.AnyStateNode
-    - UnityEditor.Graphs.AnimationStateMachine.Graph
-    - UnityEditor.Graphs.AnimationStateMachine.GraphGUI
-    - UnityEditor.Graphs.AnimationStateMachine.StateNode
-    - UnityEditor.Graphs.AnimatorControllerTool
     UnityEditor.TestRunner.dll:
     - UnityEditor.TestTools.TestRunner.Api.CallbacksHolder
     - UnityEditor.TestTools.TestRunner.TestListCacheData
@@ -102,26 +93,14 @@ ScriptsOnlyBuild:
     - Vuforia.VuforiaConfiguration/WebCamConfiguration
   methodsToPreserve:
   - assembly: Assembly-CSharp
-    fullTypeName: EnemyDetector
-    methodName: EnemyDetected
-  - assembly: Assembly-CSharp
-    fullTypeName: ShieldDetector
-    methodName: ShieldDetected
-  - assembly: Assembly-CSharp
-    fullTypeName: ShieldDetector
-    methodName: ShieldLost
-  - assembly: Assembly-CSharp
-    fullTypeName: EnemyDetector
-    methodName: EnemyLost
-  - assembly: Assembly-CSharp
     fullTypeName: ShootController
     methodName: GunShotPlayer1
-  - assembly: UnityEngine.AudioModule
-    fullTypeName: UnityEngine.AudioSource
+  - assembly: UnityEngine.AnimationModule
+    fullTypeName: UnityEngine.Animator
     methodName: Play
   - assembly: Assembly-CSharp
-    fullTypeName: GrenadeController
-    methodName: ExplosionButtonPressPlayer2
+    fullTypeName: GunController
+    methodName: PlayGunShotEffect
   - assembly: Assembly-CSharp
     fullTypeName: ShootController
     methodName: GunShotPlayer2
@@ -129,8 +108,17 @@ ScriptsOnlyBuild:
     fullTypeName: UnityEngine.AudioSource
     methodName: Play
   - assembly: Assembly-CSharp
-    fullTypeName: GrenadeController
-    methodName: ExplosionButtonPressPlayer1
+    fullTypeName: EnemyDetector
+    methodName: EnemyDetected
+  - assembly: Assembly-CSharp
+    fullTypeName: ShieldDetector
+    methodName: ShieldDetected
+  - assembly: Assembly-CSharp
+    fullTypeName: EnemyDetector
+    methodName: EnemyLost
+  - assembly: Assembly-CSharp
+    fullTypeName: ShieldDetector
+    methodName: ShieldLost
   sceneClasses:
     Assets/Scenes/MainScene.unity:
     - Class: 1
@@ -174,79 +162,77 @@ ScriptsOnlyBuild:
     - Class: 108
       Script: {instanceID: 0}
     - Class: 114
-      Script: {instanceID: 1680}
+      Script: {instanceID: 1686}
     - Class: 114
-      Script: {instanceID: 1704}
+      Script: {instanceID: 1710}
     - Class: 114
-      Script: {instanceID: 1726}
+      Script: {instanceID: 1732}
     - Class: 114
-      Script: {instanceID: 1912}
+      Script: {instanceID: 1922}
     - Class: 114
-      Script: {instanceID: 2332}
+      Script: {instanceID: 2344}
     - Class: 114
-      Script: {instanceID: 2570}
+      Script: {instanceID: 2588}
     - Class: 114
-      Script: {instanceID: 2760}
+      Script: {instanceID: 2782}
     - Class: 114
-      Script: {instanceID: 2808}
+      Script: {instanceID: 2830}
     - Class: 114
-      Script: {instanceID: 2884}
+      Script: {instanceID: 2906}
     - Class: 114
-      Script: {instanceID: 2886}
+      Script: {instanceID: 2908}
     - Class: 114
-      Script: {instanceID: 2958}
+      Script: {instanceID: 2980}
     - Class: 114
-      Script: {instanceID: 2960}
+      Script: {instanceID: 2982}
     - Class: 114
-      Script: {instanceID: 3388}
+      Script: {instanceID: 3420}
     - Class: 114
-      Script: {instanceID: 3422}
+      Script: {instanceID: 3454}
     - Class: 114
-      Script: {instanceID: 3444}
+      Script: {instanceID: 3476}
     - Class: 114
-      Script: {instanceID: 3546}
+      Script: {instanceID: 3578}
     - Class: 114
-      Script: {instanceID: 3556}
+      Script: {instanceID: 3588}
     - Class: 114
-      Script: {instanceID: 4048}
+      Script: {instanceID: 4088}
     - Class: 114
-      Script: {instanceID: 4284}
+      Script: {instanceID: 4324}
     - Class: 114
-      Script: {instanceID: 4540}
+      Script: {instanceID: 4582}
     - Class: 114
-      Script: {instanceID: 4594}
+      Script: {instanceID: 4636}
     - Class: 114
-      Script: {instanceID: 4992}
+      Script: {instanceID: 5038}
     - Class: 114
-      Script: {instanceID: 5016}
+      Script: {instanceID: 5062}
     - Class: 114
-      Script: {instanceID: 5112}
+      Script: {instanceID: 5160}
     - Class: 114
-      Script: {instanceID: 5618}
+      Script: {instanceID: 5682}
     - Class: 114
-      Script: {instanceID: 5658}
+      Script: {instanceID: 5722}
     - Class: 114
-      Script: {instanceID: 5750}
+      Script: {instanceID: 5818}
     - Class: 114
-      Script: {instanceID: 6014}
+      Script: {instanceID: 6084}
     - Class: 114
-      Script: {instanceID: 6356}
+      Script: {instanceID: 6430}
     - Class: 114
-      Script: {instanceID: 6566}
+      Script: {instanceID: 6642}
     - Class: 114
-      Script: {instanceID: 6600}
+      Script: {instanceID: 6678}
     - Class: 114
-      Script: {instanceID: 6680}
+      Script: {instanceID: 6762}
     - Class: 114
-      Script: {instanceID: 6898}
+      Script: {instanceID: 6988}
     - Class: 114
-      Script: {instanceID: 7002}
+      Script: {instanceID: 7406}
     - Class: 114
-      Script: {instanceID: 7306}
+      Script: {instanceID: 8076}
     - Class: 114
-      Script: {instanceID: 7970}
-    - Class: 114
-      Script: {instanceID: 8910}
+      Script: {instanceID: 9024}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -328,7 +314,7 @@ ScriptsOnlyBuild:
     className: Selectable
   - hash:
       serializedVersion: 2
-      Hash: f442ee7c5a499eef9ea1665afffe35f7
+      Hash: b652076e01f2fbb45f30a6af4a59de93
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: GrenadeController
@@ -808,6 +794,12 @@ ScriptsOnlyBuild:
     className: CoroutineRunner
   - hash:
       serializedVersion: 2
+      Hash: 4286f618edbfb5e35f0fcaea89434e1b
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: M2MqttUnity
+    className: M2MqttUnityClient
+  - hash:
+      serializedVersion: 2
       Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
     assemblyName: UnityEngine.TestRunner.dll
     namespaceName: UnityEngine.TestRunner.Utils
@@ -818,6 +810,12 @@ ScriptsOnlyBuild:
     assemblyName: Unity.TextMeshPro.dll
     namespaceName: TMPro
     className: TMP_SelectionCaret
+  - hash:
+      serializedVersion: 2
+      Hash: a4bd1478f17da256d952d87042fa9984
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: M2MqttUnity.Examples
+    className: M2MqttUnityTest
   - hash:
       serializedVersion: 2
       Hash: 8fbc134fd506d97c845cf2b715231396
@@ -1210,13 +1208,13 @@ ScriptsOnlyBuild:
     className: UnityOnDropdownValueChangedMessageListener
   - hash:
       serializedVersion: 2
-      Hash: 3187b5f09bd311cc3ca9a3447642e4a8
+      Hash: b5cbbc442a5e91d3c22dbaa49e34002e
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: ShieldController
   - hash:
       serializedVersion: 2
-      Hash: 2611e1665146f1c0b2c3816982088aae
+      Hash: c594d247e699901de028ae4f7e8015e2
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: ShieldCountdown
@@ -1234,7 +1232,7 @@ ScriptsOnlyBuild:
     className: Button
   - hash:
       serializedVersion: 2
-      Hash: 9bcf0e20222e5081c482e0f26ff29a47
+      Hash: 2f93aad6cb22087ca5ca7a32b6f381cf
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: ShieldDisplay
@@ -2542,7 +2540,7 @@ ScriptsOnlyBuild:
     className: SignalTrack
   - hash:
       serializedVersion: 2
-      Hash: 6d9d77a9488a636401f3d28db530d48a
+      Hash: 0ca59a2a6f4fe6dab5f79c2e2865f709
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: GunController
@@ -3005,4 +3003,4 @@ ScriptsOnlyBuild:
   platform: 9
   scenePathNames:
   - Assets/Scenes/MainScene.unity
-  playerPath: C:/Users/Hungggggg/NUSwork/Y4S1/CG4002/build-ios/build-ios-10
+  playerPath: C:/Users/Hungggggg/NUSwork/Y4S1/CG4002/build-ios/build-ios-3
