@@ -1,10 +1,5 @@
 Qn:
 - how are we demoing the eval server conn in thurs?
-- how the 2nd layer tunnel act work?
-- on logout, do we still need to send state to eval_server? (curr implementation jsut directly terminate)
-- for video demo, need individual parts or jsut integrated?
-- cannot use same clientid for diff topics?
-- sender + id on viz data
 
 Todo:
 - implement game logic
