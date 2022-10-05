@@ -4382,8 +4382,8 @@ MonoBehaviour:
   player2: {fileID: 920191649}
   shieldController: {fileID: 988623232}
   shieldHealthController: {fileID: 988623233}
-  enemyDetector: {fileID: 0}
-  shieldDetector: {fileID: 0}
+  enemyDetector: {fileID: 809507151}
+  shieldDetector: {fileID: 809507150}
   grenadeButtonPlayer1: {fileID: 1826213843}
   grenadeButtonPlayer2: {fileID: 1230697009}
   player1Grenade: 0
