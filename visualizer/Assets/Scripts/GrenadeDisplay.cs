@@ -13,20 +13,12 @@ public class GrenadeDisplay : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        index = 0;
+        //index = 0;
     }
 
     // Update is called once per frame
     void Update()
     {
-        index = grenades.player1Grenade;
-        for (int i = 0; i < index; i++)
-        {
-            grenadePlayer1[i].gameObject.SetActive(true);
-        }
-        for (int i = index; i < MAX_GRENADE; i++)
-        {
-            grenadePlayer1[i].gameObject.SetActive(false);
-        }
+
     }
 }

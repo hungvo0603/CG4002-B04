@@ -14,9 +14,9 @@ android {
     }
 
     defaultConfig {
-        minSdkVersion 22
+        minSdkVersion 24
         targetSdkVersion 30
-        applicationId 'com.DefaultCompany.visualizer'
+        applicationId 'com.hungvq.visualizer'
         ndk {
             abiFilters 'armeabi-v7a'
         }
