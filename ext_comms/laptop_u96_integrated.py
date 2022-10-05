@@ -1,5 +1,6 @@
-# Todo: try out with beetle
+# Todo: try out with beetle (broken pipe)
 from bluepy.btle import Peripheral, DefaultDelegate, BTLEDisconnectError
+import json
 import struct
 import threading
 import time
@@ -9,8 +10,8 @@ import os
 import dotenv
 import sshtunnel
 from queue import Queue
-import time
 import struct
+from tracemalloc import start
 
 relay_buffer = Queue()
 
@@ -199,22 +200,48 @@ class Client(threading.Thread):
 
     def run(self):
         # put display code here
+        data = {
+            "bettle": 0,
+            "sequence": 0,
+            "gx": 0,
+            "gy": 0,
+            "gz": 0,
+            "ax": 0,
+            "ay": 0,
+            "az": 0,
+        }
         while True:
             try:
                 pkt = relay_buffer.get()
                 # print("Packet: " + str(pkt)) to see the packet
                 print("Beetle ID: " + str(pkt[0]))
+                data["bettle"] = str(pkt[0])
+
                 print("Sequence ID: " + str(pkt[1]))
+                data["sequence"] = str(pkt[1])
+
                 print("gx: %.3f" % struct.unpack(
                     "<f", pkt[3:7]))  # little endian
+                data["gx"] = struct.unpack("<f", pkt[3:7])
+
                 print("gy: %.3f" % struct.unpack("<f", pkt[7:11]))
-                print("gZ: %.3f" % struct.unpack(
+                data["gy"] = struct.unpack("<f", pkt[7:11])
+
+                print("gz: %.3f" % struct.unpack(
                     "<f", pkt[11:15]))  # little endian
+                data["gz"] = struct.unpack("<f", pkt[11:15])
+
                 print("ax: %.3f" % struct.unpack("<f", pkt[15:19]))
+                data["ax"] = struct.unpack("<f", pkt[15:19])
+
                 print("ay: %.3f" % struct.unpack("<f", pkt[19:23]))
+                data["ay"] = struct.unpack("<f", pkt[19:23])
+
                 print("az: %.3f" % struct.unpack("<f", pkt[23:27]))
+                data["az"] = struct.unpack("<f", pkt[23:27])
+
                 # send data to server
-                self.send_data(pkt)
+                self.send_data(json.dumps(data))
 
             except KeyboardInterrupt:
                 self.end_client_connection()

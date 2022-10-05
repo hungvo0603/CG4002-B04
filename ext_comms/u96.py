@@ -1,11 +1,10 @@
 # Processes:
 # - ml model, comm visualiser, comm eval, comm relay
 # Todo:
-# - try execute_action
-# - clarify revive (does this reset all the shield and bullet also?)
-# - debug mqtt connection error -> add clean_session previously
+# - debug mqtt connection error -> temp failure in name resolution
 
 import random as rd
+from struct import unpack
 from Crypto.Cipher import AES
 from paho.mqtt import client as mqtt_client
 from Crypto.Util.Padding import pad
@@ -72,6 +71,8 @@ viz_recv_buffer = Queue()  # bool value for grenade hit
 
 # Connections
 has_terminated = False
+# Temporary
+action_count = 0
 
 
 class MovePredictor(threading.Thread):
@@ -81,24 +82,35 @@ class MovePredictor(threading.Thread):
 
     def pred_action(self, data):
         # Randomly generate action
-        actions = ["grenade", "reload", "shoot", "shield"]
-        return actions[rd.randint(0, 3)]
+        actions = ["shoot", "grenade", "reload", "shield"]
+        global action_count
+        action_count += 1
+        return actions[action_count % 4]
 
     # Machine learning model
     def run(self):
+        global has_terminated
         action = ""
         while action != "logout" and not has_terminated:
             try:
                 if not move_data_buffer.empty():
                     data = move_data_buffer.get()
                     print("[MovePredictor]Received data: ", data)
-                    action = self.pred_action(data)
+                    unpacked_data = json.loads(data)
+                    # if start of move:
+                    # action = self.pred_action(unpacked_data)
+                    # print("[MovePredictor]Generated action: ", action)
+                    # move_res_buffer.put(action)
+
+                    action = self.pred_action(unpacked_data)
                     print("[MovePredictor]Generated action: ", action)
                     move_res_buffer.put(action)
             except KeyboardInterrupt:
                 print("[MovePredictor]Keyboard Interrupt, terminating")
                 has_terminated = True
                 break
+
+        has_terminated = True
 
 
 class Mqtt(threading.Thread):
@@ -127,6 +139,7 @@ class Mqtt(threading.Thread):
         return client
 
     def publish(self):
+        global has_terminated
         while True:
             try:
                 if not viz_send_buffer.empty():
@@ -141,7 +154,7 @@ class Mqtt(threading.Thread):
 
             except KeyboardInterrupt:
                 print("[Mqtt Pub]Keyboard Interrupt, terminating")
-                terminate_all()
+                has_terminated = True
                 break
 
     def subscribe(self):
@@ -172,7 +185,7 @@ class Client(threading.Thread):
         self.conn.connect(self.server_address)
         print("[Eval server] Connection established to:", self.server_address)
         print("[Eval server] Copy to eval: ", self.secret_key)
-
+        global has_terminated
         while not has_terminated:
             try:
                 if not eval_buffer.empty():
@@ -182,6 +195,7 @@ class Client(threading.Thread):
                     # received data from eval_server is unencrypted ground truth
                     data = self.receive_data()
                     true_state = json.loads(data)
+
                     input_state(true_state)
 
                     # send ground truth to visualiser
@@ -288,6 +302,7 @@ class Server(threading.Thread):
         self.daemon = True
 
     def setup_connection(self):
+        global has_terminated
         try:
             # 1 is the number of unaccepted connections that the system will allow before refusing new connections
             self.socket.listen(1)
@@ -297,9 +312,8 @@ class Server(threading.Thread):
             print('[Relay]Connection from', client_address)
             return client_address
         except KeyboardInterrupt:
-            print("[Relay]Keyboard Interrupt, terminating")
-            terminate_all()
-            sys.exit(1)
+            print("[Relay] Keyboard interrupt, terminating")
+            has_terminated = True
 
     # def stop(self):
     #     try:
@@ -355,6 +369,7 @@ class Server(threading.Thread):
         return message
 
     def run(self):
+        global has_terminated
         while not has_terminated:
             try:
                 # received data from eval_server is unencrypted
@@ -390,27 +405,35 @@ def execute_action(player, action):
     other_player = opp_player(player)
     # do sth based on action ["grenade", "reload", "shoot", "shield"]
     state[player]["action"] = action
+    # state[other_player]["action"] = "none"
 
     # Recalculate shield time
-    time_elapsed = time.time() - shield_start[player]
-    if time_elapsed >= SHIELD_TIME:
-        shield_start[player] = None
-        state[player]["shield_time"] = 0
-        state[player]["shield_health"] = 0
+    if shield_start[player]:
+        time_elapsed = time.time() - shield_start[player]
+        if time_elapsed >= SHIELD_TIME:
+            shield_start[player] = None
+            state[player]["shield_time"] = 0
+            state[player]["shield_health"] = 0
+        else:
+            state[player]["shield_time"] = SHIELD_TIME - int(time_elapsed)
 
-    time_elapsed = time.time() - shield_start[other_player]
-    if time_elapsed >= SHIELD_TIME:
-        shield_start[other_player] = None
-        state[other_player]["shield_time"] = 0
-        state[other_player]["shield_health"] = 0
+    if shield_start[other_player]:
+        time_elapsed = time.time() - shield_start[other_player]
+        if time_elapsed >= SHIELD_TIME:
+            shield_start[other_player] = None
+            state[other_player]["shield_time"] = 0
+            state[other_player]["shield_health"] = 0
+        else:
+            state[other_player]["shield_time"] = SHIELD_TIME - \
+                int(time_elapsed)
 
     # Execute action
     if action == "grenade":
-        if state[player]["num_grenade"]:
-            state[player]["num_grenade"] -= 1
+        if state[player]["grenades"]:
+            state[player]["grenades"] -= 1
         else:
             print("[Game engine] Cannot ", action, ". Only have ", state[player]
-                  ["num_grenade"],  " grenade")
+                  ["grenades"],  " grenade")
     elif action == "reload":
         if state[player]["bullets"] <= 0:
             state[player]["bullets"] = 6
@@ -426,7 +449,7 @@ def execute_action(player, action):
                 state[other_player]["shield_health"] -= BULLET_DAMAGE
 
                 if state[other_player]["shield_health"] < 0:
-                    state[other_player]["health"] += state[other_player]["shield_health"]
+                    state[other_player]["hp"] += state[other_player]["shield_health"]
                     state[other_player]["shield_health"] = 0
             else:
                 state[other_player]["hp"] -= BULLET_DAMAGE
@@ -445,32 +468,19 @@ def execute_action(player, action):
         print("[Game engine] Unknown action: ", action)
 
     # Revive player if dead
-    if state[other_player]["health"] <= 0:
-        state[other_player]["health"] = 100
+    if state[other_player]["hp"] <= 0:
+        state[other_player]["hp"] = 100
         state[other_player]["num_deaths"] += 1
         state[other_player]["num_shield"] = 3
-        state[other_player]["num_grenade"] = 2
+        state[other_player]["grenades"] = 2
 
-    if state[player]["health"] <= 0:
-        state[player]["health"] = 100
+    if state[player]["hp"] <= 0:
+        state[player]["hp"] = 100
         state[player]["num_deaths"] += 1
         state[player]["num_shield"] = 3
-        state[player]["num_grenade"] = 2
+        state[player]["grenades"] = 2
 
     input_state(state)
-
-
-def terminate_all():
-    if(conn_relay):
-        conn_relay.end_client_connection()
-        print(conn_relay)
-    if(conn_eval):
-        conn_eval.end_client_connection()
-    if(recv_client):
-        recv_client.terminate()
-        print(recv_client)
-    if(pub_client):
-        pub_client.terminate()
 
 
 if __name__ == '__main__':
@@ -509,6 +519,7 @@ if __name__ == '__main__':
     model_pred = MovePredictor()
     model_pred.start()
 
+    state = read_state()
     # Game engine (main thread)
     while not has_terminated:
         try:
@@ -521,10 +532,10 @@ if __name__ == '__main__':
                 if action != "grenade":
                     eval_buffer.put(state)
                     print("[Game engine] Sent to eval:", state)
-
-                state["sender"] = "u96"
-                viz_send_buffer.put(state)
-                print("[Game engine] Sent to visualiser:", state)
+                else:
+                    state["sender"] = "u96"
+                    viz_send_buffer.put(state)
+                    print("[Game engine] Sent to visualiser:", state)
 
             if not viz_recv_buffer.empty():
                 # Visualizer sends player that is hit by grenade
@@ -537,7 +548,7 @@ if __name__ == '__main__':
                         state[player_hit]["shield_health"] -= GRENADE_DAMAGE
 
                         if state[player_hit]["shield_health"] < 0:
-                            state[player_hit]["health"] += state[player_hit]["shield_health"]
+                            state[player_hit]["hp"] += state[player_hit]["shield_health"]
                             state[player_hit]["shield_health"] = 0
                     else:
                         state[player_hit]["hp"] -= GRENADE_DAMAGE
@@ -550,7 +561,7 @@ if __name__ == '__main__':
             has_terminated = True
             break
 
-    # Terminate all threads + connections
+    # Terminate all connections
     if(conn_relay):
         conn_relay.end_client_connection()
         print(conn_relay)
@@ -561,4 +572,5 @@ if __name__ == '__main__':
         print(recv_client)
     if(pub_client):
         pub_client.terminate()
+
     print("Program terminated, thanks for playing :D")
