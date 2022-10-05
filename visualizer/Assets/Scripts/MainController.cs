@@ -48,12 +48,20 @@ namespace M2MQTT.MainController
         public Button disconnectButton;
         public Button testPublishButton;
 
+        [Header("Data")]
+        public PlayerDataJson playerData = new PlayerDataJson();
+        public PlayerStatsJson player1Data = new PlayerStatsJson();
+        public PlayerStatsJson player2Data = new PlayerStatsJson();
+
         private List<string> eventMessages = new List<string>();
         private bool updateUI = false;
 
         public void TestPublish()
         {
-            client.Publish("M2MQTT_Unity/test", System.Text.Encoding.UTF8.GetBytes("Test message"), MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE, false);
+            // edit GetBytes to send data
+            // client.Publish("cg4002/4/u96_viz20", System.Text.Encoding.UTF8.GetBytes("p1"), MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE, false);
+            string sample_json_string = "{\"p1\": {\"hp\": 100, \"action\": \"reload\", \"bullets\": 6, \"grenades\": 2, \"shield_time\": 0, \"shield_health\": 0, \"num_deaths\": 0, \"num_shield\": 3}, \"p2\": {\"hp\": 100, \"action\": \"none\", \"bullets\": 6, \"grenades\": 2, \"shield_time\": 0, \"shield_health\": 0, \"num_deaths\": 0, \"num_shield\": 3}, \"sender\": \"eval\"}";
+            client.Publish("cg4002/4/viz_u9620", System.Text.Encoding.UTF8.GetBytes(sample_json_string), MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE, false);
             Debug.Log("Test message published");
             // AddUiMessage("Test message published.");
         }
@@ -79,7 +87,7 @@ namespace M2MQTT.MainController
         protected override void OnConnecting()
         {
             base.OnConnecting();
-            Debug.Log("Connecting to broker.");
+            Debug.Log("Connecting to Ultra96.");
             updateUI = true;
         }
 
@@ -93,12 +101,12 @@ namespace M2MQTT.MainController
 
         protected override void SubscribeTopics()
         {
-            client.Subscribe(new string[] { "M2MQTT_Unity/test" }, new byte[] { MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE });
+            client.Subscribe(new string[] { "cg4002/4/viz_u9620" }, new byte[] { MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE });
         }
 
         protected override void UnsubscribeTopics()
         {
-            client.Unsubscribe(new string[] { "M2MQTT_Unity/test" });
+            client.Unsubscribe(new string[] { "cg4002/4/viz_u9620" });
         }
 
         protected override void OnConnectionFailed(string errorMessage)
@@ -162,16 +170,8 @@ namespace M2MQTT.MainController
         protected override void DecodeMessage(string topic, byte[] message)
         {
             string msg = System.Text.Encoding.UTF8.GetString(message);
-            Debug.Log("Received: " + msg);
+            Debug.Log("Received in DecodeMessage: " + msg);
             StoreMessage(msg);
-            // if (topic == "M2MQTT_Unity/test")
-            // {
-            //     if (autoTest)
-            //     {
-            //         autoTest = false;
-            //         Disconnect();
-            //     }
-            // }
         }
 
         private void StoreMessage(string eventMsg)
@@ -181,7 +181,9 @@ namespace M2MQTT.MainController
 
         private void ProcessMessage(string msg)
         {
-            Debug.Log("Received: " + msg);
+            playerData = PlayerDataJson.CreateDataFromJSON(msg);
+            player1Data = playerData.p1;
+            player2Data = playerData.p2;
             updateUI = true;
         }
 
