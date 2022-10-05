@@ -13,6 +13,7 @@ from Crypto import Random
 import threading
 import base64
 import socket
+from _socket import SHUT_RDWR
 import sys
 import json
 from queue import Queue
@@ -70,7 +71,7 @@ viz_send_buffer = Queue()  # game state
 viz_recv_buffer = Queue()  # bool value for grenade hit
 
 # Connections
-conn_relay, recv_client, pub_client, conn_eval = None, None, None, None
+has_terminated = False
 
 
 class MovePredictor(threading.Thread):
@@ -86,7 +87,7 @@ class MovePredictor(threading.Thread):
     # Machine learning model
     def run(self):
         action = ""
-        while action != "logout":
+        while action != "logout" and not has_terminated:
             try:
                 if not move_data_buffer.empty():
                     data = move_data_buffer.get()
@@ -96,7 +97,7 @@ class MovePredictor(threading.Thread):
                     move_res_buffer.put(action)
             except KeyboardInterrupt:
                 print("[MovePredictor]Keyboard Interrupt, terminating")
-                terminate_all()
+                has_terminated = True
                 break
 
 
@@ -172,7 +173,7 @@ class Client(threading.Thread):
         print("[Eval server] Connection established to:", self.server_address)
         print("[Eval server] Copy to eval: ", self.secret_key)
 
-        while True:
+        while not has_terminated:
             try:
                 if not eval_buffer.empty():
                     state = eval_buffer.get()
@@ -188,7 +189,7 @@ class Client(threading.Thread):
                     viz_send_buffer.put(true_state)
             except KeyboardInterrupt:
                 print("[Eval server] Interrupt received, terminating")
-                terminate_all()
+                has_terminated = True
                 break
 
     def jsonify_state(self, player_num, hp, action, bullets, grenades, shield_time, shield_health, num_deaths, num_shield):
@@ -265,7 +266,12 @@ class Client(threading.Thread):
         return message
 
     def end_client_connection(self):
-        self.conn.close()
+        try:
+            self.conn.shutdown(SHUT_RDWR)
+            self.conn.close()
+        except OSError:
+            # connection already closed
+            pass
         print("[Eval server]Connection closed")
 
 # Server for relay
@@ -349,7 +355,7 @@ class Server(threading.Thread):
         return message
 
     def run(self):
-        while True:
+        while not has_terminated:
             try:
                 # received data from eval_server is unencrypted
                 message = self.receive_data()
@@ -357,12 +363,17 @@ class Server(threading.Thread):
 
             except KeyboardInterrupt:
                 print("[Relay] Keyboard interrupt, terminating")
-                terminate_all()
+                has_terminated = True
                 break
 
     def end_client_connection(self):
-        self.conn.close()
-        print("[Eval server]Connection closed")
+        try:
+            self.conn.shutdown(SHUT_RDWR)
+            self.conn.close()
+        except OSError:
+            # connection already closed
+            pass
+        print("[Relay]Connection closed")
 
 # Game engine logic
 
@@ -499,7 +510,7 @@ if __name__ == '__main__':
     model_pred.start()
 
     # Game engine (main thread)
-    while True:
+    while not has_terminated:
         try:
             if not move_res_buffer.empty():
                 action = move_res_buffer.get()
@@ -535,7 +546,19 @@ if __name__ == '__main__':
                 eval_buffer.put(state)
                 print("[Game engine] Sent to curr state and eval:", state)
         except KeyboardInterrupt:
-            terminate_all()
+            print("[Game Engine] Keyboard interrupt")
+            has_terminated = True
             break
 
+    # Terminate all threads + connections
+    if(conn_relay):
+        conn_relay.end_client_connection()
+        print(conn_relay)
+    if(conn_eval):
+        conn_eval.end_client_connection()
+    if(recv_client):
+        recv_client.terminate()
+        print(recv_client)
+    if(pub_client):
+        pub_client.terminate()
     print("Program terminated, thanks for playing :D")
