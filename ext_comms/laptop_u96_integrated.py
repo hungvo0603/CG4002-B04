@@ -1,5 +1,7 @@
-# Todo: try out with beetle
+# Todo: try out with beetle (broken pipe)
+# sync the packet's format send from internal comms
 from bluepy.btle import Peripheral, DefaultDelegate, BTLEDisconnectError
+import json
 import struct
 import threading
 import time
@@ -9,8 +11,8 @@ import os
 import dotenv
 import sshtunnel
 from queue import Queue
-import time
 import struct
+from tracemalloc import start
 
 relay_buffer = Queue()
 
@@ -28,7 +30,6 @@ NAK = 'N'
 
 # Need to send ACK and SYN as 20 byte packets as well
 packetOne_len = 20
-oneByte_data_len = 4
 
 counter = 0  # for timing purposes
 fragmentedCounter = 0
@@ -47,40 +48,40 @@ class ScannerDelegate(DefaultDelegate):
         self.SeqID = 0
 
     def handleNotification(self, cHandle, data):
-
-        if self.done_handshake:  # when handshake is done
+        # and len(pkt) == packetOne_len: #when handshake is done
+        if self.done_handshake:
             full_packet = True
             pkt = bytearray(data)
-
             # print("Packet: " + str(pkt)) #to see the packet
+            if(len(pkt) == packetOne_len and pkt[0] == 0):
+                # print("Packet: " + str(pkt)) #to see the packet
 
-            if pkt[2] == 0:
+                if pkt[2] == 0:
+                    correct_pkt = checksum(pkt)
+                    self.SeqID = (self.SeqID + 1) & 0xFF
+                    if(correct_pkt):
+                        self.packetOne = bytearray(pkt[0:15])
+                    else:
+                        self.char.write(str.encode(NAK))
+                        print("Failed checksum")
+
+                elif pkt[2] == 1:
+                    full_packet = False
+                    correct_pkt = checksum(pkt)
+                    self.SeqID = (self.SeqID + 1) & 0xFF
+                    if(correct_pkt):
+                        self.packetTwo = bytearray(pkt[0:15])
+                    else:
+                        self.char.write(str.encode(NAK))
+                        print("Failed checksum")
+
+                if(not full_packet and (self.packetOne[1] + 1 == self.packetTwo[1])):
+                    relay_buffer.put(self.packetOne + self.packetTwo[3:15])
+            elif(len(pkt) == packetOne_len and pkt[0] == 1):
+                print("detected")
                 correct_pkt = checksum(pkt)
                 self.SeqID = (self.SeqID + 1) & 0xFF
-
-                if(correct_pkt):
-                    self.packetOne = bytearray(pkt[0:15])
-                else:
-                    self.char.write(str.encode(NAK))
-                    print("Failed checksum")
-
-            elif pkt[2] == 1:
-                full_packet = False
-                correct_pkt = checksum(pkt)
-                self.SeqID = (self.SeqID + 1) & 0xFF
-
-                if(correct_pkt):
-                    self.packetTwo = bytearray(pkt[0:15])
-                else:
-                    self.char.write(str.encode(NAK))
-                    print("Failed checksum")
-
-            if(not full_packet and (self.packetOne[1] + 1 == self.packetTwo[1])):
-                relay_buffer.put(self.packetOne + self.packetTwo[3:15])
-                # print("combined")
-            # else:
-            #     print("1st: " + str(self.packetOne[1]) + "2nd: " + str(self.packetTwo[3:14]))
-
+                relay_buffer.put(pkt)
         # Received ACK from bluno beetle after SYN is sent
         elif data == str.encode(ACK):
             self.done_handshake = True
@@ -117,8 +118,8 @@ def handshake(bluno, char, addr):
 def connection(addr):
     is_connected = False
 
-    service_uuid = "0000dfb0-0000-1000-8000-00805f9b34fb"
-    char_id = "0000dfb1-0000-1000-8000-00805f9b34fb"
+    service_uuid = "dfb0"
+    char_id = "dfb1"
 
     while is_connected == False:
         try:
@@ -147,14 +148,14 @@ def connection_thread(bluno, char, addr):
             timer()
             if bluno_handshake:
                 # establish connection, wait for 2s
-                if bluno.waitForNotifications(2.0):
+                if bluno.waitForNotifications(1.5):
                     pass
                 else:
-                    bluno.disconnect()
-                    print("Bluno " + addr + " has disconnected")
-                    bluno_handshake = False
-                    bluno, char = connection(addr)
-                    droppedCounter = droppedCounter + 1
+                    # bluno.disconnect()
+                    # print("Bluno " + addr + " has disconnected")
+                    # bluno_handshake = False
+                    # bluno,char = connection(addr)
+                    # droppedCounter = droppedCounter + 1
                     pass
             else:
                 bluno_handshake = handshake(bluno, char, addr)
@@ -199,22 +200,56 @@ class Client(threading.Thread):
 
     def run(self):
         # put display code here
+        data = {
+            "player": "p1",
+            "sender": 0,
+            "sequence": 0,
+            "gx": 0,
+            "gy": 0,
+            "gz": 0,
+            "ax": 0,
+            "ay": 0,
+            "az": 0,
+        }
         while True:
             try:
                 pkt = relay_buffer.get()
-                # print("Packet: " + str(pkt)) to see the packet
-                print("Beetle ID: " + str(pkt[0]))
-                print("Sequence ID: " + str(pkt[1]))
-                print("gx: %.3f" % struct.unpack(
-                    "<f", pkt[3:7]))  # little endian
-                print("gy: %.3f" % struct.unpack("<f", pkt[7:11]))
-                print("gZ: %.3f" % struct.unpack(
-                    "<f", pkt[11:15]))  # little endian
-                print("ax: %.3f" % struct.unpack("<f", pkt[15:19]))
-                print("ay: %.3f" % struct.unpack("<f", pkt[19:23]))
-                print("az: %.3f" % struct.unpack("<f", pkt[23:27]))
-                # send data to server
-                self.send_data(pkt)
+                if(pkt[0] == 0):
+                    print("IMU Data")
+                    # print("Packet: " + str(pkt)) to see the packet
+                    print("Sender: " + str(pkt[0]))
+                    data["sender"] = str(pkt[0])
+
+                    print("Sequence ID: " + str(pkt[1]))
+                    data["sequence"] = str(pkt[1])
+
+                    print("gx: %.3f" % struct.unpack(
+                        "<f", pkt[3:7]))  # little endian
+                    data["gx"] = struct.unpack("<f", pkt[3:7])
+
+                    print("gy: %.3f" % struct.unpack("<f", pkt[7:11]))
+                    data["gy"] = struct.unpack("<f", pkt[7:11])
+
+                    print("gz: %.3f" % struct.unpack(
+                        "<f", pkt[11:15]))  # little endian
+                    data["gz"] = struct.unpack("<f", pkt[11:15])
+
+                    print("ax: %.3f" % struct.unpack("<f", pkt[15:19]))
+                    data["ax"] = struct.unpack("<f", pkt[15:19])
+
+                    print("ay: %.3f" % struct.unpack("<f", pkt[19:23]))
+                    data["ay"] = struct.unpack("<f", pkt[19:23])
+
+                    print("az: %.3f" % struct.unpack("<f", pkt[23:27]))
+                    data["az"] = struct.unpack("<f", pkt[23:27])
+
+                    # send data to server
+                    self.send_data(json.dumps(data))
+
+                elif(pkt[0] == 1 and str(pkt[3] == '100')):
+                    print("IR Hit Detected")
+                    #print("Sequence ID: " + str(pkt[1]))
+                    #print("Data received from Bluno Beetle: " + str(pkt[3]))
 
             except KeyboardInterrupt:
                 self.end_client_connection()
@@ -267,7 +302,8 @@ if __name__ == '__main__':
     conn_u96.start()
 
     # "d0:39:72:bf:bd:b6","d0:39:72:bf:c6:0d"
-    addr_list = ["d0:39:72:bf:c1:a6"]
+    # C4 is the IMU, D0 is the IR #
+    addr_list = ["C4:BE:84:20:1C:05", "D0:39:72:BF:C6:0D"]
     bluno_list = []
     char_list = []
 
