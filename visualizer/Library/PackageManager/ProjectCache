@@ -5,106 +5,23 @@ m_ProjectFiles:
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
       serializedVersion: 2
-      ticks: 638001573188556544
-    m_Hash: 61045114
+      ticks: 638006155573240065
+    m_Hash: 4074846344
   m_LockFileStatus:
     m_FilePath: C:/Users/Hungggggg/NUSwork/Y4S1/CG4002-B04/visualizer/Packages/packages-lock.json
     m_PathExists: 1
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
       serializedVersion: 2
-      ticks: 638001573383963085
-    m_Hash: 3908395881
+      ticks: 638006155573300103
+    m_Hash: 553237153
 m_EmbeddedPackageManifests:
   m_ManifestsStatus: {}
 m_LocalPackages:
-  m_LocalFileStatus:
-  - m_FilePath: C:\Users\Hungggggg\NUSwork\Y4S1\CG4002-B04\visualizer\Packages\com.ptc.vuforia.engine-10.9.3.tgz/package.json
-    m_PathExists: 0
-    m_ContentTrackingEnabled: 1
-    m_ModificationDate:
-      serializedVersion: 2
-      ticks: 0
-    m_Hash: 0
-  - m_FilePath: C:\Users\Hungggggg\NUSwork\Y4S1\CG4002-B04\visualizer\Packages\com.ptc.vuforia.engine-10.9.3.tgz
-    m_PathExists: 1
-    m_ContentTrackingEnabled: 1
-    m_ModificationDate:
-      serializedVersion: 2
-      ticks: 637950725010000000
-    m_Hash: 1770321180
+  m_LocalFileStatus: []
 m_ProjectPath: C:/Users/Hungggggg/NUSwork/Y4S1/CG4002-B04/visualizer/Packages
 m_EditorVersion: 2021.3.8f1 (b30333d56e81)
 m_ResolvedPackages:
-- packageId: com.ptc.vuforia.engine@file:C:\Users\Hungggggg\NUSwork\Y4S1\CG4002-B04\visualizer\Packages\com.ptc.vuforia.engine-10.9.3.tgz
-  testable: 0
-  isDirectDependency: 1
-  version: 10.9.3
-  source: 6
-  resolvedPath: C:\Users\Hungggggg\NUSwork\Y4S1\CG4002-B04\visualizer\Library\PackageCache\com.ptc.vuforia.engine@7c95fcfcb02e
-  assetPath: Packages/com.ptc.vuforia.engine
-  name: com.ptc.vuforia.engine
-  displayName: Vuforia Engine AR
-  author:
-    name: PTC Inc.
-    email: 
-    url: https://developer.vuforia.com/
-  category: 
-  type: 
-  description: Vuforia Engine is the most widely used platform for AR development,
-    with support for leading phones, tablets, and eyewear. Developers can easily
-    add advanced computer vision functionality to Android, iOS, and UWP apps, to
-    create AR experiences that realistically interact with objects and the environment.
-  status: 4
-  errors: []
-  versions:
-    all:
-    - 8.0.101
-    - 8.1.9
-    - 8.1.12
-    - 8.3.9
-    - 8.5.8
-    - 8.5.9
-    compatible: []
-    verified: 
-  dependencies:
-  - name: com.unity.ugui
-    version: 1.0.0
-  resolvedDependencies:
-  - name: com.unity.ugui
-    version: 1.0.0
-  - name: com.unity.modules.ui
-    version: 1.0.0
-  - name: com.unity.modules.imgui
-    version: 1.0.0
-  keywords:
-  - vuforia
-  - engine
-  - ar
-  - xr
-  - augmented
-  - reality
-  - sdk
-  registry:
-    id: main
-    name: 
-    url: https://packages.unity.com
-    scopes: []
-    isDefault: 1
-    capabilities: 7
-  hideInEditor: 1
-  isAssetStorePackage: 0
-  datePublishedTicks: 0
-  documentationUrl: 
-  hasRepository: 0
-  repository:
-    type: 
-    url: 
-    revision: 
-    path: 
-  unityLifecycle:
-    version: 
-    nextVersion: 
 - packageId: com.unity.collab-proxy@1.17.1
   testable: 0
   isDirectDependency: 1
