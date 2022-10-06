@@ -1,5 +1,5 @@
 sceneSetups:
-- path: Assets/M2MqttUnity/Examples/Scenes/M2MqttUnity_Test.unity
+- path: Assets/Scenes/MainScene.unity
   isLoaded: 1
   isActive: 1
   isSubScene: 0
