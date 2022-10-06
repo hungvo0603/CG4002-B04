@@ -9,14 +9,12 @@ public class ShieldController : MonoBehaviour
 
     // Player 1
     public GameObject shieldPlayer1;
-    public GameObject shieldBarPlayer1;
     public Button shieldActivateButtonPlayer1;
     public bool isShieldActivatedPlayer1;
     public int currentShieldCountPlayer1;
 
     // Player 2
     public GameObject shieldPlayer2;
-    public GameObject shieldBarPlayer2;
     public Button shieldActivateButtonPlayer2;
     public bool isShieldActivatedPlayer2;
     public int currentShieldCountPlayer2;
@@ -42,7 +40,7 @@ public class ShieldController : MonoBehaviour
     {
         if (currentShieldCountPlayer1 > 0)
         {
-            currentShieldCountPlayer1 -= 1;
+            // currentShieldCountPlayer1 -= 1;
             shieldPlayer1.gameObject.SetActive(true);
             isShieldActivatedPlayer1 = true;
             shieldActivateButtonPlayer1.interactable = false;
@@ -58,7 +56,7 @@ public class ShieldController : MonoBehaviour
     {
         if (currentShieldCountPlayer2 > 0)
         {
-            currentShieldCountPlayer2 -= 1;
+            // currentShieldCountPlayer2 -= 1;
             shieldPlayer2.gameObject.SetActive(true);
             isShieldActivatedPlayer2 = true;
             shieldActivateButtonPlayer2.interactable = false;
@@ -97,6 +95,12 @@ public class ShieldController : MonoBehaviour
         shieldActivateButtonPlayer2.interactable = true;
         shieldPlayer2.gameObject.SetActive(false);
         isShieldActivatedPlayer2 = false;
+    }
+
+    public void SetShieldCount(int shieldP1, int shieldP2)
+    {
+        currentShieldCountPlayer1 = shieldP1;
+        currentShieldCountPlayer2 = shieldP2;
     }
 
 }

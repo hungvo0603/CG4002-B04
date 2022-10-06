@@ -17,10 +17,17 @@ public class ShieldCountdown : MonoBehaviour
     float sliderValuePlayer1;
     bool _isShieldActivatedPlayer1;
 
+    float shieldTimerPlayer2;
+    public TextMeshProUGUI shieldCounterPlayer2Text;
+    bool _isShieldActivatedPlayer2;
+
     void Start()
     {
         sliderValuePlayer1 = 0;
         timerTextPlayer1.text = "READY";
+
+        shieldTimerPlayer2 = SHIELD_TIME;
+        shieldCounterPlayer2Text.text = shieldTimerPlayer2.ToString();
     }
 
     // Update is called once per frame
@@ -54,6 +61,34 @@ public class ShieldCountdown : MonoBehaviour
             TimerCounterPlayer1.fillAmount = 1;
         }
 
+        _isShieldActivatedPlayer2 = shieldController.isShieldActivatedPlayer2;
+
+        if (_isShieldActivatedPlayer2)
+        {
+            if (shieldTimerPlayer2 == 0)
+            {
+                shieldTimerPlayer2 = SHIELD_TIME;
+            }
+
+            if (shieldTimerPlayer2 > 0)
+            {
+                shieldTimerPlayer2 -= Time.deltaTime;   
+                shieldCounterPlayer2Text.text = ((int)Mathf.Ceil(shieldTimerPlayer2)).ToString();
+            }
+        }
+
+        if (shieldTimerPlayer2 == 0 || !_isShieldActivatedPlayer2)
+        {
+            shieldTimerPlayer2 = SHIELD_TIME;
+            shieldCounterPlayer2Text.text = shieldTimerPlayer2.ToString();
+        }
+
+    }
+
+    public void SetShieldTime(float shieldTimeP1, float shieldTimeP2)
+    {
+        sliderValuePlayer1 = shieldTimeP1;
+        shieldTimerPlayer2 = shieldTimeP2;
     }
 
 }

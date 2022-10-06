@@ -19,7 +19,6 @@ public class PlayerDataJson
 [System.Serializable]
 public class PlayerStatsJson
 {
-    [Header("Player Statistics")]
     public int hp;
     public string action;
     public int bullets;
@@ -29,3 +28,14 @@ public class PlayerStatsJson
     public int num_deaths;
     public int num_shield;    
 }
+
+// [System.Serializable]
+// public class GrenadeHitJson
+// {
+//     public string grenadeHit;
+
+//     public static GrenadeHitJson CreateHitDataFromJSON(string jsonString)
+//     {
+//         return JsonUtility.FromJson<GrenadeHitJson>(jsonString);
+//     }
+// }

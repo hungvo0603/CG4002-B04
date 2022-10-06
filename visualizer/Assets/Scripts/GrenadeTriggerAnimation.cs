@@ -26,7 +26,7 @@ public class GrenadeTriggerAnimation : MonoBehaviour
         grenadeCounter = grenadeController.player1Grenade;
     }
 
-    void TriggerAnimation()
+    public void TriggerAnimation()
     {
         if (grenadeCounter > 0)
         {

@@ -16,15 +16,20 @@ public class ShootController : MonoBehaviour
     private const int MAX_BULLET = 6;
     private const int SHOOT_DAMAGE = 10;
 
+    public TextMeshProUGUI player2BulletText;
+
     public EnemyDetector enemy;
     private bool hasEnemy;
 
     public int player1Bullet;
+    public int player2Bullet;
 
     // Start is called before the first frame update
     void Start()
     {
         player1Bullet = MAX_BULLET;
+        player2Bullet = MAX_BULLET;
+        player2BulletText.text = player2Bullet.ToString();
         hasEnemy = false;
         // _isShieldActivatedPlayer1 = false;
         _isShieldActivatedPlayer2 = false;
@@ -36,6 +41,11 @@ public class ShootController : MonoBehaviour
         {
             player1Bullet = MAX_BULLET;
         }
+        if (player2Bullet == 0)
+        {
+            player2Bullet = MAX_BULLET;
+        }
+        player2BulletText.text = player2Bullet.ToString();
         _isShieldActivatedPlayer1 = shieldController.isShieldActivatedPlayer1;
         _isShieldActivatedPlayer2 = shieldController.isShieldActivatedPlayer2;
     }
@@ -43,7 +53,7 @@ public class ShootController : MonoBehaviour
     public void GunShotPlayer1()
     {
         hasEnemy = enemy.hasEnemy;
-        player1Bullet -= 1;
+        // player1Bullet -= 1;
         int currentShieldHealthPlayer2 = shieldHealthController.currentShieldHealthPlayer2;
         int shieldHealthPlayer2;
         if (hasEnemy)
@@ -66,6 +76,7 @@ public class ShootController : MonoBehaviour
 
     public void GunShotPlayer2()
     {
+        // player2Bullet -= 1;
         int currentShieldHealthPlayer1 = shieldHealthController.currentShieldHealthPlayer1;
         int shieldHealthPlayer1;
         if (_isShieldActivatedPlayer1)
@@ -80,6 +91,22 @@ public class ShootController : MonoBehaviour
         {
             player1.TakeDamagePlayer1(SHOOT_DAMAGE);
         }
+    }
+
+    public void SetBullet(int bulletP1, int bulletP2)
+    {
+        player1Bullet = bulletP1;
+        player2Bullet = bulletP2;
+    }
+
+    public void ReloadPlayer1()
+    {
+        player1Bullet = MAX_BULLET;
+    }
+
+    public void ReloadPlayer2()
+    {
+        player2Bullet = MAX_BULLET;
     }
 
 }

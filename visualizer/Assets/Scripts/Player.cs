@@ -67,5 +67,11 @@ public class Player : MonoBehaviour
         healthBarPlayer2.SetHealth(player2CurrentHealth);
     }
 
+    public void SetKillStatistics(int killP1, int killP2)
+    {
+        player1KillStatistic = killP1;
+        player2KillStatistic = killP2;
+    }
+
 
 }

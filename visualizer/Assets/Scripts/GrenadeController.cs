@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using M2MQTT.MainController;
 
 public class GrenadeController : MonoBehaviour
 {
@@ -77,17 +78,19 @@ public class GrenadeController : MonoBehaviour
 
     IEnumerator ThrowGrenadePlayer1() 
     {
-        player1Grenade -= 1;
+        // player1Grenade -= 1;
         SelfUpdateGrenadeDisplay();
 
         hasEnemy = enemyDetector.hasEnemy;
         hasShield = shieldDetector.hasShieldEnemy;
 
-        int currentShieldHealthPlayer2 = shieldHealthController.currentShieldHealthPlayer2;
-        int shieldHealthPlayer2;
+        // int currentShieldHealthPlayer2 = shieldHealthController.currentShieldHealthPlayer2;
+        // int shieldHealthPlayer2;
 
         yield return new WaitForSeconds(2.01f);
-
+        
+        // Game logic for grenade
+        /**
         if (hasEnemy)
         {
             if (hasShield)
@@ -104,20 +107,23 @@ public class GrenadeController : MonoBehaviour
                 player2.TakeDamagePlayer2(GRENADE_DAMAGE);
             }
         }
+        */
 
     }
 
     IEnumerator ThrowGrenadePlayer2()
     {
-        player2Grenade -= 1;
+        // player2Grenade -= 1;
         OpponentUpdateGrenadeDisplay();
         _isShieldActivatedPlayer1 = shieldController.isShieldActivatedPlayer1;
 
-        int currentShieldHealthPlayer1 = shieldHealthController.currentShieldHealthPlayer1;
-        int shieldHealthPlayer1;
+        // int currentShieldHealthPlayer1 = shieldHealthController.currentShieldHealthPlayer1;
+        // int shieldHealthPlayer1;
 
         yield return new WaitForSeconds(2.01f);
         
+        // Game Logic for Grenade
+        /**
         if (_isShieldActivatedPlayer1)
         {
             shieldHealthPlayer1 = currentShieldHealthPlayer1 - GRENADE_DAMAGE;
@@ -131,6 +137,7 @@ public class GrenadeController : MonoBehaviour
         {
             player1.TakeDamagePlayer1(GRENADE_DAMAGE);
         }
+        */
 
     }
 
@@ -156,5 +163,13 @@ public class GrenadeController : MonoBehaviour
         {
             grenadePlayer2[i].gameObject.SetActive(false);
         }
+    }
+
+    public void SetGrenadeCounter(int grenadeP1, int grenadeP2)
+    {
+        player1Grenade = grenadeP1;
+        player2Grenade = grenadeP2;
+        SelfUpdateGrenadeDisplay();
+        OpponentUpdateGrenadeDisplay();
     }
 }
