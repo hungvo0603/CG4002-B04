@@ -6,8 +6,6 @@
 # 2 player -> wait for both player action to come before send to eval/do anything (cant have player with "none" action)
 # 2 player: can either have shield first then damage or vice versa
 # pkt[0]: type of sender (0: imu sensor (glove)-> give ml, 1: ir receiver(vest), 2: shoot(gun))
-# need to send data to viz cause got test wo eval server (if action is invalid dont send to viz)
-# continue action after the broken pipe nonetype error or the mqqt temp name resolution error too
 
 import random as rd
 from struct import unpack
@@ -48,11 +46,6 @@ BULLET_DAMAGE = 10
 GRENADE_DAMAGE = 30
 SHIELD_TIME = 10
 SHIELD_HEALTH = 30
-
-# pkt[0]: type of sender (0: imu sensor (glove)-> give ml, 1: ir receiver(vest), 2: shoot(gun))
-GLOVE = 0
-VEST = 1
-GUN = 2
 
 state_lock = threading.Lock()
 curr_state = INITIAL_STATE
@@ -108,22 +101,12 @@ class MovePredictor(threading.Thread):
                     data = move_data_buffer.get()
                     print("[MovePredictor]Received data: ", data)
                     unpacked_data = json.loads(data)
-
-                    # Identify sender
-                    if unpacked_data["sender"] == GLOVE:
-                        action = self.pred_action(unpacked_data)
-                    elif unpacked_data["sender"] == GUN:
-                        action = "shoot"
-                    elif unpacked_data["sender"] == VEST:
-                        action = "vest"
-                    else:
-                        action = "none"
-                        # if start of move:
-                        # action = self.pred_action(unpacked_data)
-                        # print("[MovePredictor]Generated action: ", action)
-                        # move_res_buffer.put(action)
-
+                    # if start of move:
                     # action = self.pred_action(unpacked_data)
+                    # print("[MovePredictor]Generated action: ", action)
+                    # move_res_buffer.put(action)
+
+                    action = self.pred_action(unpacked_data)
                     print("[MovePredictor]Generated action: ", action)
                     move_res_buffer.put(action)
             except KeyboardInterrupt:
@@ -467,9 +450,14 @@ def execute_action(player, action):
             print("[Game engine] Cannot ", action, ".  Player has ", state[player]
                   ["bullets"],  "bullet")
         else:
-            state[player]["bullets"] -= 1
-            # Start timer to vest data to come
+            if state[other_player]["shield_health"]:
+                state[other_player]["shield_health"] -= BULLET_DAMAGE
 
+                if state[other_player]["shield_health"] < 0:
+                    state[other_player]["hp"] += state[other_player]["shield_health"]
+                    state[other_player]["shield_health"] = 0
+            else:
+                state[other_player]["hp"] -= BULLET_DAMAGE
     elif action == "shield":
         if not shield_start[player] and state[player]["num_shield"]:
             state[player]["shield_time"] = SHIELD_TIME
@@ -479,17 +467,8 @@ def execute_action(player, action):
         else:
             print("[Game engine] ", int(
                 time.time() - shield_start[player]),  " seconds after previous shield")
-    elif action == "vest":  # this vest is already opposite player's vest
-        # ignore if no existing timer for shoot
-
-        if state[player]["shield_health"]:
-            state[player]["shield_health"] -= BULLET_DAMAGE
-
-            if state[player]["shield_health"] < 0:
-                state[player]["hp"] += state[player]["shield_health"]
-                state[player]["shield_health"] = 0
-        else:
-            state[player]["hp"] -= BULLET_DAMAGE
+            print("[Game engine] Num shield left: ",
+                  state[player]["num_shield"])
     else:
         print("[Game engine] Unknown action: ", action)
 
