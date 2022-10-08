@@ -1,12 +1,15 @@
 # Processes:
 # - ml model, comm visualiser, comm eval, comm relay
-# Todo:
+# To try:
 # debug mqtt connection error -> temp failure in name resolution (try to change broker to mosquitto, update in viz code too), broken pipe -> relay
-# vest send data to is_hit -> shoot needs to have time window for the vest data to come in (if timeout -> miss bullet)
-# 2 player -> wait for both player action to come before send to eval/do anything (cant have player with "none" action)
-# 2 player: can either have shield first then damage or vice versa
+# try send data see still got duplicate action on p1 and p2?
+# shoot start timer for vest to receive data -> shoot needs to have time window for the vest data to come in (if timeout -> miss bullet)
 # pkt[0]: type of sender (0: imu sensor (glove)-> give ml, 1: ir receiver(vest), 2: shoot(gun))
 # need to send data to viz cause got test wo eval server (if action is invalid dont send to viz)
+
+# Todo:
+# 2 player -> wait for both player action to come before send to eval/do anything (cant have player with "none" action)
+# 2 player: can either have shield first then damage or vice versa
 # continue action after the broken pipe nonetype error or the mqqt temp name resolution error too
 
 from struct import unpack
@@ -62,7 +65,7 @@ GUN = 2
 state_lock = threading.Lock()
 curr_state = INITIAL_STATE
 shield_start = {"p1": None, "p2": None}  # both player has no shield
-has_shoot = {"p1": None, "p2": None}
+has_incoming_shoot = {"p1": Queue(), "p2": Queue()}
 
 
 def read_state():
@@ -240,21 +243,20 @@ class Client(threading.Thread):
                 has_terminated = True
                 break
 
-    def jsonify_state(self, player_num, hp, action, bullets, grenades, shield_time, shield_health, num_deaths, num_shield):
-        global curr_state
-        state = read_state()
-        state[player_num] = {
-            "hp": hp,
-            "action": action,
-            "bullets": bullets,
-            "grenades": grenades,
-            "shield_time": shield_time,
-            "shield_health": shield_health,
-            "num_deaths": num_deaths,
-            "num_shield": num_shield
-        }
-        input_state(state)
-        return json.dumps(state)
+    # def jsonify_state(self, player_num, hp, action, bullets, grenades, shield_time, shield_health, num_deaths, num_shield):
+    #     state = read_state()
+    #     state[player_num] = {
+    #         "hp": hp,
+    #         "action": action,
+    #         "bullets": bullets,
+    #         "grenades": grenades,
+    #         "shield_time": shield_time,
+    #         "shield_health": shield_health,
+    #         "num_deaths": num_deaths,
+    #         "num_shield": num_shield
+    #     }
+    #     input_state(state)
+    #     return json.dumps(state)
 
     def encrypt_message(self, state):
         # AES.block_size = 16 (default)
@@ -349,23 +351,6 @@ class Server(threading.Thread):
             print("[Relay] Keyboard interrupt, terminating")
             has_terminated = True
 
-    # def stop(self):
-    #     try:
-    #         self.conn.shutdown(SHUT_RDWR)
-    #         self.conn.close()
-    #     except OSError:
-    #         # connection already closed
-    #         pass
-
-    # def send_data(self, message):
-    #     # encrypted_text = self.encrypt_message(message)
-    #     encrypted_text = bytes(str(message), encoding="utf8")
-    #     # _ is used as delimiter between len and content
-    #     packet_size = (str(len(encrypted_text)) + '_').encode("utf-8")
-    #     # print("[Client] encrypted_text:", encrypted_text)
-    #     self.conn.sendall(packet_size)
-    #     self.conn.sendall(encrypted_text)
-
     def receive_data(self):  # blocking call
         try:
             # recv length followed by '_' followed by cypher
@@ -434,13 +419,27 @@ def opp_player(player):
         return "p1"
 
 
+def revive_player(state, player):
+    state[player]["hp"] = 100
+    state[player]["num_deaths"] += 1
+    state[player]["num_shield"] = 3
+    state[player]["grenades"] = 2
+    state[player]["bullets"] = 6
+    return state
+
+
+def failed_shot(player):
+    global has_incoming_shoot
+    has_incoming_shoot[player].pop()
+    print("[Game engine] Shot to ", player, " has missed")
+
+
 def execute_action(player, action):
     state = read_state()
     other_player = opp_player(player)
-    print("Player:", player, "Other Player:", other_player)
+
     # do sth based on action ["grenade", "reload", "shoot", "shield"]
     state[player]["action"] = action
-    # state[other_player]["action"] = "none"
 
     # Recalculate shield time
     if shield_start[player]:
@@ -480,8 +479,12 @@ def execute_action(player, action):
             print("[Game engine] Cannot ", action, ".  Player has ", state[player]
                   ["bullets"],  "bullet")
         else:
+            global has_incoming_shoot
             state[player]["bullets"] -= 1
+
             # Start timer to vest data to come
+            has_incoming_shoot[other_player].put(threading.Timer(
+                2, failed_shot, other_player))  # 2s response for vest response
 
     elif action == "shield":
         if not shield_start[player] and state[player]["num_shield"]:
@@ -494,34 +497,30 @@ def execute_action(player, action):
                 time.time() - shield_start[player]),  " seconds after previous shield")
     elif action == "vest":  # this vest is already opposite player's vest
         # ignore if no existing timer for shoot
-        if not has_shoot[opp_player]:
-            continue
+        global has_incoming_shoot
+        if not has_incoming_shoot[player].empty():
+            print("[Game engine] Player ", player, " has been hit")
+            has_incoming_shoot[player].get().cancel()
 
-        if state[player]["shield_health"]:
-            state[player]["shield_health"] -= BULLET_DAMAGE
+            if state[player]["shield_health"]:
+                state[player]["shield_health"] -= BULLET_DAMAGE
 
-            if state[player]["shield_health"] < 0:
-                state[player]["hp"] += state[player]["shield_health"]
-                state[player]["shield_health"] = 0
-        else:
-            state[player]["hp"] -= BULLET_DAMAGE
+                if state[player]["shield_health"] < 0:
+                    state[player]["hp"] += state[player]["shield_health"]
+                    state[player]["shield_health"] = 0
+            else:
+                state[player]["hp"] -= BULLET_DAMAGE
     else:
         print("[Game engine] Unknown action: ", action)
 
     # Revive player if dead
     if state[other_player]["hp"] <= 0:
-        state[other_player]["hp"] = 100
-        state[other_player]["num_deaths"] += 1
-        state[other_player]["num_shield"] = 3
-        state[other_player]["grenades"] = 2
+        state = revive_player(state, other_player)
 
     if state[player]["hp"] <= 0:
-        state[player]["hp"] = 100
-        state[player]["num_deaths"] += 1
-        state[player]["num_shield"] = 3
-        state[player]["grenades"] = 2
+        state = revive_player(state, player)
 
-    input_state(state)
+    return state
 
 
 if __name__ == '__main__':
@@ -560,28 +559,28 @@ if __name__ == '__main__':
     model_pred = MovePredictor()
     model_pred.start()
 
-    state = read_state()
     # Game engine (main thread)
     while not has_terminated:
         try:
             if not move_res_buffer.empty():
                 action = move_res_buffer.get()
                 print("[Game engine] Received action:", action)
-                execute_action("p1", action)
+                state = read_state()
+                state = execute_action("p1", action)
                 print("[Game engine] Resulting state:", state)
 
                 if action != "grenade":
                     eval_buffer.put(state)
                     print("[Game engine] Sent to eval:", state)
-                else:
-                    state["sender"] = "u96"
-                    viz_send_buffer.put(state)
-                    print("[Game engine] Sent to visualiser:", state)
+
+                state["sender"] = "u96"
+                viz_send_buffer.put(state)
+                print("[Game engine] Sent to visualiser:", state)
 
             if not viz_recv_buffer.empty():
                 # Visualizer sends player that is hit by grenade
                 player_hit = viz_recv_buffer.get()
-                print("[Game engine] Received from visualiser:", state)
+                print("[Game engine] Received from visualiser:", player_hit)
                 state = read_state()
                 if player_hit != "none":
                     # minus health based on grenade hit
@@ -593,6 +592,10 @@ if __name__ == '__main__':
                             state[player_hit]["shield_health"] = 0
                     else:
                         state[player_hit]["hp"] -= GRENADE_DAMAGE
+
+                    # Revive player if dead
+                    if state[player_hit]["hp"] <= 0:
+                        state = revive_player(state, player_hit)
 
                 input_state(state)
                 eval_buffer.put(state)
