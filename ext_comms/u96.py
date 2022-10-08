@@ -1,7 +1,7 @@
 # Processes:
 # - ml model, comm visualiser, comm eval, comm relay
 # Todo:
-# debug mqtt connection error -> temp failure in name resolution, broken pipe -> relay
+# debug mqtt connection error -> temp failure in name resolution (try to change broker to mosquitto, update in viz code too), broken pipe -> relay
 # vest send data to is_hit -> shoot needs to have time window for the vest data to come in (if timeout -> miss bullet)
 # 2 player -> wait for both player action to come before send to eval/do anything (cant have player with "none" action)
 # 2 player: can either have shield first then damage or vice versa
@@ -9,8 +9,9 @@
 # need to send data to viz cause got test wo eval server (if action is invalid dont send to viz)
 # continue action after the broken pipe nonetype error or the mqqt temp name resolution error too
 
-import random as rd
 from struct import unpack
+import pandas as pd
+import numpy as np
 from Crypto.Cipher import AES
 from paho.mqtt import client as mqtt_client
 from Crypto.Util.Padding import pad
@@ -25,7 +26,11 @@ from queue import Queue
 import uuid
 import time
 
-mqtt_broker = 'broker.emqx.io'  # Public broker
+import pynq.lib.dma
+from pynq import allocate
+from pynq import Overlay
+
+mqtt_broker = "test.mosquitto.org"  # 'broker.emqx.io'  # Public broker
 mqtt_port = 1883
 
 DEFAULT_STATE = {
@@ -57,6 +62,7 @@ GUN = 2
 state_lock = threading.Lock()
 curr_state = INITIAL_STATE
 shield_start = {"p1": None, "p2": None}  # both player has no shield
+has_shoot = {"p1": None, "p2": None}
 
 
 def read_state():
@@ -90,6 +96,12 @@ class MovePredictor(threading.Thread):
     def __init__(self):
         super().__init__()  # init parent (Thread)
         self.daemon = True
+        self.overlay = Overlay('mlp.bit')
+        self.dma_send = self.overlay.axi_dma_0
+        self.dma_recv = self.overlay.axi_dma_0
+
+        self.input_buffer = allocate(shape=(60,), dtype=np.float32)
+        self.output_buffer = allocate(shape=(1,), dtype=np.int32)
 
     def pred_action(self, data):
         # Randomly generate action
@@ -153,6 +165,7 @@ class Mqtt(threading.Thread):
         client.on_connect = on_connect
         try:
             client.connect(mqtt_broker, mqtt_port)
+            print("[Mqtt] Connection established to ", self.topic)
         except:
             print("[Mqtt] Retry connection of ", self.topic)
             client.connect(mqtt_broker, mqtt_port)
@@ -481,6 +494,8 @@ def execute_action(player, action):
                 time.time() - shield_start[player]),  " seconds after previous shield")
     elif action == "vest":  # this vest is already opposite player's vest
         # ignore if no existing timer for shoot
+        if not has_shoot[opp_player]:
+            continue
 
         if state[player]["shield_health"]:
             state[player]["shield_health"] -= BULLET_DAMAGE
