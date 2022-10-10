@@ -6,7 +6,7 @@ using TMPro;
 
 public class ShieldDetector : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI shieldDetectionText;
+    // [SerializeField] private TextMeshProUGUI shieldDetectionText;
     public bool hasShieldEnemy;
     [SerializeField] private ShieldController shieldController;
     private bool _isShieldActivatedPlayer2;
@@ -27,19 +27,19 @@ public class ShieldDetector : MonoBehaviour
     {
         if (_isShieldActivatedPlayer2)
         {
-            shieldDetectionText.text = "SHIELD ACTIVATED";
+            // shieldDetectionText.text = "SHIELD ACTIVATED";
             hasShieldEnemy = true;
         }
         else
         {
-            shieldDetectionText.text = "SHIELD NOT ACTIVATED";
+            // shieldDetectionText.text = "SHIELD NOT ACTIVATED";
             hasShieldEnemy = false;
         }
     }
 
     public void ShieldLost()
     {
-        shieldDetectionText.text = "SHIELD LOST";
+        // shieldDetectionText.text = "SHIELD LOST";
         hasShieldEnemy = false;
     }
     

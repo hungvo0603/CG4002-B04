@@ -44,8 +44,6 @@ namespace M2MQTT.MainController
         [Header("Connection UI")]
         public Image connectedIcon;
         public Image disconnectedIcon;
-        public Button connectButton;
-        public Button disconnectButton;
         public Button PublishMessageButton;
 
         [Header("Healthbar UI")]
@@ -78,6 +76,9 @@ namespace M2MQTT.MainController
         public PlayerStatsJson player2Data = new PlayerStatsJson();
         // public GrenadeHitJson grenadeHitData = new GrenadeHitJson();
 
+        [Header("Scene Changer")]
+        public SceneChanger sceneChanger;
+
         private List<string> eventMessages = new List<string>();
         private bool updateUI = false;
 
@@ -86,35 +87,31 @@ namespace M2MQTT.MainController
         {
             // client.Publish("cg4002/4/u96_viz20", System.Text.Encoding.UTF8.GetBytes("p1"), MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE, false);
             
-            // string[] sample_json_strings = new string[] 
-            // {"{\"p1\": {\"hp\": 100, \"action\": \"shoot\", \"bullets\": 5, \"grenades\": 2, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 0, \"num_shield\": 3}, \"p2\": {\"hp\": 90, \"action\": \"none\", \"bullets\": 6, \"grenades\": 2, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 0, \"num_shield\": 3}, \"sender\": \"eval\"}",
-            //  "{\"p1\": {\"hp\": 100, \"action\": \"grenade\", \"bullets\": 5, \"grenades\": 1, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 0, \"num_shield\": 3}, \"p2\": {\"hp\": 60, \"action\": \"none\", \"bullets\": 6, \"grenades\": 2, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 0, \"num_shield\": 3}, \"sender\": \"eval\"}",
-            //  "{\"p1\": {\"hp\": 100, \"action\": \"shield\", \"bullets\": 5, \"grenades\": 1, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 0, \"num_shield\": 2}, \"p2\": {\"hp\": 60, \"action\": \"none\", \"bullets\": 6, \"grenades\": 2, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 0, \"num_shield\": 3}, \"sender\": \"eval\"}",
-            //  "{\"p1\": {\"hp\": 100, \"action\": \"none\", \"bullets\": 5, \"grenades\": 1, \"shield_time\": 7, \"shield_health\": 20, \"num_deaths\": 0, \"num_shield\": 2}, \"p2\": {\"hp\": 60, \"action\": \"shoot\", \"bullets\": 5, \"grenades\": 2, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 0, \"num_shield\": 3}, \"sender\": \"eval\"}",
-            //  "{\"p1\": {\"hp\": 80, \"action\": \"none\", \"bullets\": 5, \"grenades\": 1, \"shield_time\": 4, \"shield_health\": 0, \"num_deaths\": 0, \"num_shield\": 2}, \"p2\": {\"hp\": 60, \"action\": \"grenade\", \"bullets\": 5, \"grenades\": 1, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 0, \"num_shield\": 3}, \"sender\": \"eval\"}"};
-            
             // Sending feedback message
-            // if (!String.IsNullOrEmpty(msg))
-            // {
-            //     client.Publish("cg4002/4/viz_u9620", System.Text.Encoding.UTF8.GetBytes(msg), MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE, false);
-            //     Debug.Log("Feedback message published");
-            // }
-            // else
-            // {
-            // string sample_json_string = "{\"p1\": {\"hp\": 100, \"action\": \"grenade\", \"bullets\": 5, \"grenades\": 1, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 0, \"num_shield\": 3}, \"p2\": {\"hp\": 60, \"action\": \"none\", \"bullets\": 6, \"grenades\": 2, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 0, \"num_shield\": 3}, \"sender\": \"eval\"}";
-            string sample_json_string = "{\"p1\": {\"hp\": 100, \"action\": \"shoot\", \"bullets\": 5, \"grenades\": 2, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 0, \"num_shield\": 3}, \"p2\": {\"hp\": 90, \"action\": \"none\", \"bullets\": 6, \"grenades\": 2, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 0, \"num_shield\": 3}, \"sender\": \"eval\"}";
-            // string sample_json_string = "{\"p1\": {\"hp\": 100, \"action\": \"shield\", \"bullets\": 5, \"grenades\": 1, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 0, \"num_shield\": 2}, \"p2\": {\"hp\": 60, \"action\": \"none\", \"bullets\": 6, \"grenades\": 2, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 0, \"num_shield\": 3}, \"sender\": \"eval\"}";
+            // Adi should parse the feedback, being "p1", "p2" or "none"
+            
+            // FEEDBACK TO EXT_COMM
+            /*
+            if (!String.IsNullOrEmpty(msg))
+            {
+                client.Publish("cg4002/4/viz_u9620", System.Text.Encoding.UTF8.GetBytes(msg), MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE, false);
+                Debug.Log("Feedback message published");
+            }
+            else
+            {
+            */
+
+            // TESTING FOR VISUALIZER
+            // string sample_json_string = "{\"p1\": {\"hp\": 100, \"action\": \"shoot\", \"bullets\": 5, \"grenades\": 1, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 2, \"num_shield\": 3}, \"p2\": {\"hp\": 60, \"action\": \"none\", \"bullets\": 6, \"grenades\": 2, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 3, \"num_shield\": 3}, \"sender\": \"eval\"}";
+            string sample_json_string = "{\"p1\": {\"hp\": 100, \"action\": \"logout\", \"bullets\": 5, \"grenades\": 1, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 2, \"num_shield\": 3}, \"p2\": {\"hp\": 60, \"action\": \"none\", \"bullets\": 6, \"grenades\": 2, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 3, \"num_shield\": 3}, \"sender\": \"eval\"}";
+            // string sample_json_string = "{\"p1\": {\"hp\": 100, \"action\": \"shoot\", \"bullets\": 5, \"grenades\": 2, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 0, \"num_shield\": 3}, \"p2\": {\"hp\": 90, \"action\": \"none\", \"bullets\": 6, \"grenades\": 2, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 0, \"num_shield\": 3}, \"sender\": \"eval\"}";
+            // string sample_json_string = "{\"p1\": {\"hp\": 100, \"action\": \"shoot\", \"bullets\": 5, \"grenades\": 1, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 0, \"num_shield\": 2}, \"p2\": {\"hp\": 60, \"action\": \"shield\", \"bullets\": 6, \"grenades\": 2, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 0, \"num_shield\": 3}, \"sender\": \"eval\"}";
             // string sample_json_string = "{\"p1\": {\"hp\": 100, \"action\": \"reload\", \"bullets\": 6, \"grenades\": 1, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 0, \"num_shield\": 2}, \"p2\": {\"hp\": 60, \"action\": \"none\", \"bullets\": 6, \"grenades\": 2, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 0, \"num_shield\": 3}, \"sender\": \"eval\"}";
+            // string sample_json_string = "{\"p1\": {\"hp\": 100, \"action\": \"grenade\", \"bullets\": 6, \"grenades\": 1, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 0, \"num_shield\": 2}, \"p2\": {\"hp\": 60, \"action\": \"none\", \"bullets\": 6, \"grenades\": 2, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 0, \"num_shield\": 3}, \"sender\": \"eval\"}";
+
             client.Publish("cg4002/4/viz_u9620", System.Text.Encoding.UTF8.GetBytes(sample_json_string), MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE, false);
             Debug.Log("Test message published");
             // }
-            // for (int i = 0; i < sample_json_strings.Length; i++)
-            // {
-            //     client.Publish("cg4002/4/viz_u9620", System.Text.Encoding.UTF8.GetBytes(sample_json_strings[i]), MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE, false);
-            //     Debug.Log("Test message published");
-            //     StartCoroutine(Wait3Seconds());
-            // }
-            // AddUiMessage("Test message published.");
         }
 
         // public void SetUiMessage(string msg)
@@ -187,26 +184,13 @@ namespace M2MQTT.MainController
         {
             if (client == null)
             {
-                if (connectButton != null)
-                {
-                    connectButton.interactable = true;
-                    disconnectButton.interactable = false;
-                    PublishMessageButton.interactable = false;
-                }
+                PublishMessageButton.interactable = false;
             }
             else
             {
                 if (PublishMessageButton != null)
                 {
                     PublishMessageButton.interactable = client.IsConnected;
-                }
-                if (disconnectButton != null)
-                {
-                    disconnectButton.interactable = client.IsConnected;
-                }
-                if (connectButton != null)
-                {
-                    connectButton.interactable = !client.IsConnected;
                 }
             }
             updateUI = false;
@@ -216,6 +200,7 @@ namespace M2MQTT.MainController
         {
             connectedIcon.gameObject.SetActive(false);
             disconnectedIcon.gameObject.SetActive(true);
+            Connect();
             // SetUiMessage("Ready.");
             updateUI = true;
             base.Start();
@@ -348,6 +333,10 @@ namespace M2MQTT.MainController
                 case "reload":
                     shootController.ReloadPlayer1();
                     break;
+                case "logout":
+                    Disconnect();
+                    sceneChanger.ChangeScene("ScoreboardOverlay");
+                    break;
                 default:
                     break;
             }
@@ -358,6 +347,7 @@ namespace M2MQTT.MainController
                     grenadeController.ExplosionButtonPressPlayer2();
                     enemyGrenadeTriggerAnimation.TriggerAnimation();
                     // Feedback hit
+                    // ProcessGrenadeHitFeedback("p2");
                     break;
                 case "shoot":
                     shootController.GunShotPlayer2();

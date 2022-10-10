@@ -6,7 +6,7 @@ using TMPro;
 
 public class EnemyDetector : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI enemyDetectionText;
+    // [SerializeField] private TextMeshProUGUI enemyDetectionText;
     public bool hasEnemy;
 
     void Start()
@@ -16,13 +16,13 @@ public class EnemyDetector : MonoBehaviour
     
     public void EnemyDetected()
     {
-        enemyDetectionText.text = "ENEMY DETECTED";
+        // enemyDetectionText.text = "ENEMY DETECTED";
         hasEnemy = true;
     }
 
     public void EnemyLost()
     {
-        enemyDetectionText.text = "ENEMY LOST";
+        // enemyDetectionText.text = "ENEMY LOST";
         hasEnemy = false;
     }
     

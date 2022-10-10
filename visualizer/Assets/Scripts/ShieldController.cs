@@ -12,12 +12,14 @@ public class ShieldController : MonoBehaviour
     public Button shieldActivateButtonPlayer1;
     public bool isShieldActivatedPlayer1;
     public int currentShieldCountPlayer1;
+    public AudioSource shieldActivationSoundPlayer1;
 
     // Player 2
     public GameObject shieldPlayer2;
     public Button shieldActivateButtonPlayer2;
     public bool isShieldActivatedPlayer2;
     public int currentShieldCountPlayer2;
+    public AudioSource shieldActivationSoundPlayer2;
 
     void Start ()
     {
@@ -44,6 +46,7 @@ public class ShieldController : MonoBehaviour
             shieldPlayer1.gameObject.SetActive(true);
             isShieldActivatedPlayer1 = true;
             shieldActivateButtonPlayer1.interactable = false;
+            shieldActivationSoundPlayer1.Play();
             StartCoroutine(DeactivateShieldPlayer1());
         }
         else
@@ -60,6 +63,7 @@ public class ShieldController : MonoBehaviour
             shieldPlayer2.gameObject.SetActive(true);
             isShieldActivatedPlayer2 = true;
             shieldActivateButtonPlayer2.interactable = false;
+            shieldActivationSoundPlayer2.Play();
             StartCoroutine(DeactivateShieldPlayer2());
         }
         else

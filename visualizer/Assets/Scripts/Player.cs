@@ -14,8 +14,8 @@ public class Player : MonoBehaviour
     
     int player1CurrentHealth;
     int player2CurrentHealth;
-    int player1KillStatistic;
-    int player2KillStatistic;
+    public static int player1KillStatistic;
+    public static int player2KillStatistic;
     // Start is called before the first frame update
     void Start()
     {
