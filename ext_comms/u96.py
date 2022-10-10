@@ -11,10 +11,10 @@
 # 2 player -> wait for both player action to come before send to eval/do anything (cant have player with "none" action)
 # 2 player: can either have shield first then damage or vice versa
 # continue action after the broken pipe nonetype error or the mqqt temp name resolution error too
+# try out hivemq
+# run the relay code on linux vm
+# implement logout
 
-from struct import unpack
-import pandas as pd
-import numpy as np
 from Crypto.Cipher import AES
 from paho.mqtt import client as mqtt_client
 from Crypto.Util.Padding import pad
@@ -29,9 +29,14 @@ from queue import Queue
 import uuid
 import time
 
+import numpy as np
 import pynq.lib.dma
 from pynq import allocate
 from pynq import Overlay
+from statistics import median, mean, variance
+from scipy.fftpack import fft
+
+SOM_THRESHOLD = 2  # threshold value for start of move
 
 mqtt_broker = "test.mosquitto.org"  # 'broker.emqx.io'  # Public broker
 mqtt_port = 1883
@@ -61,6 +66,8 @@ SHIELD_HEALTH = 30
 GLOVE = 0
 VEST = 1
 GUN = 2
+SHOT_FIRED = 188
+SHOT_HIT = 6278
 
 state_lock = threading.Lock()
 curr_state = INITIAL_STATE
@@ -92,7 +99,7 @@ viz_recv_buffer = Queue()  # bool value for grenade hit
 # Connections
 has_terminated = False
 # Temporary
-action_count = 0
+# action_count = 0
 
 
 class MovePredictor(threading.Thread):
@@ -103,15 +110,61 @@ class MovePredictor(threading.Thread):
         self.dma_send = self.overlay.axi_dma_0
         self.dma_recv = self.overlay.axi_dma_0
 
+        self.array_ax = []
+        self.array_az = []
+        self.array_gx = []
+        self.array_gy = []
+        self.array_gz = []
+        self.array_ay = []
+        self.array_axayaz_gxgygz = []
         self.input_buffer = allocate(shape=(60,), dtype=np.float32)
         self.output_buffer = allocate(shape=(1,), dtype=np.int32)
 
-    def pred_action(self, data):
-        # Randomly generate action
-        actions = ["shoot", "grenade", "reload", "shield"]
-        global action_count
-        action_count += 1
-        return actions[action_count % 4]
+    def is_start_of_move(self):
+        if (np.max(self.array_ax) + np.max(self.array_ay) + np.max(self.array_az) > SOM_THRESHOLD):
+            return True
+        return False
+
+    def extract_features(self, raw_data):
+        extracted = []
+        extracted = np.append(extracted, (np.min(raw_data)))
+        extracted = np.append(extracted, (np.max(raw_data)))
+        extracted = np.append(extracted, (mean(raw_data)))
+        extracted = np.append(extracted, (median(raw_data)))
+        extracted = np.append(extracted, (variance(raw_data)))
+        raw_data = fft(raw_data)
+        extracted = np.append(extracted, np.min(abs(raw_data)))
+        extracted = np.append(extracted, np.max(abs(raw_data)))
+        extracted = np.append(extracted, mean(abs(raw_data)))
+        extracted = np.append(extracted, median(abs(raw_data)))
+        extracted = np.append(extracted, variance(abs(raw_data)))
+        return extracted
+
+    def pred_action(self):
+        actions = ["grenade", "reload", "shield", "logout"]
+        self.array_axayaz_gxgygz = np.concatenate((
+            self.array_axayaz_gxgygz, self.extract_features(self.array_ax)))
+        self.array_axayaz_gxgygz = np.concatenate((
+            self.array_axayaz_gxgygz, self.extract_features(self.array_ay)))
+        self.array_axayaz_gxgygz = np.concatenate((
+            self.array_axayaz_gxgygz, self.extract_features(self.array_az)))
+        self.array_axayaz_gxgygz = np.concatenate((
+            self.array_axayaz_gxgygz, self.extract_features(self.array_gx)))
+        self.array_axayaz_gxgygz = np.concatenate((
+            self.array_axayaz_gxgygz, self.extract_features(self.array_gy)))
+        self.array_axayaz_gxgygz = np.concatenate((
+            self.array_axayaz_gxgygz, self.extract_features(self.array_gz)))
+
+        for i in range(60):
+            self.input_buffer[i] = float(self.array_axayaz_gxgygz[i])
+
+        self.dma_send.sendchannel.transfer(self.input_buffer)
+        self.dma_recv.recvchannel.transfer(self.output_buffer)
+        self.dma_send.sendchannel.wait()
+        self.dma_recv.recvchannel.wait()
+
+        return actions[self.output_buffer[0]]
+        # return "shield"
 
     # Machine learning model
     def run(self):
@@ -126,21 +179,41 @@ class MovePredictor(threading.Thread):
 
                     # Identify sender
                     if unpacked_data["sender"] == GLOVE:
-                        action = self.pred_action(unpacked_data)
-                    elif unpacked_data["sender"] == GUN:
-                        action = "shoot"
-                    elif unpacked_data["sender"] == VEST:
-                        action = "vest"
-                    else:
-                        action = "none"
-                        # if start of move:
-                        # action = self.pred_action(unpacked_data)
-                        # print("[MovePredictor]Generated action: ", action)
-                        # move_res_buffer.put(action)
+                        self.array_ax.append(unpacked_data["ax"][0])
+                        self.array_ay.append(unpacked_data["ay"][0])
+                        self.array_az.append(unpacked_data["az"][0])
+                        self.array_gx.append(unpacked_data["gx"][0])
+                        self.array_gy.append(unpacked_data["gy"][0])
+                        self.array_gz.append(unpacked_data["gz"][0])
 
-                    # action = self.pred_action(unpacked_data)
-                    print("[MovePredictor]Generated action: ", action)
-                    move_res_buffer.put(action)
+                        print("[Move Pred] Len of arr: ", len(self.array_ax))
+
+                        if (len(self.array_ax) == 40):
+                            if (self.is_start_of_move):
+                                action = self.pred_action()
+                                print(
+                                    "[MovePredictor]Generated action: ", action)
+                                move_res_buffer.put(action)
+
+                            self.array_ax = self.array_ax[5:]
+                            self.array_ay = self.array_ay[5:]
+                            self.array_az = self.array_az[5:]
+                            self.array_gx = self.array_gx[5:]
+                            self.array_gy = self.array_gy[5:]
+                            self.array_gz = self.array_gz[5:]
+
+                    elif unpacked_data["sender"] == GUN and unpacked_data["data"] == SHOT_FIRED:
+                        action = "shoot"
+                        print("[MovePredictor]Generated action: ", action)
+                        move_res_buffer.put(action)
+                    elif unpacked_data["sender"] == VEST and unpacked_data["data"] == SHOT_HIT:
+                        action = "vest"
+                        print("[MovePredictor]Generated action: ", action)
+                        move_res_buffer.put(action)
+                    else:
+                        print("[MovePredictor]Unknown sender or invalid action")
+                        action = "none"
+
             except KeyboardInterrupt:
                 print("[MovePredictor]Keyboard Interrupt, terminating")
                 has_terminated = True
@@ -435,10 +508,11 @@ def failed_shot(player):
 
 
 def execute_action(player, action):
+    global has_incoming_shoot
     state = read_state()
     other_player = opp_player(player)
 
-    # do sth based on action ["grenade", "reload", "shoot", "shield"]
+    # do sth based on action ["grenade", "reload", "logout", "shield"]
     state[player]["action"] = action
 
     # Recalculate shield time
@@ -479,7 +553,6 @@ def execute_action(player, action):
             print("[Game engine] Cannot ", action, ".  Player has ", state[player]
                   ["bullets"],  "bullet")
         else:
-            global has_incoming_shoot
             state[player]["bullets"] -= 1
 
             # Start timer to vest data to come
@@ -497,7 +570,6 @@ def execute_action(player, action):
                 time.time() - shield_start[player]),  " seconds after previous shield")
     elif action == "vest":  # this vest is already opposite player's vest
         # ignore if no existing timer for shoot
-        global has_incoming_shoot
         if not has_incoming_shoot[player].empty():
             print("[Game engine] Player ", player, " has been hit")
             has_incoming_shoot[player].get().cancel()
@@ -510,6 +582,8 @@ def execute_action(player, action):
                     state[player]["shield_health"] = 0
             else:
                 state[player]["hp"] -= BULLET_DAMAGE
+    elif action == "logout":
+        print("[Game engine] Player ", player, " has logged out")
     else:
         print("[Game engine] Unknown action: ", action)
 
@@ -567,6 +641,10 @@ if __name__ == '__main__':
                 print("[Game engine] Received action:", action)
                 state = read_state()
                 state = execute_action("p1", action)
+
+                if state["p1"]["action"] == "logout":
+                    has_terminated = True
+
                 print("[Game engine] Resulting state:", state)
 
                 if action != "grenade":

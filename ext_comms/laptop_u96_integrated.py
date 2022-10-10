@@ -38,6 +38,25 @@ partialpacket = False
 
 startTime = time.time()
 
+GLOVE_FORMAT = {
+    "player": "p1",
+    "sender": 0,
+    "sequence": 0,
+    "gx": 0,
+    "gy": 0,
+    "gz": 0,
+    "ax": 0,
+    "ay": 0,
+    "az": 0,
+}
+
+OTHER_FORMAT = {
+    "player": "p1",
+    "sender": 0,
+    "sequence": 0,
+    "data": 0,
+}
+
 
 class ScannerDelegate(DefaultDelegate):
 
@@ -48,22 +67,27 @@ class ScannerDelegate(DefaultDelegate):
         self.SeqID = 0
 
     def handleNotification(self, cHandle, data):
+
         # and len(pkt) == packetOne_len: #when handshake is done
         if self.done_handshake:
             full_packet = True
             pkt = bytearray(data)
+
             # print("Packet: " + str(pkt)) #to see the packet
+
             if(len(pkt) == packetOne_len and pkt[0] == 0):
+
                 # print("Packet: " + str(pkt)) #to see the packet
 
                 if pkt[2] == 0:
                     correct_pkt = checksum(pkt)
                     self.SeqID = (self.SeqID + 1) & 0xFF
+
                     if(correct_pkt):
                         self.packetOne = bytearray(pkt[0:15])
                     else:
                         self.char.write(str.encode(NAK))
-                        print("Failed checksum")
+                        # print("Failed checksum")
 
                 elif pkt[2] == 1:
                     full_packet = False
@@ -73,15 +97,31 @@ class ScannerDelegate(DefaultDelegate):
                         self.packetTwo = bytearray(pkt[0:15])
                     else:
                         self.char.write(str.encode(NAK))
-                        print("Failed checksum")
+                        # print("Failed checksum")
 
                 if(not full_packet and (self.packetOne[1] + 1 == self.packetTwo[1])):
                     relay_buffer.put(self.packetOne + self.packetTwo[3:15])
+
             elif(len(pkt) == packetOne_len and pkt[0] == 1):
-                print("detected")
+                print("IR detected")
                 correct_pkt = checksum(pkt)
                 self.SeqID = (self.SeqID + 1) & 0xFF
-                relay_buffer.put(pkt)
+                if(correct_pkt):
+                    self.char.write(str.encode(ACK))
+                    relay_buffer.put(pkt)
+                else:
+                    self.char.write(str.encode(NAK))
+
+            elif(len(pkt) == packetOne_len and pkt[0] == 2):
+                print("Shot detected")
+                correct_pkt = checksum(pkt)
+                self.SeqID = (self.SeqID + 1) & 0xFF
+                if(correct_pkt):
+                    self.char.write(str.encode(ACK))
+                    relay_buffer.put(pkt)
+                else:
+                    self.char.write(str.encode(NAK))
+
         # Received ACK from bluno beetle after SYN is sent
         elif data == str.encode(ACK):
             self.done_handshake = True
@@ -200,28 +240,18 @@ class Client(threading.Thread):
 
     def run(self):
         # put display code here
-        data = {
-            "player": "p1",
-            "sender": 0,
-            "sequence": 0,
-            "gx": 0,
-            "gy": 0,
-            "gz": 0,
-            "ax": 0,
-            "ay": 0,
-            "az": 0,
-        }
         while True:
             try:
                 pkt = relay_buffer.get()
+                print("IMU Data")
+
                 if(pkt[0] == 0):
-                    print("IMU Data")
-                    # print("Packet: " + str(pkt)) to see the packet
+                    data = GLOVE_FORMAT
                     print("Sender: " + str(pkt[0]))
-                    data["sender"] = str(pkt[0])
+                    data["sender"] = pkt[0]
 
                     print("Sequence ID: " + str(pkt[1]))
-                    data["sequence"] = str(pkt[1])
+                    data["sequence"] = pkt[1]
 
                     print("gx: %.3f" % struct.unpack(
                         "<f", pkt[3:7]))  # little endian
@@ -246,10 +276,35 @@ class Client(threading.Thread):
                     # send data to server
                     self.send_data(json.dumps(data))
 
-                elif(pkt[0] == 1 and str(pkt[3] == '100')):
-                    print("IR Hit Detected")
-                    #print("Sequence ID: " + str(pkt[1]))
-                    #print("Data received from Bluno Beetle: " + str(pkt[3]))
+                elif(pkt[0] == 1 and str(pkt[3]) == '6278'):
+                    # gun
+                    data = OTHER_FORMAT
+                    print("IR Hit Detection verified")
+                    print("Data: " + str(pkt[3]))
+
+                    print("Sender: " + str(pkt[0]))
+                    data["sender"] = pkt[0]
+
+                    print("Sequence ID: " + str(pkt[1]))
+                    data["sequence"] = pkt[1]
+
+                    print("Data: " + str(pkt[3]))
+                    data["sequence"] = pkt[3]
+
+                elif(pkt[0] == 2 and str(pkt[3]) == '188'):
+                    # vest
+                    data = OTHER_FORMAT
+                    print("Shot Detection verified")
+                    print("Data: " + str(pkt[3]))
+
+                    print("Sender: " + str(pkt[0]))
+                    data["sender"] = pkt[0]
+
+                    print("Sequence ID: " + str(pkt[1]))
+                    data["sequence"] = pkt[1]
+
+                    print("Data: " + str(pkt[3]))
+                    data["sequence"] = pkt[3]
 
             except KeyboardInterrupt:
                 self.end_client_connection()
