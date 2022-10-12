@@ -1,4 +1,4 @@
-# Processes:
+# Process:
 # - ml model, comm visualiser, comm eval, comm relay
 # To try:
 # debug mqtt connection error -> temp failure in name resolution (try to change broker to mosquitto, update in viz code too), broken pipe -> relay
@@ -6,6 +6,7 @@
 # shoot start timer for vest to receive data -> shoot needs to have time window for the vest data to come in (if timeout -> miss bullet)
 # pkt[0]: type of sender (0: imu sensor (glove)-> give ml, 1: ir receiver(vest), 2: shoot(gun))
 # need to send data to viz cause got test wo eval server (if action is invalid dont send to viz)
+# implement logout
 
 # Todo:
 # 2 player -> wait for both player action to come before send to eval/do anything (cant have player with "none" action)
@@ -13,7 +14,7 @@
 # continue action after the broken pipe nonetype error or the mqqt temp name resolution error too
 # try out hivemq
 # run the relay code on linux vm
-# implement logout
+
 
 from Crypto.Cipher import AES
 from paho.mqtt import client as mqtt_client
@@ -36,7 +37,7 @@ from pynq import Overlay
 from statistics import median, mean, variance
 from scipy.fftpack import fft
 
-SOM_THRESHOLD = 2  # threshold value for start of move
+SOM_THRESHOLD = 0.5  # threshold value for start of move
 
 mqtt_broker = "test.mosquitto.org"  # 'broker.emqx.io'  # Public broker
 mqtt_port = 1883
@@ -98,8 +99,6 @@ viz_recv_buffer = Queue()  # bool value for grenade hit
 
 # Connections
 has_terminated = False
-# Temporary
-# action_count = 0
 
 
 class MovePredictor(threading.Thread):
@@ -111,16 +110,20 @@ class MovePredictor(threading.Thread):
         self.dma_recv = self.overlay.axi_dma_0
 
         self.array_ax = []
+        self.array_ay = []
         self.array_az = []
         self.array_gx = []
         self.array_gy = []
         self.array_gz = []
-        self.array_ay = []
-        self.array_axayaz_gxgygz = []
+
         self.input_buffer = allocate(shape=(60,), dtype=np.float32)
         self.output_buffer = allocate(shape=(1,), dtype=np.int32)
 
     def is_start_of_move(self):
+        # print("start of move check entered")
+        # print("ax: ", np.max(self.array_ax))
+        # print("ay: ", np.max(self.array_ay))
+        # print("az: ", np.max(self.array_az))
         if (np.max(self.array_ax) + np.max(self.array_ay) + np.max(self.array_az) > SOM_THRESHOLD):
             return True
         return False
@@ -141,30 +144,32 @@ class MovePredictor(threading.Thread):
         return extracted
 
     def pred_action(self):
-        actions = ["grenade", "reload", "shield", "logout"]
-        self.array_axayaz_gxgygz = np.concatenate((
-            self.array_axayaz_gxgygz, self.extract_features(self.array_ax)))
-        self.array_axayaz_gxgygz = np.concatenate((
-            self.array_axayaz_gxgygz, self.extract_features(self.array_ay)))
-        self.array_axayaz_gxgygz = np.concatenate((
-            self.array_axayaz_gxgygz, self.extract_features(self.array_az)))
-        self.array_axayaz_gxgygz = np.concatenate((
-            self.array_axayaz_gxgygz, self.extract_features(self.array_gx)))
-        self.array_axayaz_gxgygz = np.concatenate((
-            self.array_axayaz_gxgygz, self.extract_features(self.array_gy)))
-        self.array_axayaz_gxgygz = np.concatenate((
-            self.array_axayaz_gxgygz, self.extract_features(self.array_gz)))
+        actions = ["grenade", "shield", "reload", "logout", "nomovement"]
+        array_axayaz_gxgygz = []
+        array_axayaz_gxgygz = np.concatenate((
+            array_axayaz_gxgygz, self.extract_features(self.array_ax)))
+        array_axayaz_gxgygz = np.concatenate((
+            array_axayaz_gxgygz, self.extract_features(self.array_ay)))
+        array_axayaz_gxgygz = np.concatenate((
+            array_axayaz_gxgygz, self.extract_features(self.array_az)))
+        array_axayaz_gxgygz = np.concatenate((
+            array_axayaz_gxgygz, self.extract_features(self.array_gx)))
+        array_axayaz_gxgygz = np.concatenate((
+            array_axayaz_gxgygz, self.extract_features(self.array_gy)))
+        array_axayaz_gxgygz = np.concatenate((
+            array_axayaz_gxgygz, self.extract_features(self.array_gz)))
 
         for i in range(60):
-            self.input_buffer[i] = float(self.array_axayaz_gxgygz[i])
+            self.input_buffer[i] = float(array_axayaz_gxgygz[i])
 
+        # print("Input buff: ", self.input_buffer[0], ", type: ", type(
+        #     self.input_buffer[0]))
         self.dma_send.sendchannel.transfer(self.input_buffer)
         self.dma_recv.recvchannel.transfer(self.output_buffer)
         self.dma_send.sendchannel.wait()
         self.dma_recv.recvchannel.wait()
 
         return actions[self.output_buffer[0]]
-        # return "shield"
 
     # Machine learning model
     def run(self):
@@ -174,7 +179,7 @@ class MovePredictor(threading.Thread):
             try:
                 if not move_data_buffer.empty():
                     data = move_data_buffer.get()
-                    print("[MovePredictor]Received data: ", data)
+                    # print("[MovePredictor]Received data: ", data)
                     unpacked_data = json.loads(data)
 
                     # Identify sender
@@ -189,11 +194,13 @@ class MovePredictor(threading.Thread):
                         print("[Move Pred] Len of arr: ", len(self.array_ax))
 
                         if (len(self.array_ax) == 40):
-                            if (self.is_start_of_move):
+                            if (self.is_start_of_move()):
                                 action = self.pred_action()
                                 print(
                                     "[MovePredictor]Generated action: ", action)
-                                move_res_buffer.put(action)
+
+                                if action != "nomovement":
+                                    move_res_buffer.put(action)
 
                             self.array_ax = self.array_ax[5:]
                             self.array_ay = self.array_ay[5:]
@@ -350,7 +357,7 @@ class Client(threading.Thread):
         packet_size = (str(len(encrypted_text)) + '_').encode("utf-8")
         self.conn.sendall(packet_size)
         self.conn.sendall(encrypted_text)
-        print("[Eval server] Sent encrypted data:", encrypted_text)
+        # print("[Eval server] Sent encrypted data:", encrypted_text)
 
     def receive_data(self):  # blocking call
         try:
@@ -649,7 +656,7 @@ if __name__ == '__main__':
 
                 if action != "grenade":
                     eval_buffer.put(state)
-                    print("[Game engine] Sent to eval:", state)
+                    # print("[Game engine] Sent to eval:", state)
 
                 state["sender"] = "u96"
                 viz_send_buffer.put(state)
@@ -658,7 +665,7 @@ if __name__ == '__main__':
             if not viz_recv_buffer.empty():
                 # Visualizer sends player that is hit by grenade
                 player_hit = viz_recv_buffer.get()
-                print("[Game engine] Received from visualiser:", player_hit)
+                # print("[Game engine] Received from visualiser:", player_hit)
                 state = read_state()
                 if player_hit != "none":
                     # minus health based on grenade hit
@@ -677,7 +684,7 @@ if __name__ == '__main__':
 
                 input_state(state)
                 eval_buffer.put(state)
-                print("[Game engine] Sent to curr state and eval:", state)
+                # print("[Game engine] Sent to curr state and eval:", state)
         except KeyboardInterrupt:
             print("[Game Engine] Keyboard interrupt")
             has_terminated = True

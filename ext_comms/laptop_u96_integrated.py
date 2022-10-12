@@ -24,6 +24,7 @@ SUNFIRE_USER = os.getenv('SUNFIRE_USER')
 SUNFIRE_PWD = os.getenv('SUNFIRE_PWD')
 SUNFIRE_HOST = 'stu.comp.nus.edu.sg'
 
+printed_data = []
 SYN = 'S'
 ACK = 'A'
 NAK = 'N'
@@ -35,6 +36,12 @@ counter = 0  # for timing purposes
 fragmentedCounter = 0
 droppedCounter = 0
 partialpacket = False
+firstData = False
+startTime = 0
+start = False
+dataCounter = 0
+cycle = False
+actual_cycle = False
 
 startTime = time.time()
 
@@ -72,13 +79,12 @@ class ScannerDelegate(DefaultDelegate):
         if self.done_handshake:
             full_packet = True
             pkt = bytearray(data)
+            timer()
 
             # print("Packet: " + str(pkt)) #to see the packet
 
             if(len(pkt) == packetOne_len and pkt[0] == 0):
-
                 # print("Packet: " + str(pkt)) #to see the packet
-
                 if pkt[2] == 0:
                     correct_pkt = checksum(pkt)
                     self.SeqID = (self.SeqID + 1) & 0xFF
@@ -87,7 +93,7 @@ class ScannerDelegate(DefaultDelegate):
                         self.packetOne = bytearray(pkt[0:15])
                     else:
                         self.char.write(str.encode(NAK))
-                        # print("Failed checksum")
+                        #print("Failed checksum")
 
                 elif pkt[2] == 1:
                     full_packet = False
@@ -97,7 +103,7 @@ class ScannerDelegate(DefaultDelegate):
                         self.packetTwo = bytearray(pkt[0:15])
                     else:
                         self.char.write(str.encode(NAK))
-                        # print("Failed checksum")
+                        #print("Failed checksum")
 
                 if(not full_packet and (self.packetOne[1] + 1 == self.packetTwo[1])):
                     relay_buffer.put(self.packetOne + self.packetTwo[3:15])
@@ -131,14 +137,13 @@ class ScannerDelegate(DefaultDelegate):
 
 
 def timer():
-    global startTime, counter, droppedCounter, fragmentedCounter
-    if(time.time()-startTime >= 10):
-        print("Data Rate for " + addr + " is: " + str(counter/10000) +
-              " KB/sec")  # /1000 for KB and /10 to average in 10s
+    global startTime, counter, droppedCounter, fragmentedCounter, start, dataCounter, firstData, cycle
+
+    if(time.time()-startTime >= 4):  # and firstData):
+        # print("Data Rate for " + addr + " is: " + str(counter/10000) + " KB/sec") #/1000 for KB and /10 to average in 10s
+        # print("*******")
+        cycle = True
         startTime = time.time()
-        counter = 0
-        droppedCounter = 0
-        fragmentedCounter = 0
 
 
 def handshake(bluno, char, addr):
@@ -185,7 +190,7 @@ def connection_thread(bluno, char, addr):
     global droppedCounter
     while True:
         try:
-            timer()
+            # timer()
             if bluno_handshake:
                 # establish connection, wait for 2s
                 if bluno.waitForNotifications(1.5):
@@ -240,12 +245,17 @@ class Client(threading.Thread):
 
     def run(self):
         # put display code here
+        global firstData, startTime, dataCounter, cycle, actual_cycle
+
         while True:
             try:
                 pkt = relay_buffer.get()
                 print("IMU Data")
 
                 if(pkt[0] == 0):
+                    if(actual_cycle):
+                        actual_cycle = False
+
                     data = GLOVE_FORMAT
                     print("Sender: " + str(pkt[0]))
                     data["sender"] = pkt[0]
@@ -272,6 +282,10 @@ class Client(threading.Thread):
 
                     print("az: %.3f" % struct.unpack("<f", pkt[23:27]))
                     data["az"] = struct.unpack("<f", pkt[23:27])
+
+                    if(cycle):
+                        cycle = False
+                        actual_cycle = True
 
                     # send data to server
                     self.send_data(json.dumps(data))
@@ -356,9 +370,9 @@ if __name__ == '__main__':
     conn_u96 = Client(local_port, remote_port, group_id)
     conn_u96.start()
 
-    # "d0:39:72:bf:bd:b6","d0:39:72:bf:c6:0d"
-    # C4 is the IMU, D0 is the IR #
-    addr_list = ["C4:BE:84:20:1C:05", "D0:39:72:BF:C6:0D"]
+    # ,"D0:39:72:BF:C6:0D","D0:39:72:BF:C1:A6"]#1C:05 is IMU, C6:0D is vest, C1:A6 IS gun
+    addr_list = ["C4:BE:84:20:1C:05"]
+
     bluno_list = []
     char_list = []
 
