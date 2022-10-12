@@ -425,6 +425,7 @@ class Server(threading.Thread):
         self.group_id = group_id
         self.conn = None
         self.daemon = True
+        self.setup_connection()
 
     def setup_connection(self):
         global has_terminated
@@ -574,7 +575,6 @@ def execute_action(player, action):
             # Start timer to vest data to come
             has_incoming_shoot[other_player].put(threading.Timer(
                 2, failed_shot, other_player))  # 2s response for vest response
-
     elif action == "shield":
         if not shield_start[player] and state[player]["num_shield"]:
             state[player]["shield_time"] = SHIELD_TIME
@@ -632,18 +632,18 @@ if __name__ == '__main__':
     recv_client.subscribe()
     recv_client.client.loop_start()
 
+    # Publish messages
+    pub_thread = threading.Thread(target=pub_client.publish, daemon=True)
+    pub_thread.start()
+
     # Connection to relay
     conn_relay = Server(local_port, group_id)
-    conn_relay.setup_connection()
+    # conn_relay.setup_connection()
     conn_relay.start()
 
     # Connection to eval_server
     conn_eval = Client(eval_ip, eval_port, group_id, secret_key)
     conn_eval.start()
-
-    # Publish messages
-    pub_thread = threading.Thread(target=pub_client.publish, daemon=True)
-    pub_thread.start()
 
     # ML stuff
     model_pred = MovePredictor()

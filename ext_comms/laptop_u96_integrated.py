@@ -322,7 +322,7 @@ class Client(threading.Thread):
                     print("Data: " + str(pkt[3]))
                     data["sequence"] = pkt[3]
 
-            except (KeyboardInterrupt, ConnectionResetError):
+            except (KeyboardInterrupt, ConnectionResetError, BrokenPipeError):
                 print("Program stopped")
                 has_closed = True
                 self.end_client_connection()
@@ -353,7 +353,8 @@ class Client(threading.Thread):
             tunnel_xilinx.start()
             print(tunnel_xilinx.tunnel_is_up, flush=True)
             return tunnel_xilinx.local_bind_address
-        except ConnectionResetError:
+        except Exception as e:
+            print(e)
             print("Reconnecting to tunnel")
             self.create_tunnel()
 
