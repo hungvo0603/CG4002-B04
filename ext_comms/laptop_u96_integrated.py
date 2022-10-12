@@ -15,6 +15,7 @@ import struct
 from tracemalloc import start
 
 relay_buffer = Queue()
+has_closed = False
 
 # Load environment variables
 dotenv.load_dotenv()
@@ -187,8 +188,8 @@ def connection(addr):
 
 def connection_thread(bluno, char, addr):
     bluno_handshake = False
-    global droppedCounter
-    while True:
+    global droppedCounter, has_closed
+    while not has_closed:
         try:
             # timer()
             if bluno_handshake:
@@ -205,7 +206,8 @@ def connection_thread(bluno, char, addr):
             else:
                 bluno_handshake = handshake(bluno, char, addr)
 
-        except KeyboardInterrupt:
+        except (KeyboardInterrupt, BrokenPipeError):
+            has_closed = True
             bluno.disconnect()
             break
         except BTLEDisconnectError:
@@ -245,9 +247,9 @@ class Client(threading.Thread):
 
     def run(self):
         # put display code here
-        global firstData, startTime, dataCounter, cycle, actual_cycle
+        global firstData, startTime, dataCounter, cycle, actual_cycle, has_closed
 
-        while True:
+        while not has_closed:
             try:
                 pkt = relay_buffer.get()
                 print("IMU Data")
@@ -320,33 +322,40 @@ class Client(threading.Thread):
                     print("Data: " + str(pkt[3]))
                     data["sequence"] = pkt[3]
 
-            except KeyboardInterrupt:
+            except (KeyboardInterrupt, ConnectionResetError):
+                print("Program stopped")
+                has_closed = True
                 self.end_client_connection()
                 break
 
     def create_tunnel(self):
-        # u96 to sunfire
-        tunnel_sunfire = sshtunnel.open_tunnel(
-            ssh_address_or_host=(SUNFIRE_HOST, 22),  # gateway
-            remote_bind_address=(XILINX_HOST, 22),
-            ssh_username=SUNFIRE_USER,
-            ssh_password=SUNFIRE_PWD
-        )
-        tunnel_sunfire.start()
-        print(tunnel_sunfire.tunnel_is_up, flush=True)
+        try:
+            # u96 to sunfire
+            tunnel_sunfire = sshtunnel.open_tunnel(
+                ssh_address_or_host=(SUNFIRE_HOST, 22),  # gateway
+                remote_bind_address=(XILINX_HOST, 22),
+                ssh_username=SUNFIRE_USER,
+                ssh_password=SUNFIRE_PWD
+            )
+            tunnel_sunfire.start()
+            print(tunnel_sunfire.tunnel_is_up, flush=True)
 
-        # relay to u96 (this part is sort of like creating another tunnel on curr machine to pass through the xilinx pwd)
-        tunnel_xilinx = sshtunnel.open_tunnel(
-            ssh_address_or_host=('localhost', tunnel_sunfire.local_bind_port),
-            # changed from remote
-            remote_bind_address=('localhost', self.remote_port),
-            ssh_username="xilinx",
-            ssh_password=XILINX_PWD,
-            local_bind_address=('localhost', self.local_port)
-        )
-        tunnel_xilinx.start()
-        print(tunnel_xilinx.tunnel_is_up, flush=True)
-        return tunnel_xilinx.local_bind_address
+            # relay to u96 (this part is sort of like creating another tunnel on curr machine to pass through the xilinx pwd)
+            tunnel_xilinx = sshtunnel.open_tunnel(
+                ssh_address_or_host=(
+                    'localhost', tunnel_sunfire.local_bind_port),
+                # changed from remote
+                remote_bind_address=('localhost', self.remote_port),
+                ssh_username="xilinx",
+                ssh_password=XILINX_PWD,
+                local_bind_address=('localhost', self.local_port)
+            )
+            tunnel_xilinx.start()
+            print(tunnel_xilinx.tunnel_is_up, flush=True)
+            return tunnel_xilinx.local_bind_address
+        except ConnectionResetError:
+            print("Reconnecting to tunnel")
+            self.create_tunnel()
 
     def end_client_connection(self):
         self.conn.close()

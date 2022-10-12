@@ -13,9 +13,9 @@
 # 2 player: can either have shield first then damage or vice versa
 # continue action after the broken pipe nonetype error or the mqqt temp name resolution error too
 # try out hivemq
-# run the relay code on linux vm
 
 
+from tkinter import E
 from Crypto.Cipher import AES
 from paho.mqtt import client as mqtt_client
 from Crypto.Util.Padding import pad
@@ -37,7 +37,7 @@ from pynq import Overlay
 from statistics import median, mean, variance
 from scipy.fftpack import fft
 
-SOM_THRESHOLD = 0.5  # threshold value for start of move
+SOM_THRESHOLD = 0.8  # threshold value for start of move
 
 mqtt_broker = "test.mosquitto.org"  # 'broker.emqx.io'  # Public broker
 mqtt_port = 1883
@@ -70,24 +70,24 @@ GUN = 2
 SHOT_FIRED = 188
 SHOT_HIT = 6278
 
-state_lock = threading.Lock()
+# state_lock = threading.Lock()
 curr_state = INITIAL_STATE
 shield_start = {"p1": None, "p2": None}  # both player has no shield
 has_incoming_shoot = {"p1": Queue(), "p2": Queue()}
 
 
 def read_state():
-    state_lock.acquire()
+    # state_lock.acquire()
     data = curr_state
-    state_lock.release()
+    # state_lock.release()
     return data
 
 
 def input_state(data):
     global curr_state
-    state_lock.acquire()
+    # state_lock.acquire()
     curr_state = data
-    state_lock.release()
+    # state_lock.release()
 
 
 # Data buffer
@@ -120,10 +120,6 @@ class MovePredictor(threading.Thread):
         self.output_buffer = allocate(shape=(1,), dtype=np.int32)
 
     def is_start_of_move(self):
-        # print("start of move check entered")
-        # print("ax: ", np.max(self.array_ax))
-        # print("ay: ", np.max(self.array_ay))
-        # print("az: ", np.max(self.array_az))
         if (np.max(self.array_ax) + np.max(self.array_ay) + np.max(self.array_az) > SOM_THRESHOLD):
             return True
         return False
@@ -164,10 +160,12 @@ class MovePredictor(threading.Thread):
 
         # print("Input buff: ", self.input_buffer[0], ", type: ", type(
         #     self.input_buffer[0]))
+        print("Entering dma")
         self.dma_send.sendchannel.transfer(self.input_buffer)
         self.dma_recv.recvchannel.transfer(self.output_buffer)
         self.dma_send.sendchannel.wait()
         self.dma_recv.recvchannel.wait()
+        print("Exit dma")
 
         return actions[self.output_buffer[0]]
 
@@ -194,6 +192,7 @@ class MovePredictor(threading.Thread):
                         print("[Move Pred] Len of arr: ", len(self.array_ax))
 
                         if (len(self.array_ax) == 40):
+                            has_start = False
                             if (self.is_start_of_move()):
                                 action = self.pred_action()
                                 print(
@@ -201,13 +200,23 @@ class MovePredictor(threading.Thread):
 
                                 if action != "nomovement":
                                     move_res_buffer.put(action)
+                                    time.sleep(1)  # 1s sleep
+                                    has_start = True
 
-                            self.array_ax = self.array_ax[5:]
-                            self.array_ay = self.array_ay[5:]
-                            self.array_az = self.array_az[5:]
-                            self.array_gx = self.array_gx[5:]
-                            self.array_gy = self.array_gy[5:]
-                            self.array_gz = self.array_gz[5:]
+                            if has_start:
+                                self.array_ax = []
+                                self.array_ay = []
+                                self.array_az = []
+                                self.array_gx = []
+                                self.array_gy = []
+                                self.array_gz = []
+                            else:
+                                self.array_ax = self.array_ax[5:]
+                                self.array_ay = self.array_ay[5:]
+                                self.array_az = self.array_az[5:]
+                                self.array_gx = self.array_gx[5:]
+                                self.array_gy = self.array_gy[5:]
+                                self.array_gz = self.array_gz[5:]
 
                     elif unpacked_data["sender"] == GUN and unpacked_data["data"] == SHOT_FIRED:
                         action = "shoot"
@@ -249,7 +258,7 @@ class Mqtt(threading.Thread):
         try:
             client.connect(mqtt_broker, mqtt_port)
             print("[Mqtt] Connection established to ", self.topic)
-        except:
+        except socket.gaierror:
             print("[Mqtt] Retry connection of ", self.topic)
             client.connect(mqtt_broker, mqtt_port)
 
@@ -269,7 +278,7 @@ class Mqtt(threading.Thread):
                     else:
                         print("[Mqtt Pub]Failed to send message: ", message)
 
-            except KeyboardInterrupt:
+            except (KeyboardInterrupt, socket.gaierror, ConnectionError):
                 print("[Mqtt Pub]Keyboard Interrupt, terminating")
                 has_terminated = True
                 break
@@ -427,7 +436,7 @@ class Server(threading.Thread):
             self.conn, client_address = self.socket.accept()
             print('[Relay]Connection from', client_address)
             return client_address
-        except KeyboardInterrupt:
+        except (KeyboardInterrupt, ConnectionResetError):
             print("[Relay] Keyboard interrupt, terminating")
             has_terminated = True
 
@@ -460,9 +469,9 @@ class Server(threading.Thread):
                 self.client.end_client_connection()
             message = data.decode("utf8")  # Decode raw bytes to UTF-8
 
-            print("[Relay] Received message:", message)
+            # print("[Relay] Received message:", message)
 
-        except ConnectionResetError:
+        except (KeyboardInterrupt, ConnectionResetError):
             print('[Relay]Connection Reset')
             self.client.end_client_connection()
         return message
@@ -475,7 +484,7 @@ class Server(threading.Thread):
                 message = self.receive_data()
                 move_data_buffer.put(message)
 
-            except KeyboardInterrupt:
+            except (KeyboardInterrupt, ConnectionResetError):
                 print("[Relay] Keyboard interrupt, terminating")
                 has_terminated = True
                 break
@@ -615,6 +624,14 @@ if __name__ == '__main__':
     eval_ip = sys.argv[4]
     secret_key = sys.argv[5]
 
+    # Connection to visualizer
+    recv_client = Mqtt("cg4002/4/u96_viz20", str(uuid.uuid4()))
+    pub_client = Mqtt("cg4002/4/viz_u9620", str(uuid.uuid4()))
+
+    # Receive messages
+    recv_client.subscribe()
+    recv_client.client.loop_start()
+
     # Connection to relay
     conn_relay = Server(local_port, group_id)
     conn_relay.setup_connection()
@@ -623,14 +640,6 @@ if __name__ == '__main__':
     # Connection to eval_server
     conn_eval = Client(eval_ip, eval_port, group_id, secret_key)
     conn_eval.start()
-
-    # Connection to visualizer
-    recv_client = Mqtt("cg4002/4/u96_viz20", str(uuid.uuid4()))
-    pub_client = Mqtt("cg4002/4/viz_u9620", str(uuid.uuid4()))
-
-    # Receive messages
-    recv_client.subscribe()
-    recv_client.client.loop_start()
 
     # Publish messages
     pub_thread = threading.Thread(target=pub_client.publish, daemon=True)
