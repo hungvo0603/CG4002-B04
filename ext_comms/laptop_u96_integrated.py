@@ -1,10 +1,11 @@
 # Todo: try out with beetle (broken pipe)
 # sync the packet's format send from internal comms
+from asyncio.windows_events import NULL
+from email import message
 from bluepy.btle import Peripheral, DefaultDelegate, BTLEDisconnectError
-import json
+import numpy as np
 import struct
 import threading
-import time
 import sys
 import socket
 import os
@@ -13,6 +14,8 @@ import sshtunnel
 from queue import Queue
 import struct
 from tracemalloc import start
+from statistics import median, mean, variance
+from scipy.fftpack import fft
 
 relay_buffer = Queue()
 has_closed = False
@@ -25,13 +28,20 @@ SUNFIRE_USER = os.getenv('SUNFIRE_USER')
 SUNFIRE_PWD = os.getenv('SUNFIRE_PWD')
 SUNFIRE_HOST = 'stu.comp.nus.edu.sg'
 
-printed_data = []
 SYN = 'S'
 ACK = 'A'
 NAK = 'N'
 
+GLOVE = "0"
+VEST = "1"
+GUN = "2"
+SHOT_FIRED = "188"
+SHOT_HIT = "161"
+SOM_THRESHOLD = 2  # threshold value for start of move
+
 # Need to send ACK and SYN as 20 byte packets as well
 packetOne_len = 20
+
 
 counter = 0  # for timing purposes
 fragmentedCounter = 0
@@ -43,27 +53,6 @@ start = False
 dataCounter = 0
 cycle = False
 actual_cycle = False
-
-startTime = time.time()
-
-GLOVE_FORMAT = {
-    "player": "p1",
-    "sender": 0,
-    "sequence": 0,
-    "gx": 0,
-    "gy": 0,
-    "gz": 0,
-    "ax": 0,
-    "ay": 0,
-    "az": 0,
-}
-
-OTHER_FORMAT = {
-    "player": "p1",
-    "sender": 0,
-    "sequence": 0,
-    "data": 0,
-}
 
 
 class ScannerDelegate(DefaultDelegate):
@@ -80,9 +69,7 @@ class ScannerDelegate(DefaultDelegate):
         if self.done_handshake:
             full_packet = True
             pkt = bytearray(data)
-            timer()
-
-            # print("Packet: " + str(pkt)) #to see the packet
+            # print("Packet: " + str(pkt))  # to see the packet
 
             if(len(pkt) == packetOne_len and pkt[0] == 0):
                 # print("Packet: " + str(pkt)) #to see the packet
@@ -92,6 +79,7 @@ class ScannerDelegate(DefaultDelegate):
 
                     if(correct_pkt):
                         self.packetOne = bytearray(pkt[0:15])
+                        self.char.write(str.encode(ACK))
                     else:
                         self.char.write(str.encode(NAK))
                         #print("Failed checksum")
@@ -102,6 +90,7 @@ class ScannerDelegate(DefaultDelegate):
                     self.SeqID = (self.SeqID + 1) & 0xFF
                     if(correct_pkt):
                         self.packetTwo = bytearray(pkt[0:15])
+                        self.char.write(str.encode(ACK))
                     else:
                         self.char.write(str.encode(NAK))
                         #print("Failed checksum")
@@ -115,6 +104,7 @@ class ScannerDelegate(DefaultDelegate):
                 self.SeqID = (self.SeqID + 1) & 0xFF
                 if(correct_pkt):
                     self.char.write(str.encode(ACK))
+                    print("Vest correct")
                     relay_buffer.put(pkt)
                 else:
                     self.char.write(str.encode(NAK))
@@ -125,6 +115,7 @@ class ScannerDelegate(DefaultDelegate):
                 self.SeqID = (self.SeqID + 1) & 0xFF
                 if(correct_pkt):
                     self.char.write(str.encode(ACK))
+                    print("Gun correct")
                     relay_buffer.put(pkt)
                 else:
                     self.char.write(str.encode(NAK))
@@ -135,16 +126,6 @@ class ScannerDelegate(DefaultDelegate):
             self.char.write(str.encode(ACK))
         else:
             self.char.write(str.encode(SYN))
-
-
-def timer():
-    global startTime, counter, droppedCounter, fragmentedCounter, start, dataCounter, firstData, cycle
-
-    if(time.time()-startTime >= 4):  # and firstData):
-        # print("Data Rate for " + addr + " is: " + str(counter/10000) + " KB/sec") #/1000 for KB and /10 to average in 10s
-        # print("*******")
-        cycle = True
-        startTime = time.time()
 
 
 def handshake(bluno, char, addr):
@@ -188,13 +169,13 @@ def connection(addr):
 
 def connection_thread(bluno, char, addr):
     bluno_handshake = False
-    global droppedCounter, has_closed
+    global has_closed
     while not has_closed:
         try:
             # timer()
             if bluno_handshake:
                 # establish connection, wait for 2s
-                if bluno.waitForNotifications(1.5):
+                if bluno.waitForNotifications(2.0):
                     pass
                 else:
                     # bluno.disconnect()
@@ -245,87 +226,100 @@ class Client(threading.Thread):
         self.conn.connect(self.tunnel_dest)
         self.daemon = True
 
-    def run(self):
-        # put display code here
-        global firstData, startTime, dataCounter, cycle, actual_cycle, has_closed
+        self.array_ax = []
+        self.array_ay = []
+        self.array_az = []
+        self.array_gx = []
+        self.array_gy = []
+        self.array_gz = []
 
+    def is_start_of_move(self):
+        # might need to change
+        return np.max(self.array_ax) + np.max(self.array_ay) + np.max(self.array_az) > SOM_THRESHOLD
+
+    def extract_features(self, raw_data):
+        extracted = []
+        extracted = np.append(extracted, (np.min(raw_data)))
+        extracted = np.append(extracted, (np.max(raw_data)))
+        extracted = np.append(extracted, (mean(raw_data)))
+        extracted = np.append(extracted, (median(raw_data)))
+        extracted = np.append(extracted, (variance(raw_data)))
+        raw_data = fft(raw_data)
+        extracted = np.append(extracted, np.min(abs(raw_data)))
+        extracted = np.append(extracted, np.max(abs(raw_data)))
+        extracted = np.append(extracted, mean(abs(raw_data)))
+        extracted = np.append(extracted, median(abs(raw_data)))
+        extracted = np.append(extracted, variance(abs(raw_data)))
+        return extracted
+
+    def preprocess(self, pkt):
+        self.array_ax.append(struct.unpack("<f", pkt[15:19])[0])
+        self.array_ay.append(struct.unpack("<f", pkt[19:23])[0])
+        self.array_az.append(struct.unpack("<f", pkt[23:27])[0])
+        self.array_gx.append(struct.unpack("<f", pkt[3:7])[0])
+        self.array_gy.append(struct.unpack("<f", pkt[7:11])[0])
+        self.array_gz.append(struct.unpack("<f", pkt[11:15])[0])
+
+        if (len(self.array_ax) >= 40):
+            has_start = False
+            if (self.is_start_of_move()):
+                array_axayaz_gxgygz = []
+                array_axayaz_gxgygz = np.concatenate((
+                    array_axayaz_gxgygz, self.extract_features(self.array_ax)))
+                array_axayaz_gxgygz = np.concatenate((
+                    array_axayaz_gxgygz, self.extract_features(self.array_ay)))
+                array_axayaz_gxgygz = np.concatenate((
+                    array_axayaz_gxgygz, self.extract_features(self.array_az)))
+                array_axayaz_gxgygz = np.concatenate((
+                    array_axayaz_gxgygz, self.extract_features(self.array_gx)))
+                array_axayaz_gxgygz = np.concatenate((
+                    array_axayaz_gxgygz, self.extract_features(self.array_gy)))
+                array_axayaz_gxgygz = np.concatenate((
+                    array_axayaz_gxgygz, self.extract_features(self.array_gz)))
+                has_start = True
+
+            if has_start:
+                self.array_ax = []
+                self.array_ay = []
+                self.array_az = []
+                self.array_gx = []
+                self.array_gy = []
+                self.array_gz = []
+
+                return array_axayaz_gxgygz.tobytes()
+
+            self.array_ax = self.array_ax[5:]
+            self.array_ay = self.array_ay[5:]
+            self.array_az = self.array_az[5:]
+            self.array_gx = self.array_gx[5:]
+            self.array_gy = self.array_gy[5:]
+            self.array_gz = self.array_gz[5:]
+
+        return None
+
+    def run(self):
+        global has_closed
         while not has_closed:
             try:
                 pkt = relay_buffer.get()
-                print("IMU Data")
 
                 if(pkt[0] == 0):
-                    if(actual_cycle):
-                        actual_cycle = False
+                    message = self.preprocess(pkt)
+                    if message is not None:
+                        for i in range(0, 10):
+                            # send data in chunks of 6 -> 6*10 = 60
+                            self.send_data(pkt[0] + message[i*6:(i+1)*6])
 
-                    data = GLOVE_FORMAT
-                    print("Sender: " + str(pkt[0]))
-                    data["sender"] = pkt[0]
-
-                    print("Sequence ID: " + str(pkt[1]))
-                    data["sequence"] = pkt[1]
-
-                    print("gx: %.3f" % struct.unpack(
-                        "<f", pkt[3:7]))  # little endian
-                    data["gx"] = struct.unpack("<f", pkt[3:7])
-
-                    print("gy: %.3f" % struct.unpack("<f", pkt[7:11]))
-                    data["gy"] = struct.unpack("<f", pkt[7:11])
-
-                    print("gz: %.3f" % struct.unpack(
-                        "<f", pkt[11:15]))  # little endian
-                    data["gz"] = struct.unpack("<f", pkt[11:15])
-
-                    print("ax: %.3f" % struct.unpack("<f", pkt[15:19]))
-                    data["ax"] = struct.unpack("<f", pkt[15:19])
-
-                    print("ay: %.3f" % struct.unpack("<f", pkt[19:23]))
-                    data["ay"] = struct.unpack("<f", pkt[19:23])
-
-                    print("az: %.3f" % struct.unpack("<f", pkt[23:27]))
-                    data["az"] = struct.unpack("<f", pkt[23:27])
-
-                    if(cycle):
-                        cycle = False
-                        actual_cycle = True
-
-                    # send data to server
-                    self.send_data(json.dumps(data))
-
-                elif(pkt[0] == 1 and str(pkt[3]) == '6278'):
-                    # gun
-                    data = OTHER_FORMAT
-                    print("IR Hit Detection verified")
-                    print("Data: " + str(pkt[3]))
-
-                    print("Sender: " + str(pkt[0]))
-                    data["sender"] = pkt[0]
-
-                    print("Sequence ID: " + str(pkt[1]))
-                    data["sequence"] = pkt[1]
-
-                    print("Data: " + str(pkt[3]))
-                    data["sequence"] = pkt[3]
-
-                elif(pkt[0] == 2 and str(pkt[3]) == '188'):
-                    # vest
-                    data = OTHER_FORMAT
-                    print("Shot Detection verified")
-                    print("Data: " + str(pkt[3]))
-
-                    print("Sender: " + str(pkt[0]))
-                    data["sender"] = pkt[0]
-
-                    print("Sequence ID: " + str(pkt[1]))
-                    data["sequence"] = pkt[1]
-
-                    print("Data: " + str(pkt[3]))
-                    data["sequence"] = pkt[3]
+                elif(pkt[0] == 1 and str(pkt[3]) == '161') or (pkt[0] == 2 and str(pkt[3]) == '188'):
+                    message = pkt + bytearray(4)
+                    self.send_data(message)
+                else:
+                    print("Unknown packet: ", pkt)
 
             except (KeyboardInterrupt, ConnectionResetError, BrokenPipeError):
                 print("Program stopped")
                 has_closed = True
-                self.end_client_connection()
+                self.conn.close()
                 break
 
     def create_tunnel(self):
@@ -354,18 +348,13 @@ class Client(threading.Thread):
             print(tunnel_xilinx.tunnel_is_up, flush=True)
             return tunnel_xilinx.local_bind_address
         except Exception as e:
-            print(e)
             print("Reconnecting to tunnel")
-            self.create_tunnel()
-
-    def end_client_connection(self):
-        self.conn.close()
+            return self.create_tunnel()
 
     def send_data(self, message):
-        # _ is used as delimiter between len and content
-        packet_size = (str(len(message)) + '_').encode("utf-8")
-        self.conn.sendall(packet_size)
-        self.conn.sendall(bytes(str(message), encoding="utf8"))
+        self.conn.sendall(bytes(message))
+        print("Packet: ", message)
+        print("Len Packet: ", len(message))
 
 
 if __name__ == '__main__':
@@ -381,7 +370,8 @@ if __name__ == '__main__':
     conn_u96.start()
 
     # ,"D0:39:72:BF:C6:0D","D0:39:72:BF:C1:A6"]#1C:05 is IMU, C6:0D is vest, C1:A6 IS gun
-    addr_list = ["C4:BE:84:20:1C:05"]
+    # "C4:BE:84:20:1C:05" #1C:05 is IMU, BF:ED is vest, C1:BF is gun
+    addr_list = ["C4:BE:84:20:1C:05", "D0:39:72:BF:C1:A6", "D0:39:72:BF:C1:BF"]
 
     bluno_list = []
     char_list = []
