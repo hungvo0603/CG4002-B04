@@ -15,7 +15,6 @@
 # try out hivemq
 
 
-from tkinter import E
 from Crypto.Cipher import AES
 from paho.mqtt import client as mqtt_client
 from Crypto.Util.Padding import pad
@@ -68,7 +67,7 @@ GLOVE = 0
 VEST = 1
 GUN = 2
 SHOT_FIRED = 188
-SHOT_HIT = 6278
+SHOT_HIT = 161
 
 # state_lock = threading.Lock()
 curr_state = INITIAL_STATE
@@ -240,29 +239,28 @@ class MovePredictor(threading.Thread):
 
 class Mqtt(threading.Thread):
     # Connection to visualiser
-    def __init__(self, topic, client_id):
+    def __init__(self, topic):
         super().__init__()
         self.topic = topic
-        self.client_id = client_id
-        self.client = self.connect_mqtt()
+        # self.client_id = client_id
+        self.client = None
         self.daemon = True
+        self.connect_mqtt()
 
     def connect_mqtt(self):
         def on_connect(client, broker, port, rc):
             if rc != 0:
                 print("Failed to connect, return code: ", rc)
 
-        client = mqtt_client.Client(self.client_id, clean_session=True)
-
-        client.on_connect = on_connect
         try:
-            client.connect(mqtt_broker, mqtt_port)
+            client_temp = mqtt_client.Client(clean_session=True)
+            client_temp.on_connect = on_connect
+            client_temp.connect(mqtt_broker, mqtt_port)
             print("[Mqtt] Connection established to ", self.topic)
-        except socket.gaierror:
-            print("[Mqtt] Retry connection of ", self.topic)
-            client.connect(mqtt_broker, mqtt_port)
-
-        return client
+            self.client = client_temp
+        except:
+            # print("[Mqtt] Retry connection of ", self.topic)
+            self.connect_mqtt()
 
     def publish(self):
         global has_terminated
@@ -271,12 +269,20 @@ class Mqtt(threading.Thread):
                 if not viz_send_buffer.empty():
                     state = viz_send_buffer.get()
                     message = json.dumps(state)
-                    result = self.client.publish(self.topic, message)
-                    status = result[0]
-                    if status == 0:
-                        print("[Mqtt Pub]Published data: ", message)
-                    else:
-                        print("[Mqtt Pub]Failed to send message: ", message)
+                    status = 1
+                    while status:
+                        result = self.client.publish(self.topic, message)
+                        status = result[0]
+                        if status:
+                            print("[Mqtt Pub]Failed to send message, retrying")
+                    # print("[Mqtt Pub]Published data: ", message)
+
+                    # result = self.client.publish(self.topic, message)
+                    # status = result[0]
+                    # if status:
+                    #     print("[Mqtt Pub]Failed to send message, retrying")
+                    # else:
+                    #     print("[Mqtt Pub]Published data: ", message)
 
             except (KeyboardInterrupt, socket.gaierror, ConnectionError):
                 print("[Mqtt Pub]Keyboard Interrupt, terminating")
@@ -625,8 +631,8 @@ if __name__ == '__main__':
     secret_key = sys.argv[5]
 
     # Connection to visualizer
-    recv_client = Mqtt("cg4002/4/u96_viz20", str(uuid.uuid4()))
-    pub_client = Mqtt("cg4002/4/viz_u9620", str(uuid.uuid4()))
+    recv_client = Mqtt("cg4002/4/u96_viz20")
+    pub_client = Mqtt("cg4002/4/viz_u9620")
 
     # Receive messages
     recv_client.subscribe()
