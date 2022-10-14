@@ -1,5 +1,0 @@
-pycryptodome
-pybase64
-sockets
-sshtunnel
-python-dotenv

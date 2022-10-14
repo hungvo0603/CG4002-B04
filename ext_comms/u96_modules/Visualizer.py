@@ -1,5 +1,6 @@
 import multiprocessing
 from paho.mqtt import client as mqtt_client
+import json
 import socket
 import threading
 import multiprocessing
@@ -12,24 +13,26 @@ MQTT_SUB = "cg4002/4/u96_viz20"
 
 
 class Visualizer(multiprocessing.Process):
-    def __init__(self, viz_eval):
-        self.pub = Mqtt(MQTT_PUB)
-        self.sub = Mqtt(MQTT_SUB)
+    def __init__(self, viz_eval, has_terminated):
+        self.pub = Mqtt(MQTT_PUB, viz_eval, has_terminated)
+        self.sub = Mqtt(MQTT_SUB, viz_eval, has_terminated)
         self.viz_eval = viz_eval
-        self.has_terminated = False
+        self.has_terminated = has_terminated
 
     def publish(self):
-        while not self.has_terminated:
-            if self.viz_eval.pool():
+        while not self.has_terminated.value:
+            if self.viz_eval.poll():
                 state = self.viz_eval.recv()
-                self.pub.publish(state)
+                # print("Visualizer state bef pub: ", state)
+                self.pub.publish(json.dumps(state))
 
     def subscribe(self):
         self.sub.subscribe()
 
     def terminate(self):
-        self.has_terminated = True
-        self.client.loop_stop()
+        self.has_terminated.value = True
+        self.sub.terminate()
+        # self.pub.terminate()
 
     def start(self):
         pub_thread = threading.Thread(target=self.publish)
@@ -38,26 +41,28 @@ class Visualizer(multiprocessing.Process):
         pub_thread.start()
         pub_thread.join()
 
+        self.terminate()
+
 
 class Mqtt():
     # Connection to visualiser
-    def __init__(self, topic, viz_eval):
+    def __init__(self, topic, viz_eval, has_terminated):
         super().__init__()
         self.topic = topic
         self.daemon = True
         self.conn = None
         self.viz_eval = viz_eval
-        self.has_terminated = False
+        self.has_terminated = has_terminated
         self.connect_mqtt()
 
-    def on_connect(client, broker, port, rc):
-        if rc != 0:
-            print("Failed to connect, return code: ", rc)
-
     def connect_mqtt(self):
+        def on_connect(client, broker, port, rc):
+            if rc != 0:
+                print("Failed to connect, return code: ", rc)
+
         try:
             self.conn = mqtt_client.Client(clean_session=True)
-            self.conn.on_connect = self.on_connect
+            self.conn.on_connect = on_connect
             self.conn.connect(mqtt_broker, mqtt_port)
             print("[Mqtt] Connection established to ", self.topic)
         except:
@@ -67,13 +72,13 @@ class Mqtt():
         try:
             status = 1
             while status:
-                result = self.client.publish(self.topic, state)
+                result = self.conn.publish(self.topic, state)
                 status = result[0]
                 if status:
                     print("[Mqtt Pub]Failed to send message, retrying")
         except (KeyboardInterrupt, socket.gaierror, ConnectionError):
             print("[Mqtt Pub]Keyboard Interrupt, terminating")
-            self.has_terminated = True
+            self.has_terminated.value = True
 
     def parse_player(player):
         if player == "p1":

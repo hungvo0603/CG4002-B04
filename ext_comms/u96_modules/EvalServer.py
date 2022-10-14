@@ -4,7 +4,7 @@ import socket
 from _socket import SHUT_RDWR
 import time
 
-import GameState
+from GameState import GameState
 
 P1 = 0
 P2 = 1
@@ -12,7 +12,7 @@ P2 = 1
 
 class EvalServer(multiprocessing.Process):
     # Client to eval_server
-    def __init__(self, ip_addr, port_num, group_id, secret_key, eval_pred, eval_relay, eval_viz):
+    def __init__(self, ip_addr, port_num, group_id, secret_key, eval_pred, eval_relay, eval_viz, has_terminated):
         super().__init__()  # init parent (Thread)
         self.conn = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.server_address = (ip_addr, port_num)
@@ -22,12 +22,14 @@ class EvalServer(multiprocessing.Process):
         self.has_action = [False, True]
         self.has_incoming_bullet = [False, False]
         self.gamestate = GameState(main=self)  # static
-        self.has_terminated = False
+        self.has_terminated = has_terminated
         self.daemon = True
+        self.cd_shield = False
 
         self.eval_pred = eval_pred
         self.eval_relay = eval_relay
         self.eval_viz = eval_viz
+        # self.gamestate.init_players()
 
     def run(self):
         self.conn.connect(self.server_address)
@@ -40,7 +42,7 @@ class EvalServer(multiprocessing.Process):
         self.receive_data()
 
     def receive_data(self):  # blocking call
-        while not self.has_terminated:
+        while not self.has_terminated.value:
             try:
                 success = self.gamestate.recv_and_update(self.conn)
                 if self.gamestate.player_1.get_dict()['action'] == 'logout' and self.gamestate.player_2.get_dict()['action'] == 'logout':
@@ -63,7 +65,7 @@ class EvalServer(multiprocessing.Process):
 
     def logout(self):
         try:
-            self.has_terminated = True
+            self.has_terminated.value = True
             self.conn.shutdown(SHUT_RDWR)
             self.conn.close()
         except OSError:
@@ -77,8 +79,8 @@ class EvalServer(multiprocessing.Process):
         print("[Game engine] Shot to ", player, " has missed")
 
     def process_msg(self):
-        while not self.is_logout:
-            if self.eval_pred.pool():
+        while not self.has_terminated.value:
+            if self.eval_pred.poll():
                 action, player = self.eval_pred.recv()
                 if player == P1 and not self.has_action[P1]:
                     self.has_action[P1] = True
@@ -128,7 +130,7 @@ class EvalServer(multiprocessing.Process):
                 if action == "shoot":
                     # time.sleep(1.5)  # wait for vest
                     # Wait for vest to detect
-                    # if self.eval_relay.pool():
+                    # if self.eval_relay.poll():
                     #     action, player = self.eval_relay.recv()
                     self.gamestate.update_player(
                         "bullet_hit", P2)
@@ -143,7 +145,7 @@ class EvalServer(multiprocessing.Process):
                 if action == "shoot":
                     # time.sleep(1.5)  # wait for vest
                     # Wait for vest to detect
-                    # if self.eval_relay.pool():
+                    # if self.eval_relay.poll():
                     #     action, player = self.eval_relay.recv()
                     self.gamestate.update_player(
                         "bullet_hit", P1)
@@ -159,3 +161,5 @@ class EvalServer(multiprocessing.Process):
                 self.has_action[0] = False
                 self.has_action[1] = True  # need to change
                 self.gamestate.send_encrypted(self.conn, self.secret_key)
+
+        self.logout()

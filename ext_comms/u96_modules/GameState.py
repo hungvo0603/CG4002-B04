@@ -95,7 +95,6 @@ class GameState:
         success = True
         plaintext = self._get_data_plain_text()
 
-        # ice_print_debug(f"Sending message to client: {plaintext} (Unencrypted)")
         # send len followed by '_' followed by cypher
         m = str(len(plaintext))+'_'
         try:
@@ -137,12 +136,12 @@ class GameState:
                 print('no more data from', remote_socket)
                 break
             msg = data.decode("utf8")  # Decode raw bytes to UTF-8
-            msg = msg.split('#')[0]
+
             game_state_received = json.loads(msg)
 
             self.player_1.initialize_from_dict(game_state_received['p1'])
             self.player_2.initialize_from_dict(game_state_received['p2'])
-            # self.update_player('none',0)
+
             success = True
             break
         return success

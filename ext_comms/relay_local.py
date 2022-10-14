@@ -218,8 +218,8 @@ class Client(threading.Thread):
         self.remote_port = remote_port
         self.group_id = group_id
         # Open tunnel and connect
-        self.tunnel_dest = self.create_tunnel()
-        self.conn.connect(self.tunnel_dest)
+        # self.tunnel_dest = self.create_tunnel()
+        self.conn.connect(('', self.local_port))
         self.daemon = True
 
         self.array_ax = []
@@ -304,7 +304,8 @@ class Client(threading.Thread):
                     if message is not None:
                         for i in range(0, 10):
                             # send data in chunks of 6 -> 6*10 = 60
-                            self.send_data(pkt[0] + message[i*6:(i+1)*6])
+                            self.send_data(pkt[0].to_bytes(
+                                1, 'big') + message[i*6:(i+1)*6])
 
                 elif(pkt[0] == 1 and str(pkt[3]) == '161') or (pkt[0] == 2 and str(pkt[3]) == '188'):
                     message = pkt + bytearray(4)
