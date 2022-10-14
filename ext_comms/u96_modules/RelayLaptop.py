@@ -4,7 +4,6 @@ import socket
 from _socket import SHUT_RDWR
 import struct
 
-# pkt[0]: type of sender (0: imu sensor (glove)-> give ml, 1: ir receiver(vest), 2: shoot(gun))
 GLOVE = '0'
 VEST = '1'
 GUN = '2'
@@ -13,13 +12,13 @@ SHOT_HIT = '161'
 
 
 class RelayLaptop(multiprocessing.Process):
-    def __init__(self, port_num, group_id, move_data_buffer_in, move_res_buffer_in):
+    def __init__(self, port_num, group_id, relay_pred, relay_eval):
         super().__init__()
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.soc_addr = ('', port_num)  # localhost
         self.socket.bind(self.soc_addr)
-        self.move_data_buffer_in = move_data_buffer_in
-        self.move_res_buffer_in = move_res_buffer_in
+        self.relay_pred = relay_pred
+        self.relay_eval = relay_eval
         self.group_id = group_id
         self.conn = None
         self.has_terminated = False
@@ -42,7 +41,8 @@ class RelayLaptop(multiprocessing.Process):
         self.setup_connection()
         while not self.has_terminated:
             # max packt sender + 6 extracted features
-            message = self.conn.recv(7)  # fixed 7 bit data
+            # fixed 7 bit data (need to include p1, p2 in the sender)
+            message = self.conn.recv(7)
             print("[Relay] Received message:", message)
             byte_msg = bytearray(message)
 
@@ -54,11 +54,12 @@ class RelayLaptop(multiprocessing.Process):
                 extracted_features.append(struct.unpack("<f", byte_msg[4]))
                 extracted_features.append(struct.unpack("<f", byte_msg[5]))
                 extracted_features.append(struct.unpack("<f", byte_msg[6]))
-                self.move_data_buffer_in.send(extracted_features)
+                self.relay_pred.send(
+                    (extracted_features, 0))  # 0 is p1, 1 is p2 (need to change)
             elif str(byte_msg[0]) == VEST and str(byte_msg[3]) == SHOT_HIT:
-                self.move_res_buffer_in.send("vest")
+                self.relay_eval.send(("vest", 1))
             elif str(byte_msg[0]) == GUN and str(byte_msg[3]) == SHOT_FIRED:
-                self.move_res_buffer_in.send("shoot")
+                self.relay_eval.send(("shoot", 0))
             else:
                 print("Invalid data received")
 

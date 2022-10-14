@@ -18,62 +18,45 @@
 import EvalServer
 import MovePredictor
 import RelayLaptop
-# import GameEngine
 import Visualizer
 
-
-import threading
-import socket
-
 import sys
-from multiprocessing import Pipe
+from multiprocessing import Pipe, Value
+import time
+
+# Data buffer
+relay_pred, pred_relay = Pipe()  # internal data, data
+pred_eval, eval_pred = Pipe()  # data, action
+relay_eval, eval_relay = Pipe()  # internal data, action
+# eval_in = Queue()  # action
+viz_eval, eval_viz = Pipe()  # player_hit, state
+# viz_recv_buffer_in, viz_recv_buffer_out = Pipe()  # bool value for grenade hit
+has_terminated = Value('i', False)
 
 
 class Ultra96():
     def __init__(self, local_port, group_id, eval_port, eval_ip, secret_key):
 
-        # Data buffer
-        move_res_buffer_in, move_res_buffer_out = Pipe()  # predicted action
-        move_data_buffer_in, move_data_buffer_out = Pipe()
-        eval_buffer_in, eval_buffer_out = Pipe()
-        viz_send_buffer_in, viz_send_buffer_out = Pipe()
-        viz_recv_buffer_in, viz_recv_buffer_out = Pipe()  # bool value for grenade hit
-
         # Ultra96 Processes
         self.relay = RelayLaptop(local_port, group_id,
-                                 move_data_buffer_in, move_res_buffer_in)
-        self.eval = EvalServer(eval_ip, eval_port, group_id, secret_key)
-        self.visualizer = Visualizer()
+                                 relay_pred, relay_eval)
+        self.eval = EvalServer(eval_ip, eval_port, group_id,
+                               secret_key, eval_pred, eval_relay, eval_viz)
+        self.visualizer = Visualizer(viz_eval)
         self.predictor = MovePredictor(
-            move_data_buffer_out, move_res_buffer_in)
-        # self.game_engine = GameEngine()
-        self.is_logout = False
+            pred_relay, pred_eval)
 
     def start_processes(self):
         self.relay.start()
         self.eval.start()
         self.visualizer.start()
         self.predictor.start()
-        # self.game_engine.start()
 
     def terminate_processes(self):
         self.relay.terminate()
         self.eval.terminate()
         self.visualizer.terminate()
         self.predictor.terminate()
-        # self.game_engine.terminate()
-
-    # Starts the program and creates relevant threads
-    def start(self):
-        self.start_processes()
-        while not self.is_logout:
-            try:
-                if conn10.poll():
-                    if conn10.recv() == 'logout':
-                        self.is_logout = True
-                        self.logout(ml_process)
-            except KeyboardInterrupt:
-                self.stop()
 
 
 if __name__ == '__main__':
@@ -88,6 +71,10 @@ if __name__ == '__main__':
     secret_key = sys.argv[5]
 
     ultra96 = Ultra96(local_port, group_id, eval_port, eval_ip, secret_key)
-    ultra96.start()
+    ultra96.start_processes()
+
+    while not has_terminated.value:
+        time.sleep(10)
+        pass
 
     print("Program terminated, thanks for playing :D")

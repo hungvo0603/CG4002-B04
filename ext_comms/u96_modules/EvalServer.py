@@ -1,125 +1,161 @@
-from Crypto.Cipher import AES
-from Crypto.Util.Padding import pad
-from Crypto import Random
+import threading
 import multiprocessing
 import socket
-import json
-import base64
 from _socket import SHUT_RDWR
+import time
+
+import GameState
+
+P1 = 0
+P2 = 1
 
 
 class EvalServer(multiprocessing.Process):
     # Client to eval_server
-    def __init__(self, ip_addr, port_num, group_id, secret_key):
+    def __init__(self, ip_addr, port_num, group_id, secret_key, eval_pred, eval_relay, eval_viz):
         super().__init__()  # init parent (Thread)
         self.conn = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.server_address = (ip_addr, port_num)
         self.group_id = group_id
         self.secret_key = secret_key
+        # has received p1, p2 actions (need to change p2)
+        self.has_action = [False, True]
+        self.has_incoming_bullet = [False, False]
+        self.gamestate = GameState(main=self)  # static
+        self.has_terminated = False
         self.daemon = True
+
+        self.eval_pred = eval_pred
+        self.eval_relay = eval_relay
+        self.eval_viz = eval_viz
 
     def run(self):
         self.conn.connect(self.server_address)
         print("[Eval server] Connection established to:", self.server_address)
         print("[Eval server] Copy to eval: ", self.secret_key)
-        global has_terminated
-        while not has_terminated:
-            try:
-                if not eval_buffer.empty():
-                    state = eval_buffer.get()
-                    self.send_data(state)
 
-                    # received data from eval_server is unencrypted ground truth
-                    data = self.receive_data()
-                    true_state = json.loads(data)
+        send_thread = threading.Thread(target=self.process_msg)
+        send_thread.start()
 
-                    input_state(true_state)
-
-                    # send ground truth to visualiser
-                    true_state["sender"] = "eval"
-                    viz_send_buffer.put(true_state)
-            except KeyboardInterrupt:
-                print("[Eval server] Interrupt received, terminating")
-                has_terminated = True
-                break
-
-    # def jsonify_state(self, player_num, hp, action, bullets, grenades, shield_time, shield_health, num_deaths, num_shield):
-    #     state = read_state()
-    #     state[player_num] = {
-    #         "hp": hp,
-    #         "action": action,
-    #         "bullets": bullets,
-    #         "grenades": grenades,
-    #         "shield_time": shield_time,
-    #         "shield_health": shield_health,
-    #         "num_deaths": num_deaths,
-    #         "num_shield": num_shield
-    #     }
-    #     input_state(state)
-    #     return json.dumps(state)
-
-    def encrypt_message(self, state):
-        # AES.block_size = 16 (default)
-        # padding with 0x02 (start of text)
-        message = json.dumps(state)
-        print("[Eval server] Raw message:", message)
-        padded_msg = pad(bytes(message, "utf8"), AES.block_size)
-        iv = Random.new().read(AES.block_size)  # generate iv
-        aes_key = bytes(str(self.secret_key), encoding="utf8")
-        cipher = AES.new(aes_key, AES.MODE_CBC, iv)
-        encrypted_text = base64.b64encode(
-            iv + cipher.encrypt(padded_msg))  # encode with AES-128
-        return encrypted_text
-
-    def send_data(self, message):
-        encrypted_text = self.encrypt_message(message)
-        # _ is used as delimiter between len and content
-        packet_size = (str(len(encrypted_text)) + '_').encode("utf-8")
-        self.conn.sendall(packet_size)
-        self.conn.sendall(encrypted_text)
-        # print("[Eval server] Sent encrypted data:", encrypted_text)
+        self.receive_data()
 
     def receive_data(self):  # blocking call
-        try:
-            # recv length followed by '_' followed by cypher
-            data = b''
-            while not data.endswith(b'_'):
-                _d = self.conn.recv(1)
-                if not _d:
-                    data = b''
+        while not self.has_terminated:
+            try:
+                success = self.gamestate.recv_and_update(self.conn)
+                if self.gamestate.player_1.get_dict()['action'] == 'logout' and self.gamestate.player_2.get_dict()['action'] == 'logout':
+                    # spam logout to eveyone
+                    # visual_pipe_client.send(
+                    #     self.gamestate.get_data_plain_text('1'))
+                    # pipe5.send('logout')
+                    # server_pipe_client.send('logout')
+                    # ultra96_pipe_client.send('logout')
+                    self.logout()
+                if not success:
+                    print("connection with eval server closed")
                     break
-                data += _d
-            if len(data) == 0:
-                print('no more data from the client')
-                self.end_client_connection()
+                self.has_action[P1] = False
+                self.has_action[P2] = True  # need to change
+                self.eval_viz.send(
+                    self.gamestate.get_data_plain_text(3))
+            except Exception as e:
+                print(e)
 
-            data = data.decode("utf-8")
-            length = int(data[:-1])
-
-            data = b''
-            while len(data) < length:
-                _d = self.conn.recv(length - len(data))
-                if not _d:
-                    data = b''
-                    break
-                data += _d
-            if len(data) == 0:
-                print('no more data from the client')
-                self.end_client_connection()
-            message = data.decode("utf8")  # Decode raw bytes to UTF-8
-
-            print("[Eval server]Ground truth:", message)
-
-        except ConnectionResetError:
-            print('[Eval server]Connection Reset')
-            self.end_client_connection()
-        return message
-
-    def end_client_connection(self):
+    def logout(self):
         try:
+            self.has_terminated = True
             self.conn.shutdown(SHUT_RDWR)
             self.conn.close()
         except OSError:
             # connection already closed
             pass
         print("[Eval server]Connection closed")
+
+    def failed_shot(player):
+        global has_incoming_shoot
+        has_incoming_shoot[player].pop()
+        print("[Game engine] Shot to ", player, " has missed")
+
+    def process_msg(self):
+        while not self.is_logout:
+            if self.eval_pred.pool():
+                action, player = self.eval_pred.recv()
+                if player == P1 and not self.has_action[P1]:
+                    self.has_action[P1] = True
+                    self.gamestate.update_player(action, player)
+                    self.eval_viz.send(
+                        self.gamestate.get_data_plain_text(player))
+                    print(f"Player 1 action done : {action}")
+                    if action == 'grenade':
+                        time.sleep(1.5)  # wait for viz reply
+                        # need to change
+                        # if self.eval_viz.poll():
+                        #     player_hit = self.eval_viz.recv()  # need to change to include player, player_hit
+                        #     print(
+                        #         f"Data received from Visualizer {player_hit}")
+
+                        self.gamestate.update_player(
+                            "grenade_damage", P2)
+                        self.eval_viz.send(
+                            self.gamestate.get_data_plain_text(2))
+
+                if player == P2 and not self.has_action[P2]:
+                    self.has_action[P2] = True
+                    self.gamestate.update_player(action, player)
+                    self.eval_viz.send(
+                        self.gamestate.get_data_plain_text(player))
+                    print(f"Player 2 action done : {action}")
+                    if action == 'grenade':
+                        # time.sleep(1.5)  # wait for viz reply
+                        # need to change
+                        # if self.eval_viz.poll():
+                        #     player_hit = self.eval_viz.recv()  # need to change to include player, player_hit
+                        #     print(
+                        #         f"Data received from Visualizer {player_hit}")
+
+                        self.gamestate.update_player(
+                            "grenade_damage", P1)
+                        self.eval_viz.send(
+                            self.gamestate.get_data_plain_text(3))
+
+            if self.eval_relay.poll():
+                action, player = self.eval_relay.recv()
+                if player == P1 and not self.has_action[P1]:
+                    self.has_action[P1] = True
+                    self.gamestate.update_player(action, player)
+                    self.eval_viz.send(
+                        self.gamestate.get_data_plain_text(player))
+                if action == "shoot":
+                    # time.sleep(1.5)  # wait for vest
+                    # Wait for vest to detect
+                    # if self.eval_relay.pool():
+                    #     action, player = self.eval_relay.recv()
+                    self.gamestate.update_player(
+                        "bullet_hit", P2)
+                    self.eval_viz.send(
+                        self.gamestate.get_data_plain_text(3))
+
+                if player == P2 and not self.has_action[P2]:
+                    self.has_action[P2] = True
+                    self.gamestate.update_player(action, player)
+                    self.eval_viz.send(
+                        self.gamestate.get_data_plain_text(player))
+                if action == "shoot":
+                    # time.sleep(1.5)  # wait for vest
+                    # Wait for vest to detect
+                    # if self.eval_relay.pool():
+                    #     action, player = self.eval_relay.recv()
+                    self.gamestate.update_player(
+                        "bullet_hit", P1)
+                    self.eval_viz.send(
+                        self.gamestate.get_data_plain_text(3))
+
+            if self.cd_shield:
+                print("Shield time over")
+                self.cd_shield = False
+
+            # Sends data to Eval Server if both players have done an action
+            if self.has_action[0] and self.has_action[1]:
+                self.has_action[0] = False
+                self.has_action[1] = True  # need to change
+                self.gamestate.send_encrypted(self.conn, self.secret_key)
