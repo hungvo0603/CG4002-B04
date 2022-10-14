@@ -1,15 +1,10 @@
 # Process:
 # - ml model, comm visualiser, comm eval, comm relay
 # To try:
-# debug mqtt connection error -> temp failure in name resolution (try to change broker to mosquitto, update in viz code too), broken pipe -> relay
-# try send data see still got duplicate action on p1 and p2?
-# shoot start timer for vest to receive data -> shoot needs to have time window for the vest data to come in (if timeout -> miss bullet)
-# pkt[0]: type of sender (0: imu sensor (glove)-> give ml, 1: ir receiver(vest), 2: shoot(gun))
-# need to send data to viz cause got test wo eval server (if action is invalid dont send to viz)
-# implement logout
+
 
 # Todo:
-# 2 player -> wait for both player action to come before send to eval/do anything (cant have player with "none" action)
+# blocking process on last few movements -> can try to move viz to main process + thread
 # 2 player: can either have shield first then damage or vice versa
 # continue action after the broken pipe nonetype error or the mqqt temp name resolution error too
 # try out hivemq

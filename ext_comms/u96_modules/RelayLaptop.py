@@ -3,6 +3,7 @@ import multiprocessing
 import socket
 from _socket import SHUT_RDWR
 import struct
+import time
 
 GLOVE = 0
 VEST = 1
@@ -40,19 +41,15 @@ class RelayLaptop(multiprocessing.Process):
     def run(self):
         self.setup_connection()
         while not self.has_terminated.value:
-            # max packt sender + 6 extracted features
-            # fixed 7 bit data (need to include p1, p2 in the sender)
-            byte_msg = self.conn.recv(7)
-            # byte_msg = bytearray(message)
+            # max packt sender + 6 extracted features (8 each)
+            s = time.perf_counter()
+            byte_msg = self.conn.recv(49)
             if byte_msg[0] == GLOVE:
+                # print(float.fromhex(byte_msg[1:2]))
                 extracted_features = []
-                extracted_features.append(byte_msg[1])
-                extracted_features.append(byte_msg[2])
-                extracted_features.append(byte_msg[3])
-                extracted_features.append(byte_msg[4])
-                extracted_features.append(byte_msg[5])
-                extracted_features.append(byte_msg[6])
-                # print("Extracted features: ", extracted_features)
+                for i in range(1, 49, 8):
+                    extracted_features.append(
+                        struct.unpack('<d', byte_msg[i:i+8])[0])
                 self.relay_pred.send(
                     (extracted_features, 0))  # 0 is p1, 1 is p2 (need to change)
             elif byte_msg[0] == VEST and byte_msg[3] == SHOT_HIT:

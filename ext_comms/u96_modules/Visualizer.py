@@ -74,8 +74,6 @@ class Mqtt():
             while status:
                 result = self.conn.publish(self.topic, state)
                 status = result[0]
-                if status:
-                    print("[Mqtt Pub]Failed to send message, retrying")
         except (KeyboardInterrupt, socket.gaierror, ConnectionError):
             print("[Mqtt Pub]Keyboard Interrupt, terminating")
             self.has_terminated.value = True

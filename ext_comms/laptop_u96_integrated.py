@@ -304,7 +304,8 @@ class Client(threading.Thread):
                     if message is not None:
                         for i in range(0, 10):
                             # send data in chunks of 6 -> 6*10 = 60
-                            self.send_data(pkt[0] + message[i*6:(i+1)*6])
+                            self.send_data(pkt[0].to_bytes(
+                                1, 'big') + message[i*6:(i+1)*6])
 
                 elif(pkt[0] == 1 and str(pkt[3]) == '161') or (pkt[0] == 2 and str(pkt[3]) == '188'):
                     message = pkt + bytearray(4)
@@ -367,7 +368,8 @@ if __name__ == '__main__':
 
     # ,"D0:39:72:BF:C6:0D","D0:39:72:BF:C1:A6"]#1C:05 is IMU, C6:0D is vest, C1:A6 IS gun
     # "C4:BE:84:20:1C:05" #1C:05 is IMU, BF:ED is vest, C1:BF is gun
-    addr_list = ["C4:BE:84:20:1C:05", "D0:39:72:BF:C1:A6", "D0:39:72:BF:C1:BF"]
+    # , "D0:39:72:BF:C1:A6", "D0:39:72:BF:C1:BF"
+    addr_list = ["C4:BE:84:20:1C:05"]
 
     bluno_list = []
     char_list = []
