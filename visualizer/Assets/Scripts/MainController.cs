@@ -68,7 +68,7 @@ namespace M2MQTT.MainController
         public Player player;
 
         [Header("Enemy Detector")]
-        // public EnemyDetector enemyDetector;
+        public EnemyDetector enemyDetector;
 
         [Header("Data")]
         public PlayerDataJson playerData = new PlayerDataJson();
@@ -91,27 +91,24 @@ namespace M2MQTT.MainController
             // Adi should parse the feedback, being "p1", "p2" or "none"
             
             // FEEDBACK TO EXT_COMM
-            /*
+            
             if (!String.IsNullOrEmpty(msg))
             {
-                client.Publish("cg4002/4/viz_u9620", System.Text.Encoding.UTF8.GetBytes(msg), MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE, false);
+                client.Publish("cg4002/4/u96_viz", System.Text.Encoding.UTF8.GetBytes(msg), MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE, false);
+                Debug.Log(msg);
                 Debug.Log("Feedback message published");
             }
-            else
-            {
-            */
-
+            else {
             // TESTING FOR VISUALIZER
-            // string sample_json_string = "{\"p1\": {\"hp\": 100, \"action\": \"shoot\", \"bullets\": 5, \"grenades\": 1, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 2, \"num_shield\": 3}, \"p2\": {\"hp\": 60, \"action\": \"none\", \"bullets\": 6, \"grenades\": 2, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 3, \"num_shield\": 3}, \"sender\": \"eval\"}";
-            string sample_json_string = "{\"p1\": {\"hp\": 100, \"action\": \"logout\", \"bullets\": 5, \"grenades\": 1, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 2, \"num_shield\": 3}, \"p2\": {\"hp\": 60, \"action\": \"none\", \"bullets\": 6, \"grenades\": 2, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 3, \"num_shield\": 3}, \"sender\": \"eval\"}";
-            // string sample_json_string = "{\"p1\": {\"hp\": 100, \"action\": \"shoot\", \"bullets\": 5, \"grenades\": 2, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 0, \"num_shield\": 3}, \"p2\": {\"hp\": 90, \"action\": \"none\", \"bullets\": 6, \"grenades\": 2, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 0, \"num_shield\": 3}, \"sender\": \"eval\"}";
-            // string sample_json_string = "{\"p1\": {\"hp\": 100, \"action\": \"shoot\", \"bullets\": 5, \"grenades\": 1, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 0, \"num_shield\": 2}, \"p2\": {\"hp\": 60, \"action\": \"shield\", \"bullets\": 6, \"grenades\": 2, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 0, \"num_shield\": 3}, \"sender\": \"eval\"}";
-            // string sample_json_string = "{\"p1\": {\"hp\": 100, \"action\": \"reload\", \"bullets\": 6, \"grenades\": 1, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 0, \"num_shield\": 2}, \"p2\": {\"hp\": 60, \"action\": \"none\", \"bullets\": 6, \"grenades\": 2, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 0, \"num_shield\": 3}, \"sender\": \"eval\"}";
-            // string sample_json_string = "{\"p1\": {\"hp\": 100, \"action\": \"grenade\", \"bullets\": 6, \"grenades\": 1, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 0, \"num_shield\": 2}, \"p2\": {\"hp\": 60, \"action\": \"none\", \"bullets\": 6, \"grenades\": 2, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 0, \"num_shield\": 3}, \"sender\": \"eval\"}";
+            // string sample_json_string = "{\"p1\": {\"hp\": 100, \"action\": \"shoot\", \"bullets\": 5, \"grenades\": 1, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 2, \"num_shield\": 3}, \"p2\": {\"hp\": 60, \"action\": \"none\", \"bullets\": 6, \"grenades\": 2, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 3, \"num_shield\": 3}}";
+            // string sample_json_string = "{\"p1\": {\"hp\": 100, \"action\": \"shield\", \"bullets\": 5, \"grenades\": 2, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 0, \"num_shield\": 3}, \"p2\": {\"hp\": 100, \"action\": \"none\", \"bullets\": 6, \"grenades\": 2, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 0, \"num_shield\": 3}}";
+            string sample_json_string = "{\"p1\": {\"hp\": 100, \"action\": \"reload\", \"bullets\": 6, \"grenades\": 1, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 0, \"num_shield\": 2}, \"p2\": {\"hp\": 60, \"action\": \"none\", \"bullets\": 6, \"grenades\": 2, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 0, \"num_shield\": 3}}";
+            // string sample_json_string = "{\"p1\": {\"hp\": 100, \"action\": \"grenade\", \"bullets\": 6, \"grenades\": 1, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 0, \"num_shield\": 2}, \"p2\": {\"hp\": 60, \"action\": \"none\", \"bullets\": 6, \"grenades\": 2, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 0, \"num_shield\": 3}}";
+            // string sample_json_string = "{\"p1\": {\"hp\": 100, \"action\": \"logout\", \"bullets\": 5, \"grenades\": 1, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 2, \"num_shield\": 3}, \"p2\": {\"hp\": 60, \"action\": \"none\", \"bullets\": 6, \"grenades\": 2, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 3, \"num_shield\": 3}}";
 
-            client.Publish("cg4002/4/viz_u9620", System.Text.Encoding.UTF8.GetBytes(sample_json_string), MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE, false);
+            client.Publish("cg4002/4/viz_u96", System.Text.Encoding.UTF8.GetBytes(sample_json_string), MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE, false);
             Debug.Log("Test message published");
-            // }
+            }
         }
 
         // public void SetUiMessage(string msg)
@@ -152,12 +149,12 @@ namespace M2MQTT.MainController
 
         protected override void SubscribeTopics()
         {
-            client.Subscribe(new string[] { "cg4002/4/viz_u9620" }, new byte[] { MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE });
+            client.Subscribe(new string[] { "cg4002/4/viz_u96" }, new byte[] { MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE });
         }
 
         protected override void UnsubscribeTopics()
         {
-            client.Unsubscribe(new string[] { "cg4002/4/viz_u9620" });
+            client.Unsubscribe(new string[] { "cg4002/4/viz_u96" });
         }
 
         protected override void OnConnectionFailed(string errorMessage)
@@ -237,19 +234,25 @@ namespace M2MQTT.MainController
             // }
             // else
             // {
-            playerData = PlayerDataJson.CreateDataFromJSON(msg);
-            player1Data = playerData.p1;
-            player2Data = playerData.p2;
-            updateUI = true;
-            ProcessAction(player1Data.action, player2Data.action);
-            ProcessHealthBarUpdate(player1Data.hp, player2Data.hp);
-            ProcessBulletUpdate(player1Data.bullets, player2Data.bullets);
-            ProcessKDAUpdate(player2Data.num_deaths, player1Data.num_deaths);
-            ProcessShieldCounterUpdate(player1Data.num_shield, player2Data.num_shield);
-            ProcessShieldHealthUpdate(player1Data.shield_health, player2Data.shield_health);
-            ProcessGrenadeUpdate(player1Data.grenades, player2Data.grenades);
-            ProcessShieldTimeUpdate(player1Data.shield_time, player2Data.shield_time);
-            // }
+            if (msg == "p1" || msg == "p2" || msg == "none")
+            {
+                Debug.Log("Feedback received");
+            }
+            else
+            {
+                playerData = PlayerDataJson.CreateDataFromJSON(msg);
+                player1Data = playerData.p1;
+                player2Data = playerData.p2;
+                updateUI = true;
+                ProcessAction(player1Data.action, player2Data.action);
+                ProcessHealthBarUpdate(player1Data.hp, player2Data.hp);
+                ProcessBulletUpdate(player1Data.bullets, player2Data.bullets);
+                ProcessKDAUpdate(player2Data.num_deaths, player1Data.num_deaths);
+                ProcessShieldCounterUpdate(player1Data.num_shield, player2Data.num_shield);
+                ProcessShieldHealthUpdate(player1Data.shield_health, player2Data.shield_health);
+                ProcessGrenadeUpdate(player1Data.grenades, player2Data.grenades);
+                ProcessShieldTimeUpdate(player1Data.shield_time, player2Data.shield_time);
+            }
 
         }
 
@@ -321,7 +324,7 @@ namespace M2MQTT.MainController
                 case "grenade":
                     grenadeController.ExplosionButtonPressPlayer1();
                     grenadeTriggerAnimation.TriggerAnimation();
-                    // ProcessGrenadeHitFeedback("p1");
+                    ProcessGrenadeHitFeedback("p1");
                     break;
                 case "shoot":
                     shootController.GunShotPlayer1();
@@ -366,18 +369,19 @@ namespace M2MQTT.MainController
 
         private void ProcessGrenadeHitFeedback(string thrower)
         {
-            // bool enemyDetected = enemyDetector.hasEnemy;
-            bool enemyDetected = true;
+            bool enemyDetected = enemyDetector.hasEnemy;
+            // bool enemyDetected = true;
             if (enemyDetected)
             {
-                if (thrower == "p1")
-                {
-                    PublishMessage("p2");
-                }
-                else if (thrower == "p2")
-                {
-                    PublishMessage("p1");
-                }
+                PublishMessage("p2");
+                // if (thrower == "p1")
+                // {
+                //     PublishMessage("p2");
+                // }
+                // else if (thrower == "p2")
+                // {
+                //     PublishMessage("p1");
+                // }
             }
             else
             {

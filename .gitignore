@@ -474,7 +474,4 @@ visualizer/Library/ArtifactDB
 visualizer/Library/PackageCache/com.ptc.vuforia.engine@7c95fcfcb02e/
 
 # Cache
-visualizer/Library/ShaderCache/
-visualizer/Library/Il2cppBuildCache/
-visualizer/Library/PlayerDataCache/
-visualizer/Library/PackageCache/
+visualizer/Library/

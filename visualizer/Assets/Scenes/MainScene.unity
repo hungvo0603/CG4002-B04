@@ -313,7 +313,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 683.50183, y: -719.50183}
+  m_AnchoredPosition: {x: 697, y: -814}
   m_SizeDelta: {x: 216.9903, y: 207.9911}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &100683202
@@ -2178,6 +2178,7 @@ MonoBehaviour:
   shieldController: {fileID: 988623232}
   shieldHealthController: {fileID: 988623233}
   player2BulletText: {fileID: 1363115358}
+  reloadSound: {fileID: 0}
   enemy: {fileID: 1925194665}
   player1Bullet: 0
   player2Bullet: 0
@@ -2875,7 +2876,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 847, y: -476.95}
+  m_AnchoredPosition: {x: 804, y: -433}
   m_SizeDelta: {x: 311.3115, y: 71.8974}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &601390290
@@ -3081,7 +3082,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400060, guid: fcb334eb247ae3e488abb081c847cf09, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.413
+      value: -0.24
       objectReference: {fileID: 0}
     - target: {fileID: 400060, guid: fcb334eb247ae3e488abb081c847cf09, type: 3}
       propertyPath: m_LocalPosition.z
@@ -4475,7 +4476,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 6fd3251a0839c42fe9fe2398c2a9e505, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.756
+      value: 0.05
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 6fd3251a0839c42fe9fe2398c2a9e505, type: 3}
       propertyPath: m_LocalPosition.z
@@ -5278,6 +5279,7 @@ MonoBehaviour:
   shieldController: {fileID: 988623232}
   shieldCountdown: {fileID: 988623235}
   player: {fileID: 920191649}
+  enemyDetector: {fileID: 1925194665}
   playerData:
     p1:
       hp: 0
@@ -5297,7 +5299,6 @@ MonoBehaviour:
       shield_health: 0
       num_deaths: 0
       num_shield: 0
-    sender: 
   player1Data:
     hp: 0
     action: 
@@ -5839,7 +5840,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 1129, y: -491}
+  m_AnchoredPosition: {x: 1104, y: -432}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1347227640
@@ -6450,7 +6451,7 @@ Camera:
     height: 1
   near clip plane: 0.05
   far clip plane: 2000
-  field of view: 40.302902
+  field of view: 30.014471
   orthographic: 0
   orthographic size: 5
   m_Depth: 1
@@ -6476,7 +6477,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1377523912}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1262, y: 607, z: -2014}
+  m_LocalPosition: {x: 1039, y: 485, z: -2014}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -8317,7 +8318,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 1129, y: -476.94998}
+  m_AnchoredPosition: {x: 1106, y: -433}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1676008287
@@ -8936,6 +8937,7 @@ GameObject:
   - component: {fileID: 1835352561}
   - component: {fileID: 1835352565}
   - component: {fileID: 1835352566}
+  - component: {fileID: 1835352567}
   m_Layer: 5
   m_Name: BulletCanvas
   m_TagString: Untagged
@@ -9069,9 +9071,106 @@ MonoBehaviour:
   shieldController: {fileID: 988623232}
   shieldHealthController: {fileID: 988623233}
   player2BulletText: {fileID: 1363115358}
+  reloadSound: {fileID: 1835352567}
   enemy: {fileID: 1925194665}
   player1Bullet: 0
   player2Bullet: 0
+--- !u!82 &1835352567
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1835352560}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: b4f6cef98fb174946b362a7818ecec06, type: 3}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &1836541402
 GameObject:
   m_ObjectHideFlags: 0
@@ -9266,9 +9365,9 @@ GameObject:
   - component: {fileID: 1925194663}
   - component: {fileID: 1925194662}
   - component: {fileID: 1925194661}
-  - component: {fileID: 1925194660}
   - component: {fileID: 1925194665}
   - component: {fileID: 1925194664}
+  - component: {fileID: 1925194666}
   m_Layer: 0
   m_Name: ImageTarget
   m_TagString: Untagged
@@ -9276,33 +9375,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1925194660
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1925194659}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1778676317, guid: 1e108ae5f2133934f948edded555f03e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mObserverBehaviour: {fileID: 1925194662}
-  mHiddenRoot: {fileID: 0}
-  mTargetName: image_target_3resize
-  mDatasetName: Vuforia/B04-Marker-02.xml
-  mEmptyDatasetSelected: 0
-  mVirtualScale: 1
-  mPreviewName: ImageTargetPreview
-  mIsSimulatorMode: 0
-  mParent: {fileID: 1925194663}
-  mRootFlag: 55
-  mSelectableFlag: 52
-  mCastedBehaviour: {fileID: 1925194662}
-  mType: 0
-  mMeshFilter: {fileID: 0}
-  mMeshRenderer: {fileID: 0}
 --- !u!114 &1925194661
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9385,7 +9457,7 @@ MonoBehaviour:
   mMotionHint: 1
   mTrackingOptimization: 0
   mTrackingOptimizationNeedsUpgrade: 0
-  mPreview: {fileID: 1925194660}
+  mPreview: {fileID: 1925194666}
   mLastSize: {x: 0.297, y: 0.419935}
   mVirtualButtonBehaviours: []
 --- !u!4 &1925194663
@@ -9432,6 +9504,33 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hasEnemy: 0
+--- !u!114 &1925194666
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1925194659}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1778676317, guid: 1e108ae5f2133934f948edded555f03e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mObserverBehaviour: {fileID: 1925194662}
+  mHiddenRoot: {fileID: 0}
+  mTargetName: image_target_3resize
+  mDatasetName: Vuforia/B04-Marker-02.xml
+  mEmptyDatasetSelected: 0
+  mVirtualScale: 1
+  mPreviewName: ImageTargetPreview
+  mIsSimulatorMode: 0
+  mParent: {fileID: 1925194663}
+  mRootFlag: 55
+  mSelectableFlag: 52
+  mCastedBehaviour: {fileID: 1925194662}
+  mType: 0
+  mMeshFilter: {fileID: 0}
+  mMeshRenderer: {fileID: 0}
 --- !u!1 &2020004034
 GameObject:
   m_ObjectHideFlags: 0

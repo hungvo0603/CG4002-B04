@@ -17,6 +17,7 @@ public class ShootController : MonoBehaviour
     private const int SHOOT_DAMAGE = 10;
 
     public TextMeshProUGUI player2BulletText;
+    public AudioSource reloadSound;
 
     public EnemyDetector enemy;
     private bool hasEnemy;
@@ -102,6 +103,7 @@ public class ShootController : MonoBehaviour
     public void ReloadPlayer1()
     {
         player1Bullet = MAX_BULLET;
+        reloadSound.Play();
     }
 
     public void ReloadPlayer2()

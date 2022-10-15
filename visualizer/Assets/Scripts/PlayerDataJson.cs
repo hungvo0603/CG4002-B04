@@ -8,7 +8,6 @@ public class PlayerDataJson
 {
     public PlayerStatsJson p1;
     public PlayerStatsJson p2;
-    public string sender;
 
     public static PlayerDataJson CreateDataFromJSON(string jsonString)
     {
