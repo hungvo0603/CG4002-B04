@@ -12,7 +12,7 @@ MQTT_PUB = "cg4002/4/viz_u9620"
 MQTT_SUB = "cg4002/4/u96_viz20"
 
 
-class Visualizer(multiprocessing.Process):
+class Visualizer():
     def __init__(self, viz_eval, has_terminated):
         self.pub = Mqtt(MQTT_PUB, viz_eval, has_terminated)
         self.sub = Mqtt(MQTT_SUB, viz_eval, has_terminated)

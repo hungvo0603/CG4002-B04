@@ -23,9 +23,7 @@ import time
 relay_pred, pred_relay = Pipe(duplex=True)  # internal data, data
 pred_eval, eval_pred = Pipe(duplex=True)  # data, action
 relay_eval, eval_relay = Pipe(duplex=True)  # internal data, action
-# eval_in = Queue()  # action
 viz_eval, eval_viz = Pipe(duplex=True)  # player_hit, state
-# viz_recv_buffer_in, viz_recv_buffer_out = Pipe()  # bool value for grenade hit
 has_terminated = Value('i', False)
 
 
@@ -77,7 +75,7 @@ if __name__ == '__main__':
 
     relay.join()
     eval.join()
-    visualizer.join()
     predictor.join()
+    visualizer.terminate()
 
     print("Program terminated, thanks for playing :D")
