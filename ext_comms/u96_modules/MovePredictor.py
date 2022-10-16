@@ -6,7 +6,7 @@ import multiprocessing
 
 
 class MovePredictor(multiprocessing.Process):
-    def __init__(self, pred_relay, pred_eval, has_terminated):
+    def __init__(self, pred_relay, pred_eval, has_terminated, pred_eval_event):
         super().__init__()  # init parent (Thread)
         self.daemon = True
         self.has_terminated = has_terminated
@@ -16,6 +16,7 @@ class MovePredictor(multiprocessing.Process):
         self.dma_recv = self.overlay.axi_dma_0
         self.pred_relay = pred_relay
         self.pred_eval = pred_eval
+        self.pred_eval_event = pred_eval_event
 
         self.input_arr = [[], []]  # p1, p2
         self.input_buffer = [allocate(shape=(60,), dtype=np.float32), allocate(
@@ -52,6 +53,7 @@ class MovePredictor(multiprocessing.Process):
                 if action is not None and action != "nomovement":
                     print("[MovePredictor] Predicted action: ", action)
                     self.pred_eval.send((action, player))
+                    self.pred_eval_event.set()
             except KeyboardInterrupt:
                 print("[MovePredictor]Keyboard Interrupt, terminating")
                 self.has_terminated.value = True

@@ -16,7 +16,7 @@ from RelayLaptop import RelayLaptop
 from Visualizer import Visualizer
 
 import sys
-from multiprocessing import Pipe, Value
+from multiprocessing import Pipe, Value, Event
 import time
 
 # Data buffer
@@ -26,6 +26,14 @@ relay_eval, eval_relay = Pipe(duplex=True)  # internal data, action
 viz_eval, eval_viz = Pipe(duplex=True)  # player_hit, state
 has_terminated = Value('i', False)
 
+# Events
+# relay_pred_event = Event()
+pred_eval_event = Event()
+relay_eval_event = Event()
+# eval_viz_event = Event()
+# viz_eval_event = Event()
+
+has_incoming_bullet = [Event(), Event()]
 
 # class Ultra96():
 
@@ -61,11 +69,11 @@ if __name__ == '__main__':
 
     # Ultra96 Processes
     relay = RelayLaptop(local_port, group_id,
-                        relay_pred, relay_eval, has_terminated)
+                        relay_pred, relay_eval, has_terminated, relay_eval_event, has_incoming_bullet)
     predictor = MovePredictor(
-        pred_relay, pred_eval, has_terminated)
+        pred_relay, pred_eval, has_terminated, pred_eval_event)
     eval = EvalServer(eval_ip, eval_port, group_id,
-                      secret_key, eval_pred, eval_relay, eval_viz, has_terminated)
+                      secret_key, eval_pred, eval_relay, eval_viz, has_terminated, pred_eval_event, relay_eval_event, has_incoming_bullet)
     visualizer = Visualizer(viz_eval, has_terminated)
 
     relay.start()
