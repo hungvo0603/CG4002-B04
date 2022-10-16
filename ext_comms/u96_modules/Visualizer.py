@@ -21,10 +21,9 @@ class Visualizer():
 
     def publish(self):
         while not self.has_terminated.value:
-            if self.viz_eval.poll():
-                state = self.viz_eval.recv()
-                # print("Visualizer state bef pub: ", state)
-                self.pub.publish(json.dumps(state))
+            state = self.viz_eval.recv()
+            # print("Visualizer state bef pub: ", state)
+            self.pub.publish(json.dumps(state))
 
     def subscribe(self):
         self.sub.subscribe()

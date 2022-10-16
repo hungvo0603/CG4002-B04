@@ -25,7 +25,7 @@ class MovePredictor(multiprocessing.Process):
 
     def pred_action(self, data, player):
         self.input_arr[player].extend(data)
-        # print("Size: " + str(len(self.input_arr[player])))
+
         if len(self.input_arr[player]) < 60:
             return None
 
@@ -35,7 +35,7 @@ class MovePredictor(multiprocessing.Process):
             self.input_buffer[player][i] = float(self.input_arr[player][i])
 
         # print("Input buffer: ", self.input_buffer[player])
-
+        print("Running prediction...")
         self.dma_send.sendchannel.transfer(self.input_buffer[player])
         self.dma_recv.recvchannel.transfer(self.output_buffer[player])
         self.dma_send.sendchannel.wait()
@@ -47,12 +47,11 @@ class MovePredictor(multiprocessing.Process):
     def run(self):
         while not self.has_terminated.value:
             try:
-                if self.pred_relay.poll():
-                    data, player = self.pred_relay.recv()
-                    action = self.pred_action(data, player)
-                    if action is not None and action != "nomovement":
-                        # print("[MovePredictor] Predicted action: ", action)
-                        self.pred_eval.send((action, player))
+                data, player = self.pred_relay.recv()
+                action = self.pred_action(data, player)
+                if action is not None and action != "nomovement":
+                    print("[MovePredictor] Predicted action: ", action)
+                    self.pred_eval.send((action, player))
             except KeyboardInterrupt:
                 print("[MovePredictor]Keyboard Interrupt, terminating")
                 self.has_terminated.value = True

@@ -26,7 +26,7 @@ class RelayLaptop(multiprocessing.Process):
 
     def setup_connection(self):
         try:
-            # 1 is the number of unaccepted connections that the system will allow before refusing new connections
+            # 2 is the number of unaccepted connections that the system will allow before refusing new connections
             self.socket.listen(1)
             # Wait for a connection
             print('[Relay]Waiting for a connection')
