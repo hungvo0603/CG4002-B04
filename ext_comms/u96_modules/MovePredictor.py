@@ -41,7 +41,7 @@ class MovePredictor(multiprocessing.Process):
         self.dma_recv.recvchannel.transfer(self.output_buffer[player])
         self.dma_send.sendchannel.wait()
         self.dma_recv.recvchannel.wait()
-        self.input_arr[player] = []  # clear array after prediction
+        self.input_arr[player].clear()  # clear array after prediction
 
         return actions[self.output_buffer[player][0]]
 
@@ -53,7 +53,7 @@ class MovePredictor(multiprocessing.Process):
                 if action is not None and action != "nomovement":
                     print("[MovePredictor] Predicted action: ", action)
                     self.pred_eval.send((action, player))
-                    self.pred_eval_event.set()
+                    # self.pred_eval_event.set()
             except KeyboardInterrupt:
                 print("[MovePredictor]Keyboard Interrupt, terminating")
                 self.has_terminated.value = True

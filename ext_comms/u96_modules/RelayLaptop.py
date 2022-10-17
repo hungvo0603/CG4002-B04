@@ -13,14 +13,14 @@ SHOT_HIT = 161
 
 
 class RelayLaptop(multiprocessing.Process):
-    def __init__(self, port_num, group_id, relay_pred, relay_eval, has_terminated, relay_eval_event, has_incoming_bullet):
+    def __init__(self, port_num, group_id, relay_pred, relay_eval, has_terminated, relay_eval_event, has_incoming_bullet_p1_in):
         super().__init__()
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.soc_addr = ('', port_num)  # localhost
         self.socket.bind(self.soc_addr)
         self.relay_pred = relay_pred
         self.relay_eval = relay_eval
-        self.has_incoming_bullet = has_incoming_bullet
+        self.has_incoming_bullet_p1_in = has_incoming_bullet_p1_in
         self.relay_eval_event = relay_eval_event
         self.group_id = group_id
         self.conn = None
@@ -57,11 +57,11 @@ class RelayLaptop(multiprocessing.Process):
                 # self.relay_pred_event.set()
             elif byte_msg[0] == VEST and byte_msg[3] == SHOT_HIT:
                 # self.relay_eval.send(("vest", 1))
-                self.has_incoming_bullet[1].set()  # need to change
+                self.has_incoming_bullet_p1_in.send(True)  # need to change
                 # self.relay_eval_event.set()
             elif byte_msg[0] == GUN and byte_msg[3] == SHOT_FIRED:
                 self.relay_eval.send(("shoot", 0))
-                self.relay_eval_event.set()
+                # self.relay_eval_event.set()
             else:
                 print("Invalid data received")
 

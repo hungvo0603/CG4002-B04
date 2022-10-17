@@ -22,6 +22,10 @@ import time
 # Data buffer
 relay_pred, pred_relay = Pipe(duplex=True)  # internal data, data
 pred_eval, eval_pred = Pipe(duplex=True)  # data, action
+has_incoming_bullet_p1_in, has_incoming_bullet_p1_out = Pipe(
+    duplex=True)
+has_incoming_bullet_p2_in, has_incoming_bullet_p2_out = Pipe(
+    duplex=True)
 relay_eval, eval_relay = Pipe(duplex=True)  # internal data, action
 viz_eval, eval_viz = Pipe(duplex=True)  # player_hit, state
 has_terminated = Value('i', False)
@@ -33,7 +37,7 @@ relay_eval_event = Event()
 # eval_viz_event = Event()
 # viz_eval_event = Event()
 
-has_incoming_bullet = [Event(), Event()]
+# has_incoming_bullet = [Event(), Event()]
 
 # class Ultra96():
 
@@ -69,11 +73,11 @@ if __name__ == '__main__':
 
     # Ultra96 Processes
     relay = RelayLaptop(local_port, group_id,
-                        relay_pred, relay_eval, has_terminated, relay_eval_event, has_incoming_bullet)
+                        relay_pred, relay_eval, has_terminated, relay_eval_event, has_incoming_bullet_p1_in)
     predictor = MovePredictor(
         pred_relay, pred_eval, has_terminated, pred_eval_event)
     eval = EvalServer(eval_ip, eval_port, group_id,
-                      secret_key, eval_pred, eval_relay, eval_viz, has_terminated, pred_eval_event, relay_eval_event, has_incoming_bullet)
+                      secret_key, eval_pred, eval_relay, eval_viz, has_terminated, pred_eval_event, relay_eval_event, has_incoming_bullet_p1_out)
     visualizer = Visualizer(viz_eval, has_terminated)
 
     relay.start()

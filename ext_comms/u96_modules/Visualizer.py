@@ -1,15 +1,13 @@
-import multiprocessing
 from paho.mqtt import client as mqtt_client
 import json
 import socket
 import threading
-import multiprocessing
 
 mqtt_broker = "test.mosquitto.org"  # 'broker.emqx.io'  # Public broker
 mqtt_port = 1883
 
-MQTT_PUB = "cg4002/4/viz_u9620"
-MQTT_SUB = "cg4002/4/u96_viz20"
+MQTT_PUB = "cg4002/4/viz_u96"
+MQTT_SUB = "cg4002/4/u96_viz"
 
 
 class Visualizer():
@@ -69,10 +67,10 @@ class Mqtt():
 
     def publish(self, state):
         try:
-            status = 1
-            while status:
-                result = self.conn.publish(self.topic, state)
-                status = result[0]
+            result = self.conn.publish(self.topic, state, qos=1)
+            print("[Mqtt]Sent data: ", state)
+            if result[0] != 0:
+                print("Failed to publish, return code: ", result[0])
         except (KeyboardInterrupt, socket.gaierror, ConnectionError):
             print("[Mqtt Pub]Keyboard Interrupt, terminating")
             self.has_terminated.value = True
@@ -87,6 +85,7 @@ class Mqtt():
             player_hit = msg.payload.decode()
             if player_hit != "none":
                 self.viz_eval.send(self.parse_player(player_hit))
+                self.viz_eval.clear()
             print("[Mqtt]Received data: ", player_hit)
 
         self.conn.on_message = on_message
