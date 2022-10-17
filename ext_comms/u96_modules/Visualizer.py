@@ -13,7 +13,7 @@ MQTT_SUB = "cg4002/4/u96_viz"
 class Visualizer():
     def __init__(self, viz_eval, has_terminated):
         self.pub = Mqtt(MQTT_PUB, viz_eval, has_terminated)
-        self.sub = Mqtt(MQTT_SUB, viz_eval, has_terminated)
+        self.sub = Mqtt(MQTT_PUB, viz_eval, has_terminated)
         self.viz_eval = viz_eval
         self.has_terminated = has_terminated
 
@@ -83,13 +83,13 @@ class Mqtt():
     def subscribe(self):
         def on_message(client, userdata, msg):
             player_hit = msg.payload.decode()
-            if player_hit != "none":
-                self.viz_eval.send(self.parse_player(player_hit))
-                self.viz_eval.clear()
+            # include when add viz
+            # if player_hit != "none":
+            #     self.viz_eval.send(self.parse_player(player_hit))
             print("[Mqtt]Received data: ", player_hit)
 
         self.conn.on_message = on_message
-        self.conn.subscribe(self.topic)
+        self.conn.subscribe(self.topic, qos=1)
         self.conn.loop_start()
 
     def terminate(self):

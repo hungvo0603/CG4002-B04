@@ -3,10 +3,19 @@ import pynq.lib.dma
 from pynq import allocate
 from pynq import Overlay
 import multiprocessing
+from queue import Empty
+
+
+# def clear(q):
+#     try:
+#         while True:
+#             q.get_nowait()
+#     except Empty:
+#         pass
 
 
 class MovePredictor(multiprocessing.Process):
-    def __init__(self, pred_relay, pred_eval, has_terminated, pred_eval_event):
+    def __init__(self, pred_relay, pred_eval, has_terminated):
         super().__init__()  # init parent (Thread)
         self.daemon = True
         self.has_terminated = has_terminated
@@ -16,7 +25,6 @@ class MovePredictor(multiprocessing.Process):
         self.dma_recv = self.overlay.axi_dma_0
         self.pred_relay = pred_relay
         self.pred_eval = pred_eval
-        self.pred_eval_event = pred_eval_event
 
         self.input_arr = [[], []]  # p1, p2
         self.input_buffer = [allocate(shape=(60,), dtype=np.float32), allocate(
@@ -49,11 +57,13 @@ class MovePredictor(multiprocessing.Process):
         while not self.has_terminated.value:
             try:
                 data, player = self.pred_relay.recv()
+                # clear pipe content
+                print("[ML] Recived: ", len(data))
                 action = self.pred_action(data, player)
                 if action is not None and action != "nomovement":
                     print("[MovePredictor] Predicted action: ", action)
                     self.pred_eval.send((action, player))
-                    # self.pred_eval_event.set()
+                    # clear(self.pred_eval)
             except KeyboardInterrupt:
                 print("[MovePredictor]Keyboard Interrupt, terminating")
                 self.has_terminated.value = True

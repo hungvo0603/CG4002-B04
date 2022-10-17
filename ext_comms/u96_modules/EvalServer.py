@@ -12,7 +12,7 @@ BOTH = 2
 
 class EvalServer(multiprocessing.Process):
     # Client to eval_server
-    def __init__(self, ip_addr, port_num, group_id, secret_key, eval_pred, eval_relay, eval_viz, has_terminated, pred_eval_event, relay_eval_event, has_incoming_bullet_p1_out):
+    def __init__(self, ip_addr, port_num, group_id, secret_key, eval_pred, eval_relay, eval_viz, has_terminated, has_incoming_bullet_p1_out):
         super().__init__()  # init parent (Thread)
         self.conn = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.server_address = (ip_addr, port_num)
@@ -48,6 +48,7 @@ class EvalServer(multiprocessing.Process):
 
         while not self.has_terminated.value:
             # Process if both players have done an action
+            print("P1 waiting action")
             self.has_action[P1].wait()
             # self.has_action[P2].wait()
 
@@ -56,6 +57,7 @@ class EvalServer(multiprocessing.Process):
             #     self.cd_shield = False
 
             self.has_action[P1].clear()
+            print("P1 cleared action")
             # self.has_action[P2].clear()
             print("Sending to eval...")
             self.gamestate.send_encrypted(self.conn, self.secret_key)
@@ -65,6 +67,7 @@ class EvalServer(multiprocessing.Process):
     def receive_data(self):  # blocking call
         while not self.has_terminated.value:
             try:
+                print("[eval] get data from eval")
                 success = self.gamestate.recv_and_update(self.conn)
                 # if self.gamestate.player_1.get_dict()['action'] == 'logout' and self.gamestate.player_2.get_dict()['action'] == 'logout':
                 # spam logout to eveyone
@@ -99,6 +102,8 @@ class EvalServer(multiprocessing.Process):
             # self.pred_eval_event.wait()
             # print("Glove event received")
             action, player = self.eval_pred.recv()
+            print("Glove action received:", action)
+            # print("Aft recv: ", self.eval_pred)
             # self.pred_eval_event.clear()
             if player == P1 and not self.has_action[P1].is_set():
                 # self.has_action[P1] = True
@@ -144,6 +149,7 @@ class EvalServer(multiprocessing.Process):
         while not self.has_terminated.value:
             # self.relay_eval_event.wait()
             action, player = self.eval_relay.recv()
+            print("Gun action received:", action)
             # self.relay_eval_event.clear()
             if player == P1 and not self.has_action[P1].is_set():
                 # self.has_action[P1] = True
