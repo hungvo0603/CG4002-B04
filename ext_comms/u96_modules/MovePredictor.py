@@ -6,12 +6,12 @@ import multiprocessing
 from queue import Empty
 
 
-# def clear(q):
-#     try:
-#         while True:
-#             q.get_nowait()
-#     except Empty:
-#         pass
+def clear(pipe):
+    try:
+        while pipe.poll():
+            pipe.get_nowait()
+    except Empty:
+        pass
 
 
 class MovePredictor(multiprocessing.Process):
@@ -34,7 +34,7 @@ class MovePredictor(multiprocessing.Process):
 
     def pred_action(self, data, player):
         self.input_arr[player].extend(data)
-
+        print("len of input arr: ", len(self.input_arr[player]))
         if len(self.input_arr[player]) < 60:
             return None
 
@@ -50,6 +50,7 @@ class MovePredictor(multiprocessing.Process):
         self.dma_send.sendchannel.wait()
         self.dma_recv.recvchannel.wait()
         self.input_arr[player].clear()  # clear array after prediction
+        print("len of input arr: ", len(self.input_arr[player]))
 
         return actions[self.output_buffer[player][0]]
 
@@ -60,8 +61,11 @@ class MovePredictor(multiprocessing.Process):
                 # clear pipe content
                 print("[ML] Recived: ", len(data))
                 action = self.pred_action(data, player)
-                if action is not None and action != "nomovement":
+
+                if action is not None:
                     print("[MovePredictor] Predicted action: ", action)
+
+                if action is not None and action != "nomovement":
                     self.pred_eval.send((action, player))
                     # clear(self.pred_eval)
             except KeyboardInterrupt:
