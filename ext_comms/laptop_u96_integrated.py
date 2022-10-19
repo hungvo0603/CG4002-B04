@@ -1,120 +1,70 @@
 from bluepy.btle import Peripheral, DefaultDelegate, BTLEDisconnectError
-
 import numpy as np
-
 import struct
-
 import threading
-
 import sys
-
 import socket
-
 import os
-
 import dotenv
-
 import sshtunnel
-
 from queue import Queue
-
 import struct
-
 from tracemalloc import start
-
 from statistics import median, mean, variance
-
 from scipy.fftpack import fft
-
 import time
 
-
 relay_buffer = Queue()
-
 has_closed = False
-
 
 # Load environment variables
 
 dotenv.load_dotenv()
 
 XILINX_HOST = os.getenv('XILINX_HOST')
-
 XILINX_PWD = os.getenv('XILINX_PWD')
-
 SUNFIRE_USER = os.getenv('SUNFIRE_USER')
-
 SUNFIRE_PWD = os.getenv('SUNFIRE_PWD')
-
 SUNFIRE_HOST = 'stu.comp.nus.edu.sg'
 
 
 SYN = 'S'
-
 ACK = 'A'
-
 NAK = 'N'
 
-
 GLOVE = "0"
-
 VEST = "1"
-
 GUN = "2"
-
 SHOT_FIRED = "188"
-
 SHOT_HIT = "161"
-
-SOM_THRESHOLD = 2  # threshold value for start of move
-
+SOM_THRESHOLD = 0.6  # threshold value for start of move
 PACKET_SIZE = 49  # type + 6 floats
-
 
 # Need to send ACK and SYN as 20 byte packets as well
 
 packetOne_len = 20
-
-
 counter = 0  # for timing purposes
-
 fragmentedCounter = 0
-
 droppedCounter = 0
-
 partialpacket = False
-
 firstData = False
-
 startTime = 0
-
 start = False
-
 dataCounter = 0
-
 cycle = False
-
 actual_cycle = False
 
 
 class ScannerDelegate(DefaultDelegate):
-
     def __init__(self, char):
-
         DefaultDelegate.__init__(self)
-
         self.char = char
-
         self.done_handshake = False
-
         self.SeqID = 0
 
     def handleNotification(self, cHandle, data):
-
         # and len(pkt) == packetOne_len: #when handshake is done
-
         if self.done_handshake:
-
             full_packet = True
 
             pkt = bytearray(data)
@@ -441,9 +391,36 @@ class Client(threading.Thread):
 
         # print(self.array_ax)
 
-        if (len(self.array_ax) >= 40):
+        if(not self.start_collection):
 
-            if(self.start_collection):
+            if (len(self.array_ax) >= 5):
+
+                print("Detecting start of move")
+
+                if self.is_start_of_move():
+
+                    print("Start of move detected")
+
+                    self.start_collection = True
+                else:
+
+                    self.array_ax = []
+
+                    self.array_ay = []
+
+                    self.array_az = []
+
+                    self.array_gx = []
+
+                    self.array_gy = []
+
+                    self.array_gz = []
+
+        else:
+
+            if (len(self.array_ax) >= 40):
+
+                print("40 data set collected")
 
                 array_axayaz_gxgygz = []
 
@@ -476,36 +453,6 @@ class Client(threading.Thread):
                 array_axayaz_gxgygz = np.float_(array_axayaz_gxgygz)
 
                 return array_axayaz_gxgygz.tobytes()
-
-            if (not self.is_start_of_move()):
-
-                self.array_ax = self.array_ax[5:]
-
-                self.array_ay = self.array_ay[5:]
-
-                self.array_az = self.array_az[5:]
-
-                self.array_gx = self.array_gx[5:]
-
-                self.array_gy = self.array_gy[5:]
-
-                self.array_gz = self.array_gz[5:]
-
-            else:
-
-                self.array_ax = []
-
-                self.array_ay = []
-
-                self.array_az = []
-
-                self.array_gx = []
-
-                self.array_gy = []
-
-                self.array_gz = []
-
-                self.start_collection = True
 
         return None
 
@@ -546,7 +493,7 @@ class Client(threading.Thread):
 
                         # check me (clear aft action)
 
-                        time.sleep(1)
+                        time.sleep(5)
 
                         relay_buffer.queue.clear()
 
@@ -572,7 +519,13 @@ class Client(threading.Thread):
 
                     self.send_data(message)
 
-                    relay_buffer.queue.clear()
+                    if pkt[0] == 2:
+
+                        # wait for a while then clear pending data (debounce)
+
+                        time.sleep(0.5)
+
+                        relay_buffer.queue.clear()
 
                 else:
 
@@ -674,7 +627,8 @@ if __name__ == '__main__':
     # green: glove ("78:DB:2F:BF:34:35"), gun ("D0:39:72:BF:C1:BF"), vest ("D0:39:72:BF:C6:0D")
 
     # , "D0:39:72:BF:C1:BF", "D0:39:72:BF:C6:0D"] # , "D0:39:72:BF:C1:A6", "D0:39:72:BF:C1:BF"
-    addr_list = ["78:DB:2F:BF:34:35", "D0:39:72:BF:C1:BF", "D0:39:72:BF:C6:0D"]
+    addr_list = ["C4:BE:84:20:1C:05", "D0:39:72:BF:C1:BF",
+                 "D0:39:72:BF:C6:0D"]  # "78:DB:2F:BF:34:35",
 
     bluno_list = []
 

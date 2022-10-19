@@ -2,24 +2,34 @@ from paho.mqtt import client as mqtt_client
 import json
 import socket
 import threading
+from queue import Empty
 
-mqtt_broker = "test.mosquitto.org"  # 'broker.emqx.io'  # Public broker
+mqtt_broker = 'broker.emqx.io'  # "test.mosquitto.org" Public broker
 mqtt_port = 1883
 
 MQTT_PUB = "cg4002/4/viz_u96"
 MQTT_SUB = "cg4002/4/u96_viz"
 
 
+# def clear(pipe):
+#     try:
+#         while pipe.poll():
+#             pipe.recv()
+#     except Empty:
+#         pass
+
+
 class Visualizer():
     def __init__(self, viz_eval, has_terminated):
         self.pub = Mqtt(MQTT_PUB, viz_eval, has_terminated)
-        self.sub = Mqtt(MQTT_PUB, viz_eval, has_terminated)
+        self.sub = Mqtt(MQTT_SUB, viz_eval, has_terminated)
         self.viz_eval = viz_eval
         self.has_terminated = has_terminated
 
     def publish(self):
         while not self.has_terminated.value:
             state = self.viz_eval.recv()
+            # clear(self.viz_eval)
             # print("Visualizer state bef pub: ", state)
             self.pub.publish(json.dumps(state))
 
@@ -58,7 +68,7 @@ class Mqtt():
                 print("Failed to connect, return code: ", rc)
 
         try:
-            self.conn = mqtt_client.Client(clean_session=True)
+            self.conn = mqtt_client.Client()  # clean_session=True
             self.conn.on_connect = on_connect
             self.conn.connect(mqtt_broker, mqtt_port)
             print("[Mqtt] Connection established to ", self.topic)
@@ -67,8 +77,10 @@ class Mqtt():
 
     def publish(self, state):
         try:
-            result = self.conn.publish(self.topic, state, qos=1)
-            print("[Mqtt]Sent data: ", state)
+            result = self.conn.publish(self.topic, state, qos=2)
+            self.conn.loop(1, 1)  # loop to prevent mqtt from blocking
+            # print("[Mqtt]Sent data: ", state)
+            # print("[Mqtt]Publish result: ", result)
             if result[0] != 0:
                 print("Failed to publish, return code: ", result[0])
         except (KeyboardInterrupt, socket.gaierror, ConnectionError):
@@ -89,7 +101,7 @@ class Mqtt():
             print("[Mqtt]Received data: ", player_hit)
 
         self.conn.on_message = on_message
-        self.conn.subscribe(self.topic, qos=1)
+        self.conn.subscribe(self.topic, qos=2)
         self.conn.loop_start()
 
     def terminate(self):

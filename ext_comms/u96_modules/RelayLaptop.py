@@ -4,12 +4,23 @@ import socket
 from _socket import SHUT_RDWR
 import struct
 import time
+from queue import Empty
 
 GLOVE = 0
 VEST = 1
 GUN = 2
 SHOT_FIRED = 188
 SHOT_HIT = 161
+
+
+def clear(pipe):
+    try:
+        print("Clearing pipe")
+        while pipe.poll():
+            pipe.recv()
+    except Empty:
+        print("Finish clearing pipe")
+        pass
 
 
 class RelayLaptop(multiprocessing.Process):

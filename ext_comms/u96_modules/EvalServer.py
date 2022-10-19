@@ -2,12 +2,20 @@ import threading
 import multiprocessing
 import socket
 from _socket import SHUT_RDWR
-
+from queue import Empty
 from GameState import GameState
 
 P1 = 0
 P2 = 1
 BOTH = 2
+
+
+def clear(pipe):
+    try:
+        while pipe.poll():
+            pipe.recv()
+    except Empty:
+        pass
 
 
 class EvalServer(multiprocessing.Process):
@@ -52,9 +60,11 @@ class EvalServer(multiprocessing.Process):
             self.has_action[P1].wait()
             # self.has_action[P2].wait()
 
-            # if self.cd_shield:
-            #     print("Shield time over")
-            #     self.cd_shield = False
+            # Clear all pedning data in pipe
+            print("Clearing eval pipe")
+            clear(self.eval_pred)
+            clear(self.eval_relay)
+            clear(self.eval_viz)
 
             self.has_action[P1].clear()
             print("P1 cleared action")
@@ -102,6 +112,7 @@ class EvalServer(multiprocessing.Process):
             # self.pred_eval_event.wait()
             # print("Glove event received")
             action, player = self.eval_pred.recv()
+            clear(self.eval_pred)
             print("Glove action received:", action)
             # print("Aft recv: ", self.eval_pred)
             # self.pred_eval_event.clear()
@@ -149,6 +160,7 @@ class EvalServer(multiprocessing.Process):
         while not self.has_terminated.value:
             # self.relay_eval_event.wait()
             action, player = self.eval_relay.recv()
+            clear(self.eval_relay)
             print("Gun action received:", action)
             # self.relay_eval_event.clear()
             if player == P1 and not self.has_action[P1].is_set():
@@ -161,6 +173,7 @@ class EvalServer(multiprocessing.Process):
                     # check for vest ir receiver
                     if self.has_incoming_bullet_p1_out.poll(timeout=1.5):
                         self.has_incoming_bullet_p1_out.recv()
+                        clear(self.has_incoming_bullet_p1_out)
                         self.gamestate.update_player(
                             "bullet_hit", P2)
                         # self.eval_viz.send(

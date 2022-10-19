@@ -8,9 +8,11 @@ from queue import Empty
 
 def clear(pipe):
     try:
+        print("Clearing pipe")
         while pipe.poll():
-            pipe.get_nowait()
+            pipe.recv()
     except Empty:
+        print("Finish clearing pipe")
         pass
 
 
@@ -51,6 +53,8 @@ class MovePredictor(multiprocessing.Process):
         self.dma_recv.recvchannel.wait()
         self.input_arr[player].clear()  # clear array after prediction
         print("len of input arr: ", len(self.input_arr[player]))
+        print("Cleared pipe after buffer")
+        clear(self.pred_relay)
 
         return actions[self.output_buffer[player][0]]
 
@@ -67,7 +71,6 @@ class MovePredictor(multiprocessing.Process):
 
                 if action is not None and action != "nomovement":
                     self.pred_eval.send((action, player))
-                    # clear(self.pred_eval)
             except KeyboardInterrupt:
                 print("[MovePredictor]Keyboard Interrupt, terminating")
                 self.has_terminated.value = True
