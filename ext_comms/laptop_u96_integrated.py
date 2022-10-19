@@ -1,10 +1,7 @@
-# Todo: try out with beetle (broken pipe)
-# sync the packet's format send from internal comms
 from bluepy.btle import Peripheral, DefaultDelegate, BTLEDisconnectError
-import json
+import numpy as np
 import struct
 import threading
-import time
 import sys
 import socket
 import os
@@ -13,26 +10,39 @@ import sshtunnel
 from queue import Queue
 import struct
 from tracemalloc import start
+from statistics import median, mean, variance
+from scipy.fftpack import fft
+import time
 
 relay_buffer = Queue()
 has_closed = False
 
 # Load environment variables
+
 dotenv.load_dotenv()
+
 XILINX_HOST = os.getenv('XILINX_HOST')
 XILINX_PWD = os.getenv('XILINX_PWD')
 SUNFIRE_USER = os.getenv('SUNFIRE_USER')
 SUNFIRE_PWD = os.getenv('SUNFIRE_PWD')
 SUNFIRE_HOST = 'stu.comp.nus.edu.sg'
 
-printed_data = []
+
 SYN = 'S'
 ACK = 'A'
 NAK = 'N'
 
-# Need to send ACK and SYN as 20 byte packets as well
-packetOne_len = 20
+GLOVE = "0"
+VEST = "1"
+GUN = "2"
+SHOT_FIRED = "188"
+SHOT_HIT = "161"
+SOM_THRESHOLD = 0.6  # threshold value for start of move
+PACKET_SIZE = 49  # type + 6 floats
 
+# Need to send ACK and SYN as 20 byte packets as well
+
+packetOne_len = 20
 counter = 0  # for timing purposes
 fragmentedCounter = 0
 droppedCounter = 0
@@ -44,30 +54,8 @@ dataCounter = 0
 cycle = False
 actual_cycle = False
 
-startTime = time.time()
-
-GLOVE_FORMAT = {
-    "player": "p1",
-    "sender": 0,
-    "sequence": 0,
-    "gx": 0,
-    "gy": 0,
-    "gz": 0,
-    "ax": 0,
-    "ay": 0,
-    "az": 0,
-}
-
-OTHER_FORMAT = {
-    "player": "p1",
-    "sender": 0,
-    "sequence": 0,
-    "data": 0,
-}
-
 
 class ScannerDelegate(DefaultDelegate):
-
     def __init__(self, char):
         DefaultDelegate.__init__(self)
         self.char = char
@@ -75,144 +63,223 @@ class ScannerDelegate(DefaultDelegate):
         self.SeqID = 0
 
     def handleNotification(self, cHandle, data):
-
         # and len(pkt) == packetOne_len: #when handshake is done
         if self.done_handshake:
             full_packet = True
-            pkt = bytearray(data)
-            timer()
 
-            # print("Packet: " + str(pkt)) #to see the packet
+            pkt = bytearray(data)
+
+            # print("Packet: " + str(pkt))  # to see the packet
 
             if(len(pkt) == packetOne_len and pkt[0] == 0):
+
                 # print("Packet: " + str(pkt)) #to see the packet
+
                 if pkt[2] == 0:
+
                     correct_pkt = checksum(pkt)
+
                     self.SeqID = (self.SeqID + 1) & 0xFF
 
                     if(correct_pkt):
+
                         self.packetOne = bytearray(pkt[0:15])
+
+                        self.char.write(str.encode(ACK))
+
                     else:
+
                         self.char.write(str.encode(NAK))
+
                         #print("Failed checksum")
 
                 elif pkt[2] == 1:
+
                     full_packet = False
+
                     correct_pkt = checksum(pkt)
+
                     self.SeqID = (self.SeqID + 1) & 0xFF
+
                     if(correct_pkt):
+
                         self.packetTwo = bytearray(pkt[0:15])
+
+                        self.char.write(str.encode(ACK))
+
                     else:
+
                         self.char.write(str.encode(NAK))
+
                         #print("Failed checksum")
 
                 if(not full_packet and (self.packetOne[1] + 1 == self.packetTwo[1])):
+
                     relay_buffer.put(self.packetOne + self.packetTwo[3:15])
 
             elif(len(pkt) == packetOne_len and pkt[0] == 1):
+
                 print("IR detected")
+
                 correct_pkt = checksum(pkt)
+
                 self.SeqID = (self.SeqID + 1) & 0xFF
+
                 if(correct_pkt):
+
                     self.char.write(str.encode(ACK))
+
+                    print("Vest correct")
+
                     relay_buffer.put(pkt)
+
                 else:
+
                     self.char.write(str.encode(NAK))
 
             elif(len(pkt) == packetOne_len and pkt[0] == 2):
+
                 print("Shot detected")
+
                 correct_pkt = checksum(pkt)
+
                 self.SeqID = (self.SeqID + 1) & 0xFF
+
                 if(correct_pkt):
+
                     self.char.write(str.encode(ACK))
+
+                    print("Gun correct")
+
                     relay_buffer.put(pkt)
+
                 else:
+
                     self.char.write(str.encode(NAK))
 
         # Received ACK from bluno beetle after SYN is sent
+
         elif data == str.encode(ACK):
+
             self.done_handshake = True
+
             self.char.write(str.encode(ACK))
+
         else:
+
             self.char.write(str.encode(SYN))
 
 
-def timer():
-    global startTime, counter, droppedCounter, fragmentedCounter, start, dataCounter, firstData, cycle
-
-    if(time.time()-startTime >= 4):  # and firstData):
-        # print("Data Rate for " + addr + " is: " + str(counter/10000) + " KB/sec") #/1000 for KB and /10 to average in 10s
-        # print("*******")
-        cycle = True
-        startTime = time.time()
-
-
 def handshake(bluno, char, addr):
+
     done_handshake = False
 
     while done_handshake == False:
+
         if bluno.waitForNotifications(2.0):  # establish connection
+
             done_handshake = True
+
             print("Handshake done")
+
         else:
+
             char.write(str.encode(SYN))
 
     print(addr + " completed handshake")
+
     return done_handshake
 
 
 def connection(addr):
+
     is_connected = False
 
     service_uuid = "dfb0"
+
     char_id = "dfb1"
 
     while is_connected == False:
+
         try:
+
             print("Establishing a connection with: " + addr)
+
             bluno = Peripheral(addr)
 
             # To turn on notifications
+
             service = bluno.getServiceByUUID(service_uuid)
+
             char = service.getCharacteristics(char_id)[0]
 
             bluno.setDelegate(ScannerDelegate(char))
 
             print("Bluno " + addr + " is connected")
+
             char.write(str.encode(SYN))
+
             return bluno, char
+
         except Exception:
+
             print("Encounter an error when connecting..")
+
             pass
 
 
 def connection_thread(bluno, char, addr):
+
     bluno_handshake = False
-    global droppedCounter, has_closed
+
+    global has_closed
+
     while not has_closed:
+
         try:
+
             # timer()
+
             if bluno_handshake:
+
                 # establish connection, wait for 2s
-                if bluno.waitForNotifications(1.5):
+
+                if bluno.waitForNotifications(2.0):
+
                     pass
+
                 else:
+
                     # bluno.disconnect()
+
                     # print("Bluno " + addr + " has disconnected")
+
                     # bluno_handshake = False
+
                     # bluno,char = connection(addr)
+
                     # droppedCounter = droppedCounter + 1
+
                     pass
+
             else:
+
                 bluno_handshake = handshake(bluno, char, addr)
 
         except (KeyboardInterrupt, BrokenPipeError):
+
             has_closed = True
+
             bluno.disconnect()
+
             break
+
         except BTLEDisconnectError:
+
             print("Bluno " + addr + " has disconnected due to an error")
+
             bluno_handshake = False
+
             bluno, char = connection(addr)
 
 
@@ -221,179 +288,366 @@ def checksum(data):
     global counter
 
     checksum = 0
+
     pkt = bytearray(data)
 
     for digit in range(len(data) - 1):  # same way calc on beetle
+
         checksum = (checksum ^ data[digit]) & 0xFF
 
     if checksum == data[len(data)-1]:
+
         counter = counter + len(data) - 3  # minue beetleID, seqID and checksum
+
         return True
+
     else:
+
         return False
 
 
 class Client(threading.Thread):
+
     def __init__(self, local_port, remote_port, group_id):
+
         super().__init__()  # init parent (Thread)
+
         self.conn = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
         self.local_port = local_port
+
         self.remote_port = remote_port
+
         self.group_id = group_id
-        # Open tunnel and connect
-        self.tunnel_dest = self.create_tunnel()
-        self.conn.connect(self.tunnel_dest)
+
         self.daemon = True
 
+        self.start_collection = False
+
+        self.array_ax = []
+
+        self.array_ay = []
+
+        self.array_az = []
+
+        self.array_gx = []
+
+        self.array_gy = []
+
+        self.array_gz = []
+
+    def is_start_of_move(self):
+
+        # might need to change
+
+        print(np.max(self.array_ax) +
+              np.max(self.array_ay) + np.max(self.array_az))
+
+        return np.max(self.array_ax) + np.max(self.array_ay) + np.max(self.array_az) > SOM_THRESHOLD
+
+    def extract_features(self, raw_data):
+
+        extracted = []
+
+        extracted = np.append(extracted, (np.min(raw_data)))
+
+        extracted = np.append(extracted, (np.max(raw_data)))
+
+        extracted = np.append(extracted, (mean(raw_data)))
+
+        extracted = np.append(extracted, (median(raw_data)))
+
+        extracted = np.append(extracted, (variance(raw_data)))
+
+        raw_data = fft(raw_data)
+
+        extracted = np.append(extracted, np.min(abs(raw_data)))
+
+        extracted = np.append(extracted, np.max(abs(raw_data)))
+
+        extracted = np.append(extracted, mean(abs(raw_data)))
+
+        extracted = np.append(extracted, median(abs(raw_data)))
+
+        extracted = np.append(extracted, variance(abs(raw_data)))
+
+        return extracted
+
+    def preprocess(self, pkt):  # look here
+
+        self.array_ax.append(struct.unpack("<f", pkt[15:19])[0])
+
+        self.array_ay.append(struct.unpack("<f", pkt[19:23])[0])
+
+        self.array_az.append(struct.unpack("<f", pkt[23:27])[0])
+
+        self.array_gx.append(struct.unpack("<f", pkt[3:7])[0])
+
+        self.array_gy.append(struct.unpack("<f", pkt[7:11])[0])
+
+        self.array_gz.append(struct.unpack("<f", pkt[11:15])[0])
+
+        print(len(self.array_ax))
+
+        # print(self.array_ax)
+
+        if(not self.start_collection):
+
+            if (len(self.array_ax) >= 5):
+
+                print("Detecting start of move")
+
+                if self.is_start_of_move():
+
+                    print("Start of move detected")
+
+                    self.start_collection = True
+                else:
+
+                    self.array_ax = []
+
+                    self.array_ay = []
+
+                    self.array_az = []
+
+                    self.array_gx = []
+
+                    self.array_gy = []
+
+                    self.array_gz = []
+
+        else:
+
+            if (len(self.array_ax) >= 40):
+
+                print("40 data set collected")
+
+                array_axayaz_gxgygz = []
+
+                array_axayaz_gxgygz = np.concatenate((
+
+                    array_axayaz_gxgygz, self.extract_features(self.array_ax)))
+
+                array_axayaz_gxgygz = np.concatenate((
+
+                    array_axayaz_gxgygz, self.extract_features(self.array_ay)))
+
+                array_axayaz_gxgygz = np.concatenate((
+
+                    array_axayaz_gxgygz, self.extract_features(self.array_az)))
+
+                array_axayaz_gxgygz = np.concatenate((
+
+                    array_axayaz_gxgygz, self.extract_features(self.array_gx)))
+
+                array_axayaz_gxgygz = np.concatenate((
+
+                    array_axayaz_gxgygz, self.extract_features(self.array_gy)))
+
+                array_axayaz_gxgygz = np.concatenate((
+
+                    array_axayaz_gxgygz, self.extract_features(self.array_gz)))
+
+                self.start_collection = False
+
+                array_axayaz_gxgygz = np.float_(array_axayaz_gxgygz)
+
+                return array_axayaz_gxgygz.tobytes()
+
+        return None
+
     def run(self):
-        # put display code here
-        global firstData, startTime, dataCounter, cycle, actual_cycle, has_closed
+
+        # Open tunnel and connect
+
+        self.tunnel_dest = self.create_tunnel()
+
+        self.conn.connect(self.tunnel_dest)
+
+        global has_closed
 
         while not has_closed:
+
             try:
+
                 pkt = relay_buffer.get()
-                print("IMU Data")
 
                 if(pkt[0] == 0):
-                    if(actual_cycle):
-                        actual_cycle = False
 
-                    data = GLOVE_FORMAT
-                    print("Sender: " + str(pkt[0]))
-                    data["sender"] = pkt[0]
+                    s = time.perf_counter()
 
-                    print("Sequence ID: " + str(pkt[1]))
-                    data["sequence"] = pkt[1]
+                    message = self.preprocess(pkt)
 
-                    print("gx: %.3f" % struct.unpack(
-                        "<f", pkt[3:7]))  # little endian
-                    data["gx"] = struct.unpack("<f", pkt[3:7])
+                    if message is not None:
 
-                    print("gy: %.3f" % struct.unpack("<f", pkt[7:11]))
-                    data["gy"] = struct.unpack("<f", pkt[7:11])
+                        # print("Len msg: ", len(message))
 
-                    print("gz: %.3f" % struct.unpack(
-                        "<f", pkt[11:15]))  # little endian
-                    data["gz"] = struct.unpack("<f", pkt[11:15])
+                        for i in range(0, 10):
 
-                    print("ax: %.3f" % struct.unpack("<f", pkt[15:19]))
-                    data["ax"] = struct.unpack("<f", pkt[15:19])
+                            # send data in chunks of 48 -> 6*10*8 = 480
 
-                    print("ay: %.3f" % struct.unpack("<f", pkt[19:23]))
-                    data["ay"] = struct.unpack("<f", pkt[19:23])
+                            self.send_data(pkt[0].to_bytes(
+                                1, 'big') + message[i*(PACKET_SIZE-1):(i+1)*(PACKET_SIZE-1)])
 
-                    print("az: %.3f" % struct.unpack("<f", pkt[23:27]))
-                    data["az"] = struct.unpack("<f", pkt[23:27])
+                            time.sleep(0.2)
 
-                    if(cycle):
-                        cycle = False
-                        actual_cycle = True
+                        # check me (clear aft action)
 
-                    # send data to server
-                    self.send_data(json.dumps(data))
+                        time.sleep(5)
 
-                elif(pkt[0] == 1 and str(pkt[3]) == '6278'):
-                    # gun
-                    data = OTHER_FORMAT
-                    print("IR Hit Detection verified")
-                    print("Data: " + str(pkt[3]))
+                        relay_buffer.queue.clear()
 
-                    print("Sender: " + str(pkt[0]))
-                    data["sender"] = pkt[0]
+                        self.array_ax = []
 
-                    print("Sequence ID: " + str(pkt[1]))
-                    data["sequence"] = pkt[1]
+                        self.array_ay = []
 
-                    print("Data: " + str(pkt[3]))
-                    data["sequence"] = pkt[3]
+                        self.array_az = []
 
-                elif(pkt[0] == 2 and str(pkt[3]) == '188'):
-                    # vest
-                    data = OTHER_FORMAT
-                    print("Shot Detection verified")
-                    print("Data: " + str(pkt[3]))
+                        self.array_gx = []
 
-                    print("Sender: " + str(pkt[0]))
-                    data["sender"] = pkt[0]
+                        self.array_gy = []
 
-                    print("Sequence ID: " + str(pkt[1]))
-                    data["sequence"] = pkt[1]
+                        self.array_gz = []
 
-                    print("Data: " + str(pkt[3]))
-                    data["sequence"] = pkt[3]
+                        print("Time taken for glove: ", time.perf_counter()-s)
+
+                elif(pkt[0] == 1 and str(pkt[3]) == '161') or (pkt[0] == 2 and str(pkt[3]) == '188'):
+
+                    message = pkt + bytearray(PACKET_SIZE-len(pkt))
+
+                    print("Message: ", message)
+
+                    self.send_data(message)
+
+                    if pkt[0] == 2:
+
+                        # wait for a while then clear pending data (debounce)
+
+                        time.sleep(0.5)
+
+                        relay_buffer.queue.clear()
+
+                else:
+
+                    print("Unknown packet: ", pkt)
 
             except (KeyboardInterrupt, ConnectionResetError, BrokenPipeError):
+
                 print("Program stopped")
+
                 has_closed = True
-                self.end_client_connection()
+
+                self.conn.close()
+
                 break
 
     def create_tunnel(self):
+
         try:
+
             # u96 to sunfire
+
             tunnel_sunfire = sshtunnel.open_tunnel(
+
                 ssh_address_or_host=(SUNFIRE_HOST, 22),  # gateway
+
                 remote_bind_address=(XILINX_HOST, 22),
+
                 ssh_username=SUNFIRE_USER,
+
                 ssh_password=SUNFIRE_PWD
+
             )
+
             tunnel_sunfire.start()
+
             print(tunnel_sunfire.tunnel_is_up, flush=True)
 
             # relay to u96 (this part is sort of like creating another tunnel on curr machine to pass through the xilinx pwd)
-            tunnel_xilinx = sshtunnel.open_tunnel(
-                ssh_address_or_host=(
-                    'localhost', tunnel_sunfire.local_bind_port),
-                # changed from remote
-                remote_bind_address=('localhost', self.remote_port),
-                ssh_username="xilinx",
-                ssh_password=XILINX_PWD,
-                local_bind_address=('localhost', self.local_port)
-            )
-            tunnel_xilinx.start()
-            print(tunnel_xilinx.tunnel_is_up, flush=True)
-            return tunnel_xilinx.local_bind_address
-        except Exception as e:
-            print(e)
-            print("Reconnecting to tunnel")
-            self.create_tunnel()
 
-    def end_client_connection(self):
-        self.conn.close()
+            tunnel_xilinx = sshtunnel.open_tunnel(
+
+                ssh_address_or_host=(
+
+                    'localhost', tunnel_sunfire.local_bind_port),
+
+                # changed from remote
+
+                remote_bind_address=('localhost', self.remote_port),
+
+                ssh_username="xilinx",
+
+                ssh_password=XILINX_PWD,
+
+                local_bind_address=('localhost', self.local_port)
+
+            )
+
+            tunnel_xilinx.start()
+
+            print(tunnel_xilinx.tunnel_is_up, flush=True)
+
+            return tunnel_xilinx.local_bind_address
+
+        except Exception as e:
+
+            print("Reconnecting to tunnel")
+
+            return self.create_tunnel()
 
     def send_data(self, message):
-        # _ is used as delimiter between len and content
-        packet_size = (str(len(message)) + '_').encode("utf-8")
-        self.conn.sendall(packet_size)
-        self.conn.sendall(bytes(str(message), encoding="utf8"))
+
+        rc = self.conn.sendall(bytes(message))
+
+        if rc:
+
+            print("Failed to send, with rc: ", rc)
 
 
 if __name__ == '__main__':
+
     if len(sys.argv) != 4:
+
         print('[Client] Invalid number of arguments')
+
         sys.exit()
 
     local_port = int(sys.argv[1])
+
     remote_port = int(sys.argv[2])
+
     group_id = sys.argv[3]
 
     conn_u96 = Client(local_port, remote_port, group_id)
+
     conn_u96.start()
 
-    # ,"D0:39:72:BF:C6:0D","D0:39:72:BF:C1:A6"]#1C:05 is IMU, C6:0D is vest, C1:A6 IS gun
-    addr_list = ["C4:BE:84:20:1C:05"]
+    # red: ,"D0:39:72:BF:C6:0D","D0:39:72:BF:C1:A6"]#1C:05 is IMU, C6:0D is vest, C1:A6 IS gun
+
+    # green: glove ("78:DB:2F:BF:34:35"), gun ("D0:39:72:BF:C1:BF"), vest ("D0:39:72:BF:C6:0D")
+
+    # , "D0:39:72:BF:C1:BF", "D0:39:72:BF:C6:0D"] # , "D0:39:72:BF:C1:A6", "D0:39:72:BF:C1:BF"
+    addr_list = ["C4:BE:84:20:1C:05", "D0:39:72:BF:C1:BF",
+                 "D0:39:72:BF:C6:0D"]  # "78:DB:2F:BF:34:35",
 
     bluno_list = []
+
     char_list = []
 
     for addr in addr_list:
+
         bluno, char = connection(addr)
+
         bluno_list.append(bluno)
+
         char_list.append(char)
 
     # zip creates [(bluno#, char#, addr#),..] for each bluno beetle
+
     for (b, c, a) in zip(bluno_list, char_list, addr_list):
+
         t = threading.Thread(target=connection_thread, args=(b, c, a, ))
+
         t.start()
 
     conn_u96.join()
