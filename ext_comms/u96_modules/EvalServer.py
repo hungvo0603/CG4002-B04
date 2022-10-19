@@ -1,6 +1,7 @@
 import threading
 import multiprocessing
 import socket
+import time
 from _socket import SHUT_RDWR
 from queue import Empty
 from GameState import GameState
@@ -8,6 +9,7 @@ from GameState import GameState
 P1 = 0
 P2 = 1
 BOTH = 2
+TOTAL_MOVE = 18
 
 
 def clear(pipe):
@@ -32,6 +34,7 @@ class EvalServer(multiprocessing.Process):
 
         self.gamestate = GameState(main=self)  # static
         self.has_terminated = has_terminated
+        self.action_counter = 0
         self.daemon = True
         # self.cd_shield = False
         # self.pred_eval_event = pred_eval_event
@@ -55,6 +58,16 @@ class EvalServer(multiprocessing.Process):
         gun_thread.start()
 
         while not self.has_terminated.value:
+            if self.action_counter >= TOTAL_MOVE:
+                time.sleep(10)
+                print("Logout move")
+                self.gamestate.update_player("logout", P1)
+                self.eval_viz.send(
+                    self.gamestate.get_data_plain_text(P1))
+                self.gamestate.send_encrypted(self.conn, self.secret_key)
+                self.logout()
+                break
+
             # Process if both players have done an action
             print("P1 waiting action")
             self.has_action[P1].wait()
@@ -71,6 +84,7 @@ class EvalServer(multiprocessing.Process):
             # self.has_action[P2].clear()
             print("Sending to eval...")
             self.gamestate.send_encrypted(self.conn, self.secret_key)
+            self.action_counter += 1
 
         self.logout()
 
