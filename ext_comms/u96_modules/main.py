@@ -53,10 +53,10 @@ if __name__ == '__main__':
 
     # Ultra96 Processes
     relay = RelayLaptop(local_port, group_id,
-                        relay_pred, relay_eval, has_terminated, has_incoming_bullet_p1_in)
+                        relay_pred, relay_eval, has_terminated, has_incoming_bullet_p1_in, has_incoming_bullet_p2_in)
     predictor = MovePredictor(pred_relay, pred_eval, has_terminated)
     eval = EvalServer(eval_ip, eval_port, group_id,
-                      secret_key, eval_pred, eval_relay, eval_viz, has_terminated, has_incoming_bullet_p1_out)
+                      secret_key, eval_pred, eval_relay, eval_viz, has_terminated, has_incoming_bullet_p1_out, has_incoming_bullet_p2_out)
     visualizer = Visualizer(viz_eval, has_terminated)
 
     relay.start()

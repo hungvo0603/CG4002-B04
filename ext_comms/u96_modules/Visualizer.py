@@ -2,21 +2,12 @@ from paho.mqtt import client as mqtt_client
 import json
 import socket
 import threading
-from queue import Empty
 
 mqtt_broker = 'broker.emqx.io'  # "test.mosquitto.org" Public broker
 mqtt_port = 1883
 
 MQTT_PUB = "cg4002/4/viz_u96"
 MQTT_SUB = "cg4002/4/u96_viz"
-
-
-# def clear(pipe):
-#     try:
-#         while pipe.poll():
-#             pipe.recv()
-#     except Empty:
-#         pass
 
 
 class Visualizer():
@@ -97,7 +88,7 @@ class Mqtt():
             player_hit = msg.payload.decode()
             # include when add viz
             # if player_hit != "none":
-            #     self.viz_eval.send(self.parse_player(player_hit))
+            self.viz_eval.send(player_hit)
             print("[Mqtt]Received data: ", player_hit)
 
         self.conn.on_message = on_message
