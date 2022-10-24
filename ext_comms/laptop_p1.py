@@ -33,7 +33,10 @@ GUN = "2"
 SHOT_FIRED = "188"
 SHOT_HIT = "161"
 SOM_THRESHOLD = 0.8  # threshold value for start of move
-PACKET_SIZE = 49  # type + 6 floats
+PACKET_SIZE = 50  # player + type + 6 floats
+P1 = 0
+P2 = 1
+
 # Need to send ACK and SYN as 20 byte packets as well
 packetOne_len = 20
 counter = 0  # for timing purposes
@@ -115,6 +118,7 @@ def handshake(bluno, char, addr):
         if bluno.waitForNotifications(2.0):  # establish connection
             done_handshake = True
             print("Handshake done")
+
         else:
             char.write(str.encode(SYN))
     print(addr + " completed handshake")
@@ -146,7 +150,6 @@ def connection_thread(bluno, char, addr):
     global has_closed
     while not has_closed:
         try:
-            # timer()
             if bluno_handshake:
                 # establish connection, wait for 2s
                 if bluno.waitForNotifications(2.0):
@@ -267,14 +270,14 @@ class Client(threading.Thread):
             try:
                 pkt = relay_buffer.get()
                 if(pkt[0] == 0):
-                    s = time.perf_counter()
                     message = self.preprocess(pkt)
                     if message is not None:
                         # print("Len msg: ", len(message))
                         for i in range(0, 10):
                             # send data in chunks of 48 -> 6*10*8 = 480
-                            self.send_data(pkt[0].to_bytes(
-                                1, 'big') + message[i*(PACKET_SIZE-1):(i+1)*(PACKET_SIZE-1)])
+                            self.send_data(int(P1).to_bytes(
+                                1, 'big') + pkt[0].to_bytes(
+                                1, 'big') + message[i*(PACKET_SIZE-2):(i+1)*(PACKET_SIZE-2)])
                             time.sleep(0.2)
                         # check me (clear aft action)
                         time.sleep(5)
@@ -285,9 +288,9 @@ class Client(threading.Thread):
                         self.array_gx = []
                         self.array_gy = []
                         self.array_gz = []
-                        print("Time taken for glove: ", time.perf_counter()-s)
                 elif(pkt[0] == 1 and str(pkt[3]) == '161') or (pkt[0] == 2 and str(pkt[3]) == '188'):
-                    message = pkt + bytearray(PACKET_SIZE-len(pkt))
+                    message = int(P1).to_bytes(
+                        1, 'big') + pkt + bytearray(PACKET_SIZE-len(pkt))
                     print("Message: ", message)
                     self.send_data(message)
                     if pkt[0] == 2:
