@@ -290,7 +290,7 @@ class Client(threading.Thread):
                         self.array_gz = []
                 elif(pkt[0] == 1 and str(pkt[3]) == '161') or (pkt[0] == 2 and str(pkt[3]) == '188'):
                     message = int(P1).to_bytes(
-                        1, 'big') + pkt + bytearray(PACKET_SIZE-len(pkt))
+                        1, 'big') + pkt + bytearray(PACKET_SIZE-len(pkt)-1)
                     print("Message: ", message)
                     self.send_data(message)
                     if pkt[0] == 2:
