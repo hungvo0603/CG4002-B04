@@ -45,6 +45,8 @@ namespace M2MQTT.MainController
         public Image connectedIcon;
         public Image disconnectedIcon;
         public Button PublishMessageButton;
+        public Image bluetoothConnected;
+        public Image bluetoothDisconnected;
 
         [Header("Healthbar UI")]
         public HealthBarController healthBarPlayer1;
@@ -70,17 +72,18 @@ namespace M2MQTT.MainController
         [Header("Enemy Detector")]
         public EnemyDetector enemyDetector;
 
+        [Header("Scoreboard Overlay")]
+        public GameObject scoreboardOverlay;
+
         [Header("Data")]
         public PlayerDataJson playerData = new PlayerDataJson();
         public PlayerStatsJson player1Data = new PlayerStatsJson();
         public PlayerStatsJson player2Data = new PlayerStatsJson();
         // public GrenadeHitJson grenadeHitData = new GrenadeHitJson();
 
-        [Header("Scene Changer")]
-        public SceneChanger sceneChanger;
-
         private List<string> eventMessages = new List<string>();
         private bool updateUI = false;
+        private int counter = 0;
 
         // Receiver: cg4002/4/u96_viz20
         public void PublishMessage(string msg)
@@ -102,32 +105,14 @@ namespace M2MQTT.MainController
             // TESTING FOR VISUALIZER
             // string sample_json_string = "{\"p1\": {\"hp\": 100, \"action\": \"shoot\", \"bullets\": 5, \"grenades\": 1, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 2, \"num_shield\": 3}, \"p2\": {\"hp\": 60, \"action\": \"none\", \"bullets\": 6, \"grenades\": 2, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 3, \"num_shield\": 3}}";
             // string sample_json_string = "{\"p1\": {\"hp\": 100, \"action\": \"shield\", \"bullets\": 5, \"grenades\": 2, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 0, \"num_shield\": 3}, \"p2\": {\"hp\": 100, \"action\": \"none\", \"bullets\": 6, \"grenades\": 2, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 0, \"num_shield\": 3}}";
-            string sample_json_string = "{\"p1\": {\"hp\": 100, \"action\": \"reload\", \"bullets\": 6, \"grenades\": 1, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 0, \"num_shield\": 2}, \"p2\": {\"hp\": 60, \"action\": \"none\", \"bullets\": 6, \"grenades\": 2, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 0, \"num_shield\": 3}}";
-            // string sample_json_string = "{\"p1\": {\"hp\": 100, \"action\": \"grenade\", \"bullets\": 6, \"grenades\": 1, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 0, \"num_shield\": 2}, \"p2\": {\"hp\": 60, \"action\": \"none\", \"bullets\": 6, \"grenades\": 2, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 0, \"num_shield\": 3}}";
+            // string sample_json_string = "{\"p1\": {\"hp\": 100, \"action\": \"reload\", \"bullets\": 6, \"grenades\": 1, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 0, \"num_shield\": 2}, \"p2\": {\"hp\": 60, \"action\": \"none\", \"bullets\": 6, \"grenades\": 2, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 0, \"num_shield\": 3}}";
+            string sample_json_string = "{\"p1\": {\"hp\": 100, \"action\": \"grenade\", \"bullets\": 6, \"grenades\": 1, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 0, \"num_shield\": 2}, \"p2\": {\"hp\": 60, \"action\": \"none\", \"bullets\": 6, \"grenades\": 2, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 0, \"num_shield\": 3}}";
             // string sample_json_string = "{\"p1\": {\"hp\": 100, \"action\": \"logout\", \"bullets\": 5, \"grenades\": 1, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 2, \"num_shield\": 3}, \"p2\": {\"hp\": 60, \"action\": \"none\", \"bullets\": 6, \"grenades\": 2, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 3, \"num_shield\": 3}}";
 
             client.Publish("cg4002/4/viz_u96", System.Text.Encoding.UTF8.GetBytes(sample_json_string), MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE, false);
             Debug.Log("Test message published");
             }
         }
-
-        // public void SetUiMessage(string msg)
-        // {
-        //     if (consoleInputField != null)
-        //     {
-        //         consoleInputField.text = msg;
-        //         updateUI = true;
-        //     }
-        // }
-
-        // public void AddUiMessage(string msg)
-        // {
-        //     if (consoleInputField != null)
-        //     {
-        //         consoleInputField.text += msg + "\n";
-        //         updateUI = true;
-        //     }
-        // }
 
         protected override void OnConnecting()
         {
@@ -142,18 +127,17 @@ namespace M2MQTT.MainController
             connectedIcon.gameObject.SetActive(true);
             disconnectedIcon.gameObject.SetActive(false);
             updateUI = true;
-            
-            // For testing Reload only
-            // shootController.SetBullet(3, 4);
         }
 
         protected override void SubscribeTopics()
         {
+            Debug.Log("Topic Subscribed");
             client.Subscribe(new string[] { "cg4002/4/viz_u96" }, new byte[] { MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE });
         }
 
         protected override void UnsubscribeTopics()
         {
+            Debug.Log("Topic Unsubscribed");
             client.Unsubscribe(new string[] { "cg4002/4/viz_u96" });
         }
 
@@ -197,8 +181,10 @@ namespace M2MQTT.MainController
         {
             connectedIcon.gameObject.SetActive(false);
             disconnectedIcon.gameObject.SetActive(true);
+            scoreboardOverlay.gameObject.SetActive(false);
+            bluetoothConnected.gameObject.SetActive(false);
+            bluetoothDisconnected.gameObject.SetActive(true);
             Connect();
-            // SetUiMessage("Ready.");
             updateUI = true;
             base.Start();
         }
@@ -234,6 +220,12 @@ namespace M2MQTT.MainController
             // }
             // else
             // {
+            counter += 1;
+            if (counter == 10)
+            {
+                SubscribeTopics();
+                counter = 0;
+            }
             if (msg == "p1" || msg == "p2" || msg == "none")
             {
                 Debug.Log("Feedback received");
@@ -337,8 +329,15 @@ namespace M2MQTT.MainController
                     shootController.ReloadPlayer1();
                     break;
                 case "logout":
-                    Disconnect();
-                    sceneChanger.ChangeScene("ScoreboardOverlay");
+                    scoreboardOverlay.gameObject.SetActive(true);
+                    break;
+                case "bluetooth-connected":
+                    bluetoothConnected.gameObject.SetActive(true);
+                    bluetoothDisconnected.gameObject.SetActive(false);
+                    break;
+                case "bluetooth-disconnected":
+                    bluetoothConnected.gameObject.SetActive(false);
+                    bluetoothDisconnected.gameObject.SetActive(true);
                     break;
                 default:
                     break;

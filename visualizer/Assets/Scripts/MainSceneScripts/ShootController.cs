@@ -38,14 +38,14 @@ public class ShootController : MonoBehaviour
 
     void Update()
     {
-        if (player1Bullet == 0)
-        {
-            player1Bullet = MAX_BULLET;
-        }
-        if (player2Bullet == 0)
-        {
-            player2Bullet = MAX_BULLET;
-        }
+        // if (player1Bullet == 0)
+        // {
+        //     player1Bullet = MAX_BULLET;
+        // }
+        // if (player2Bullet == 0)
+        // {
+        //     player2Bullet = MAX_BULLET;
+        // }
         player2BulletText.text = player2Bullet.ToString();
         _isShieldActivatedPlayer1 = shieldController.isShieldActivatedPlayer1;
         _isShieldActivatedPlayer2 = shieldController.isShieldActivatedPlayer2;
@@ -102,8 +102,10 @@ public class ShootController : MonoBehaviour
 
     public void ReloadPlayer1()
     {
-        player1Bullet = MAX_BULLET;
-        reloadSound.Play();
+        if (player1Bullet == 0) {
+            player1Bullet = MAX_BULLET;
+            reloadSound.Play(); 
+        }
     }
 
     public void ReloadPlayer2()
