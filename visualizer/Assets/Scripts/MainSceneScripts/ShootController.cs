@@ -16,7 +16,6 @@ public class ShootController : MonoBehaviour
     private const int MAX_BULLET = 6;
     private const int SHOOT_DAMAGE = 10;
 
-    public TextMeshProUGUI player2BulletText;
     public AudioSource reloadSound;
 
     public EnemyDetector enemy;
@@ -30,7 +29,6 @@ public class ShootController : MonoBehaviour
     {
         player1Bullet = MAX_BULLET;
         player2Bullet = MAX_BULLET;
-        player2BulletText.text = player2Bullet.ToString();
         hasEnemy = false;
         // _isShieldActivatedPlayer1 = false;
         _isShieldActivatedPlayer2 = false;
@@ -46,7 +44,6 @@ public class ShootController : MonoBehaviour
         // {
         //     player2Bullet = MAX_BULLET;
         // }
-        player2BulletText.text = player2Bullet.ToString();
         _isShieldActivatedPlayer1 = shieldController.isShieldActivatedPlayer1;
         _isShieldActivatedPlayer2 = shieldController.isShieldActivatedPlayer2;
     }

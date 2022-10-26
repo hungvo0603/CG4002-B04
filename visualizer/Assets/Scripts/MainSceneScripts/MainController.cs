@@ -30,6 +30,7 @@ using UnityEngine.UI;
 using uPLibrary.Networking.M2Mqtt;
 using uPLibrary.Networking.M2Mqtt.Messages;
 using M2MqttUnity;
+using TMPro;
 
 /// <summary>
 /// Examples for the M2MQTT library (https://github.com/eclipse/paho.mqtt.m2mqtt),
@@ -41,6 +42,9 @@ namespace M2MQTT.MainController
     /// </summary>
     public class MainController : M2MqttUnityClient
     {
+        [Header("Registered Player")]
+        public TextMeshProUGUI playerRegistered;
+
         [Header("Connection UI")]
         public Image connectedIcon;
         public Image disconnectedIcon;
@@ -55,6 +59,8 @@ namespace M2MQTT.MainController
         [Header("Bullet UI")]
         public ShootController shootController;
         public GunController gunController;
+        public GameObject bulletDisplayP1;
+        public GameObject bulletDisplayP2;
 
         [Header("Grenade UI")]
         public GrenadeController grenadeController;
@@ -85,16 +91,8 @@ namespace M2MQTT.MainController
         private bool updateUI = false;
         private int counter = 0;
 
-        // Receiver: cg4002/4/u96_viz20
         public void PublishMessage(string msg)
-        {
-            // client.Publish("cg4002/4/u96_viz20", System.Text.Encoding.UTF8.GetBytes("p1"), MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE, false);
-            
-            // Sending feedback message
-            // Adi should parse the feedback, being "p1", "p2" or "none"
-            
-            // FEEDBACK TO EXT_COMM
-            
+        {   
             if (!String.IsNullOrEmpty(msg))
             {
                 client.Publish("cg4002/4/u96_viz", System.Text.Encoding.UTF8.GetBytes(msg), MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE, false);
@@ -106,7 +104,7 @@ namespace M2MQTT.MainController
             // string sample_json_string = "{\"p1\": {\"hp\": 100, \"action\": \"shoot\", \"bullets\": 5, \"grenades\": 1, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 2, \"num_shield\": 3}, \"p2\": {\"hp\": 60, \"action\": \"none\", \"bullets\": 6, \"grenades\": 2, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 3, \"num_shield\": 3}}";
             // string sample_json_string = "{\"p1\": {\"hp\": 100, \"action\": \"shield\", \"bullets\": 5, \"grenades\": 2, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 0, \"num_shield\": 3}, \"p2\": {\"hp\": 100, \"action\": \"none\", \"bullets\": 6, \"grenades\": 2, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 0, \"num_shield\": 3}}";
             // string sample_json_string = "{\"p1\": {\"hp\": 100, \"action\": \"reload\", \"bullets\": 6, \"grenades\": 1, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 0, \"num_shield\": 2}, \"p2\": {\"hp\": 60, \"action\": \"none\", \"bullets\": 6, \"grenades\": 2, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 0, \"num_shield\": 3}}";
-            string sample_json_string = "{\"p1\": {\"hp\": 100, \"action\": \"grenade\", \"bullets\": 6, \"grenades\": 1, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 0, \"num_shield\": 2}, \"p2\": {\"hp\": 60, \"action\": \"none\", \"bullets\": 6, \"grenades\": 2, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 0, \"num_shield\": 3}}";
+            string sample_json_string = "{\"p1\": {\"hp\": 100, \"action\": \"grenade\", \"bullets\": 6, \"grenades\": 1, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 0, \"num_shield\": 2}, \"p2\": {\"hp\": 60, \"action\": \"shoot\", \"bullets\": 4, \"grenades\": 2, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 0, \"num_shield\": 3}}";
             // string sample_json_string = "{\"p1\": {\"hp\": 100, \"action\": \"logout\", \"bullets\": 5, \"grenades\": 1, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 2, \"num_shield\": 3}, \"p2\": {\"hp\": 60, \"action\": \"none\", \"bullets\": 6, \"grenades\": 2, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 3, \"num_shield\": 3}}";
 
             client.Publish("cg4002/4/viz_u96", System.Text.Encoding.UTF8.GetBytes(sample_json_string), MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE, false);
@@ -174,6 +172,14 @@ namespace M2MQTT.MainController
                     PublishMessageButton.interactable = client.IsConnected;
                 }
             }
+            if (SettingsController.REGISTERED_PLAYER == 1)
+            {
+                bulletDisplayP2.gameObject.SetActive(false);
+            }
+            else if (SettingsController.REGISTERED_PLAYER == 2)
+            {
+                bulletDisplayP1.gameObject.SetActive(false);
+            }
             updateUI = false;
         }
 
@@ -184,9 +190,43 @@ namespace M2MQTT.MainController
             scoreboardOverlay.gameObject.SetActive(false);
             bluetoothConnected.gameObject.SetActive(false);
             bluetoothDisconnected.gameObject.SetActive(true);
+            playerRegistered.text = "Player " + SettingsController.REGISTERED_PLAYER.ToString();
+            StartCoroutine(SetPlayerSide());
             Connect();
             updateUI = true;
             base.Start();
+        }
+
+        IEnumerator SetPlayerSide()
+        {
+            yield return new WaitForSeconds(1f);
+
+            if (SettingsController.REGISTERED_PLAYER == 1)
+            {
+                playerRegistered.text = (counter == 0) ? "<<" : "<<" + playerRegistered.text;
+            } 
+            else if (SettingsController.REGISTERED_PLAYER == 2)
+            {
+                playerRegistered.text = (counter == 0) ? ">>" : playerRegistered.text + ">>";
+            }
+
+            counter += 1;
+            if (counter == 3) 
+            {
+                counter = 0;
+                StartCoroutine(DisablePlayerNotice());
+            }
+            else
+            {
+                StartCoroutine(SetPlayerSide());
+            }
+            
+        }
+
+        IEnumerator DisablePlayerNotice()
+        {
+            yield return new WaitForSeconds(2f);
+            playerRegistered.gameObject.SetActive(false);
         }
 
         protected override void DecodeMessage(string topic, byte[] message)
@@ -201,16 +241,6 @@ namespace M2MQTT.MainController
             eventMessages.Add(eventMsg);
         }
 
-        /** Player data
-        //  hp --
-        //  action
-        //  bullets --
-        //  grenades --
-        //  shield_time 
-        //  shield_health --
-        //  num_deaths --
-        //  num_shields --
-        */
         private void ProcessMessage(string msg)
         {
             // string[] specialMessage = new string[] {"p1", "p2", "none"};
@@ -220,12 +250,6 @@ namespace M2MQTT.MainController
             // }
             // else
             // {
-            counter += 1;
-            if (counter == 10)
-            {
-                SubscribeTopics();
-                counter = 0;
-            }
             if (msg == "p1" || msg == "p2" || msg == "none")
             {
                 Debug.Log("Feedback received");
@@ -311,12 +335,13 @@ namespace M2MQTT.MainController
 
         private void ProcessAction(string actionP1, string actionP2)
         {
+            string currentPlayer = "p" + SettingsController.REGISTERED_PLAYER.ToString();
             switch (actionP1)
             {
                 case "grenade":
                     grenadeController.ExplosionButtonPressPlayer1();
                     grenadeTriggerAnimation.TriggerAnimation();
-                    ProcessGrenadeHitFeedback("p1");
+                    ProcessGrenadeHitFeedback(currentPlayer);
                     break;
                 case "shoot":
                     shootController.GunShotPlayer1();
@@ -331,11 +356,11 @@ namespace M2MQTT.MainController
                 case "logout":
                     scoreboardOverlay.gameObject.SetActive(true);
                     break;
-                case "bluetooth-connected":
+                case "connect":
                     bluetoothConnected.gameObject.SetActive(true);
                     bluetoothDisconnected.gameObject.SetActive(false);
                     break;
-                case "bluetooth-disconnected":
+                case "disconnect":
                     bluetoothConnected.gameObject.SetActive(false);
                     bluetoothDisconnected.gameObject.SetActive(true);
                     break;
@@ -348,8 +373,7 @@ namespace M2MQTT.MainController
                 case "grenade":
                     grenadeController.ExplosionButtonPressPlayer2();
                     enemyGrenadeTriggerAnimation.TriggerAnimation();
-                    // Feedback hit
-                    // ProcessGrenadeHitFeedback("p2");
+                    ProcessGrenadeHitFeedback(currentPlayer);
                     break;
                 case "shoot":
                     shootController.GunShotPlayer2();
@@ -361,6 +385,14 @@ namespace M2MQTT.MainController
                 case "reload":
                     shootController.ReloadPlayer2();
                     break;
+                case "connect":
+                    bluetoothConnected.gameObject.SetActive(true);
+                    bluetoothDisconnected.gameObject.SetActive(false);
+                    break;
+                case "disconnect":
+                    bluetoothConnected.gameObject.SetActive(false);
+                    bluetoothDisconnected.gameObject.SetActive(true);
+                    break;
                 default:
                     break;
             }
@@ -369,18 +401,16 @@ namespace M2MQTT.MainController
         private void ProcessGrenadeHitFeedback(string thrower)
         {
             bool enemyDetected = enemyDetector.hasEnemy;
-            // bool enemyDetected = true;
             if (enemyDetected)
             {
-                PublishMessage("p2");
-                // if (thrower == "p1")
-                // {
-                //     PublishMessage("p2");
-                // }
-                // else if (thrower == "p2")
-                // {
-                //     PublishMessage("p1");
-                // }
+                if (thrower == "p1")
+                {
+                    PublishMessage("p2");
+                }
+                else if (thrower == "p2")
+                {
+                    PublishMessage("p1");
+                }
             }
             else
             {
