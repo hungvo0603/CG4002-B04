@@ -10,8 +10,10 @@ import time
 GLOVE = 0
 VEST = 1
 GUN = 2
-SHOT_FIRED = 188
-SHOT_HIT = 161
+SHOT_FIRED_1 = 188
+SHOT_HIT_1 = 161
+SHOT_FIRED_2 = 182
+SHOT_HIT_2 = 168
 P1 = 0
 P2 = 1
 PACKET_SIZE = 50  # player + type + 6 floats
@@ -20,12 +22,12 @@ PORT_2 = 10000
 
 
 class RelayLaptop(multiprocessing.Process):
-    def __init__(self, port_num, group_id, relay_pred, relay_eval, has_terminated, has_incoming_bullet_p1_in, has_incoming_bullet_p2_in):
+    def __init__(self, group_id, relay_pred, relay_eval, has_terminated, has_incoming_bullet_p1_in, has_incoming_bullet_p2_in):
         super().__init__()
         self.conn1 = Server(P1, PORT_1, group_id,
-                            relay_pred, relay_eval, has_terminated, has_incoming_bullet_p1_in)
+                            relay_pred, relay_eval, has_terminated, has_incoming_bullet_p1_in, SHOT_FIRED_1, SHOT_HIT_1)
         self.conn2 = Server(P2, PORT_2, group_id,
-                            relay_pred, relay_eval, has_terminated, has_incoming_bullet_p2_in)
+                            relay_pred, relay_eval, has_terminated, has_incoming_bullet_p2_in, SHOT_FIRED_2, SHOT_HIT_2)
         self.daemon = True
         # self.has_terminated = has_terminated
 
@@ -36,7 +38,7 @@ class RelayLaptop(multiprocessing.Process):
 
 
 class Server(threading.Thread):
-    def __init__(self, player, port_num, group_id, relay_pred, relay_eval, has_terminated, has_incoming_bullet_in):
+    def __init__(self, player, port_num, group_id, relay_pred, relay_eval, has_terminated, has_incoming_bullet_in, shot_fired, shot_hit):
         super().__init__()
         self.player = player
         self.daemon = True
@@ -49,6 +51,8 @@ class Server(threading.Thread):
         self.group_id = group_id
         self.conn = None
         self.has_terminated = has_terminated
+        self.shot_fired = shot_fired
+        self.shot_hit = shot_hit
 
     def setup_connection(self):
         try:
@@ -59,7 +63,6 @@ class Server(threading.Thread):
             self.conn, client_address = self.socket.accept()
             print('[Relay]Connection from', client_address,
                   ' ', self.player+1, "th connection")
-            # return client_address
         except ConnectionRefusedError:
             print("[Relay] Cannot connect to Ultra96")
         except Exception as e:
@@ -71,7 +74,7 @@ class Server(threading.Thread):
             # max packt sender + 6 extracted features (8 each)
             # s = time.perf_counter()
             byte_msg = self.conn.recv(PACKET_SIZE)
-            print("[Relay] Received", len(byte_msg), "bytes")
+            # print("[Relay] Received", len(byte_msg), "bytes")
             player = byte_msg[0]
             if byte_msg[1] == GLOVE:
                 # print(float.fromhex(byte_msg[1:2]))
@@ -81,12 +84,13 @@ class Server(threading.Thread):
                         struct.unpack('<d', byte_msg[i:i+8])[0])
                 self.relay_pred.send(
                     (extracted_features, player))  # 0 is p1, 1 is p2 (need to change)
-                print("[Relay] Send", len(extracted_features), "bytes")
-            elif byte_msg[1] == VEST and byte_msg[3] == SHOT_HIT:
+                # print("[Relay] Send", len(extracted_features), "bytes")
+            elif byte_msg[1] == VEST and byte_msg[4] == self.shot_hit:
                 self.has_incoming_bullet_in.send(True)  # need to change
-            elif byte_msg[1] == GUN and byte_msg[3] == SHOT_FIRED:
+            elif byte_msg[1] == GUN and byte_msg[4] == self.shot_fired:
                 self.relay_eval.send(("shoot", player))
             else:
+                print("[Relay] Unknown packet: ", byte_msg)
                 print("Invalid data received")
             time.sleep(0.1)  # sleep a bit after send
 

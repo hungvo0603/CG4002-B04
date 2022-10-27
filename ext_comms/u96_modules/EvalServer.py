@@ -136,12 +136,12 @@ class EvalServer(multiprocessing.Process):
 
                 if action == 'grenade':
                     # uncomment this on viz
-                    # player_hit = self.eval_viz.recv()
-                    # print(
-                    #     f"Data received from Visualizer {player_hit}")
-                    # if player_hit != "none":
-                    self.gamestate.update_player(
-                        "grenade_damage", P2)
+                    player_hit = self.eval_viz.recv()
+                    print(
+                        f"Data received from Visualizer {player_hit}")
+                    if player_hit != "none":
+                        self.gamestate.update_player(
+                            "grenade_damage", P2)
                 print(f"Player 1 action done : {action}")
                 self.has_action[P1].set()
 
@@ -151,14 +151,13 @@ class EvalServer(multiprocessing.Process):
                     self.gamestate.get_data_plain_text(player))
 
                 if action == 'grenade':
-                    # time.sleep(1.5)  # wait for viz reply
                     # uncomment on viz
-                    # player_hit = self.eval_viz.recv()
-                    # print(
-                    #     f"Data received from Visualizer {player_hit}")
-                    # if player_hit != "none":
-                    self.gamestate.update_player(
-                        "grenade_damage", P1)
+                    player_hit = self.eval_viz.recv()
+                    print(
+                        f"Data received from Visualizer {player_hit}")
+                    if player_hit != "none":
+                        self.gamestate.update_player(
+                            "grenade_damage", P1)
                 print(f"Player 2 action done : {action}")
                 self.has_action[P2].set()
 

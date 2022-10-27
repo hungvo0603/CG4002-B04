@@ -37,22 +37,21 @@ has_terminated = Value('i', False)
 
 
 if __name__ == '__main__':
-    if len(sys.argv) != 6:
+    if len(sys.argv) != 5:
         print('Invalid number of arguments')
         sys.exit()
 
-    local_port = int(sys.argv[1])
-    group_id = int(sys.argv[2])
-    eval_port = int(sys.argv[3])
-    eval_ip = sys.argv[4]
-    secret_key = sys.argv[5]
+    group_id = int(sys.argv[1])
+    eval_port = int(sys.argv[2])
+    eval_ip = sys.argv[3]
+    secret_key = sys.argv[4]
 
     # ultra96 = Ultra96(local_port, group_id, eval_port,
     #                   eval_ip, secret_key, has_terminated)
     # ultra96.start_processes()
 
     # Ultra96 Processes
-    relay = RelayLaptop(local_port, group_id,
+    relay = RelayLaptop(group_id,
                         relay_pred, relay_eval, has_terminated, has_incoming_bullet_p1_in, has_incoming_bullet_p2_in)
     predictor = MovePredictor(pred_relay, pred_eval, has_terminated)
     eval = EvalServer(eval_ip, eval_port, group_id,
