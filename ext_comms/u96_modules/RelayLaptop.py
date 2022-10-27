@@ -43,6 +43,7 @@ class Server(threading.Thread):
         self.player = player
         self.daemon = True
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.soc_addr = ('', port_num)  # localhost
         self.socket.bind(self.soc_addr)
         self.relay_pred = relay_pred
