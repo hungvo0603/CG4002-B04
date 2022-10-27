@@ -17,17 +17,24 @@ public class ShieldCountdown : MonoBehaviour
     float sliderValuePlayer1;
     bool _isShieldActivatedPlayer1;
 
-    float shieldTimerPlayer2;
-    public TextMeshProUGUI shieldCounterPlayer2Text;
+    [SerializeField] private TextMeshProUGUI timerTextPlayer2;
+    public Image TimerCounterPlayer2;
+    float sliderValuePlayer2;
     bool _isShieldActivatedPlayer2;
+
+    // float shieldTimerPlayer2;
+    // public TextMeshProUGUI shieldCounterPlayer2Text;
+    // bool _isShieldActivatedPlayer2;
 
     void Start()
     {
         sliderValuePlayer1 = 0;
+        sliderValuePlayer2 = 0;
         timerTextPlayer1.text = "READY";
+        timerTextPlayer2.text = "READY";
 
-        shieldTimerPlayer2 = SHIELD_TIME;
-        shieldCounterPlayer2Text.text = shieldTimerPlayer2.ToString();
+        // shieldTimerPlayer2 = SHIELD_TIME;
+        // shieldCounterPlayer2Text.text = shieldTimerPlayer2.ToString();
     }
 
     // Update is called once per frame
@@ -61,26 +68,32 @@ public class ShieldCountdown : MonoBehaviour
             TimerCounterPlayer1.fillAmount = 1;
         }
 
+        // Player 2
         _isShieldActivatedPlayer2 = shieldController.isShieldActivatedPlayer2;
 
         if (_isShieldActivatedPlayer2)
         {
-            if (shieldTimerPlayer2 == 0)
+            if (sliderValuePlayer2 == 0)
             {
-                shieldTimerPlayer2 = SHIELD_TIME;
+                sliderValuePlayer2 = SHIELD_TIME;
             }
 
-            if (shieldTimerPlayer2 > 0)
+            if (sliderValuePlayer2 > 0)
             {
-                shieldTimerPlayer2 -= Time.deltaTime;   
-                shieldCounterPlayer2Text.text = ((int)Mathf.Ceil(shieldTimerPlayer2)).ToString();
+                sliderValuePlayer2 -= Time.deltaTime;
+                timerTextPlayer2.text = ((int)Mathf.Ceil(sliderValuePlayer2)).ToString();
+                TimerCounterPlayer2.fillAmount = sliderValuePlayer2 / SHIELD_TIME;
             }
         }
-
-        if (shieldTimerPlayer2 == 0 || !_isShieldActivatedPlayer2)
+        else
         {
-            shieldTimerPlayer2 = SHIELD_TIME;
-            shieldCounterPlayer2Text.text = shieldTimerPlayer2.ToString();
+            sliderValuePlayer2 = 0;
+        }
+
+        if (sliderValuePlayer2 == 0 || !_isShieldActivatedPlayer2)
+        {
+            timerTextPlayer2.text = "READY";
+            TimerCounterPlayer2.fillAmount = 1;
         }
 
     }
@@ -88,7 +101,7 @@ public class ShieldCountdown : MonoBehaviour
     public void SetShieldTime(float shieldTimeP1, float shieldTimeP2)
     {
         sliderValuePlayer1 = shieldTimeP1;
-        shieldTimerPlayer2 = shieldTimeP2;
+        sliderValuePlayer2 = shieldTimeP2;
     }
 
 }

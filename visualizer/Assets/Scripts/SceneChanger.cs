@@ -5,9 +5,18 @@ using UnityEngine.SceneManagement;
 
 public class SceneChanger : MonoBehaviour
 {
-    public void ChangeScene (string sceneName)
+    public Animator transition;
+
+    public void ChangeScene ()
     {
-        SceneManager.LoadScene(sceneName);
+        StartCoroutine(StartTransition(SceneManager.GetActiveScene().buildIndex + 1));
+    }
+
+    IEnumerator StartTransition(int levelIndex)
+    {
+        transition.SetTrigger("Start");
+        yield return new WaitForSeconds(1f);
+        SceneManager.LoadScene(levelIndex);
     }
 
     public void Exit()

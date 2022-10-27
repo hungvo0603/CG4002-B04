@@ -31,7 +31,7 @@ public class StartSceneController : MonoBehaviour
 
     IEnumerator ChangeScene()
     {
-        yield return new WaitForSeconds(0.5f);
-        sceneChanger.ChangeScene("SettingsScene");
+        yield return new WaitForSeconds(0.2f);
+        sceneChanger.ChangeScene();
     }
 }

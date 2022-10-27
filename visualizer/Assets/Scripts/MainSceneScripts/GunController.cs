@@ -7,6 +7,7 @@ public class GunController : MonoBehaviour
 {
     // Start is called before the first frame update
     public AudioSource gunShotSound;
+    public AudioSource gunReloadSound;
     public ParticleSystem gunShotEffect;
 
     void Start()
@@ -15,14 +16,21 @@ public class GunController : MonoBehaviour
         gunShotEffect.Clear();
     }
 
-    public void PlayGunShotEffect() {
+    public void PlayGunShotEffect() 
+    {
         gunShotSound.Play();
         gunShotEffect.Play();
-        GetComponent<Animator>().Play("SelfGunShot");
+        GetComponent<Animator>().Play("Shoot");
     }
 
     public void PlayGunShotEffectPlayer2()
     {
         gunShotSound.Play();
+    }
+
+    public void PlayReloadEffect() 
+    {
+        gunReloadSound.Play(); 
+        GetComponent<Animator>().Play("Reload");
     }
 }

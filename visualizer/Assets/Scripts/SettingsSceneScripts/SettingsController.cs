@@ -37,7 +37,6 @@ public class SettingsController : MonoBehaviour
         settingText.text = "Get Ready, Player 2";
         StartCoroutine(ShowLoadingMessage());
         REGISTERED_PLAYER = (int)PLAYER.PLAYER_2;
-        Debug.Log(REGISTERED_PLAYER);
     }
 
     IEnumerator ShowLoadingMessage()
@@ -50,6 +49,6 @@ public class SettingsController : MonoBehaviour
     IEnumerator ChangeToMainScene()
     {
         yield return new WaitForSeconds(1f);
-        sceneChanger.ChangeScene("MainScene");
+        sceneChanger.ChangeScene();
     }
 }

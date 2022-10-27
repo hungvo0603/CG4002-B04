@@ -22,6 +22,10 @@ public class BulletDisplay : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+    }
+
+    public void UpdateBulletDisplayP1()
+    {
         if (bulletP1Canvas.activeSelf)
         {
             index = shootController.player1Bullet;
@@ -33,7 +37,10 @@ public class BulletDisplay : MonoBehaviour
                 bulletsPlayer1[i].gameObject.SetActive(false);
             }            
         }
+    }
 
+    public void UpdateBulletDisplayP2()
+    {
         if (bulletP2Canvas.activeSelf)
         {
             index2 = shootController.player2Bullet;

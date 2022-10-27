@@ -36,14 +36,6 @@ public class ShootController : MonoBehaviour
 
     void Update()
     {
-        // if (player1Bullet == 0)
-        // {
-        //     player1Bullet = MAX_BULLET;
-        // }
-        // if (player2Bullet == 0)
-        // {
-        //     player2Bullet = MAX_BULLET;
-        // }
         _isShieldActivatedPlayer1 = shieldController.isShieldActivatedPlayer1;
         _isShieldActivatedPlayer2 = shieldController.isShieldActivatedPlayer2;
     }
@@ -51,7 +43,6 @@ public class ShootController : MonoBehaviour
     public void GunShotPlayer1()
     {
         hasEnemy = enemy.hasEnemy;
-        // player1Bullet -= 1;
         int currentShieldHealthPlayer2 = shieldHealthController.currentShieldHealthPlayer2;
         int shieldHealthPlayer2;
         if (hasEnemy)
@@ -74,7 +65,6 @@ public class ShootController : MonoBehaviour
 
     public void GunShotPlayer2()
     {
-        // player2Bullet -= 1;
         int currentShieldHealthPlayer1 = shieldHealthController.currentShieldHealthPlayer1;
         int shieldHealthPlayer1;
         if (_isShieldActivatedPlayer1)
@@ -99,10 +89,7 @@ public class ShootController : MonoBehaviour
 
     public void ReloadPlayer1()
     {
-        if (player1Bullet == 0) {
-            player1Bullet = MAX_BULLET;
-            reloadSound.Play(); 
-        }
+        player1Bullet = MAX_BULLET;
     }
 
     public void ReloadPlayer2()

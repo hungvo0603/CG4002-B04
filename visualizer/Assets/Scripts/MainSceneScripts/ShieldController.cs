@@ -51,7 +51,7 @@ public class ShieldController : MonoBehaviour
         }
         else
         {
-            currentShieldCountPlayer1 = MAX_SHIELD;
+            currentShieldCountPlayer1 = MAX_SHIELD; // delete
         }
     }
     
@@ -68,7 +68,7 @@ public class ShieldController : MonoBehaviour
         }
         else
         {
-            currentShieldCountPlayer2 = MAX_SHIELD;
+            currentShieldCountPlayer2 = MAX_SHIELD; // delete
         }
 
     }
