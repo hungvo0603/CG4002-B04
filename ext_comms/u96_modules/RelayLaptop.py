@@ -26,10 +26,10 @@ class RelayLaptop(multiprocessing.Process):
         super().__init__()
         self.conn1 = Server(P1, PORT_1, group_id,
                             relay_pred, relay_eval, has_terminated, has_incoming_bullet_p1_in, SHOT_FIRED_1, SHOT_HIT_1)
-        self.conn2 = Server(P2, PORT_2, group_id,
-                            relay_pred, relay_eval, has_terminated, has_incoming_bullet_p2_in, SHOT_FIRED_2, SHOT_HIT_2)
+        # self.conn2 = Server(P2, PORT_2, group_id,
+        #                     relay_pred, relay_eval, has_terminated, has_incoming_bullet_p2_in, SHOT_FIRED_2, SHOT_HIT_2)
         self.daemon = True
-        # self.has_terminated = has_terminated
+        self.has_terminated = has_terminated
 
     def run(self):
         self.conn1.start()
@@ -43,6 +43,8 @@ class Server(threading.Thread):
         self.player = player
         self.daemon = True
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        # allow reuse of port
+        self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.soc_addr = ('', port_num)  # localhost
         self.socket.bind(self.soc_addr)
         self.relay_pred = relay_pred
@@ -56,8 +58,8 @@ class Server(threading.Thread):
 
     def setup_connection(self):
         try:
-            # 1 is the number of unaccepted connections that the system will allow before refusing new connections
-            self.socket.listen(1)
+            # listen to any number of connections
+            self.socket.listen()
             # Wait for a connection
             print('[Relay]Waiting for a connection')
             self.conn, client_address = self.socket.accept()
