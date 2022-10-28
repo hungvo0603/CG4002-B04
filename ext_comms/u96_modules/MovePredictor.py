@@ -53,8 +53,8 @@ class MovePredictor(multiprocessing.Process):
         self.dma_recv.recvchannel.wait()
         self.input_arr[player].clear()  # clear array after prediction
         print("len of input arr: ", len(self.input_arr[player]))
-        print("Cleared pipe after buffer")
-        clear(self.pred_relay)
+        # print("Cleared pipe after buffer")
+        # clear(self.pred_relay)
 
         return actions[self.output_buffer[player][0]]
 

@@ -1,13 +1,6 @@
-# Process:
-# - ml model, comm visualiser, comm eval, comm relay
-# To try:
-
-
 # Todo:
-# blocking process on last few movements -> can try to move viz to main process + thread
 # 2 player: can either have shield first then damage or vice versa
-# continue action after the broken pipe nonetype error or the mqqt temp name resolution error too
-# try out hivemq
+# mass logout of process
 
 # Main modules
 from EvalServer import EvalServer
@@ -45,10 +38,6 @@ if __name__ == '__main__':
     eval_port = int(sys.argv[2])
     eval_ip = sys.argv[3]
     secret_key = sys.argv[4]
-
-    # ultra96 = Ultra96(local_port, group_id, eval_port,
-    #                   eval_ip, secret_key, has_terminated)
-    # ultra96.start_processes()
 
     # Ultra96 Processes
     relay = RelayLaptop(group_id,

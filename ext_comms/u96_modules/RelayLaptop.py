@@ -72,7 +72,7 @@ class Server(threading.Thread):
     def run(self):
         self.setup_connection()
         while not self.has_terminated.value:
-            # max packt sender + 6 extracted features (8 each)
+            # max packt player + sender + 6 extracted features (8 each)
             # s = time.perf_counter()
             byte_msg = self.conn.recv(PACKET_SIZE)
             # print("[Relay] Received", len(byte_msg), "bytes")
