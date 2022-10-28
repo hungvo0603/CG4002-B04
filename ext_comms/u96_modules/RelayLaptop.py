@@ -10,6 +10,7 @@ import time
 GLOVE = 0
 VEST = 1
 GUN = 2
+DISCONNECT = 7
 SHOT_FIRED_1 = 188
 SHOT_HIT_1 = 161
 SHOT_FIRED_2 = 182
@@ -77,6 +78,11 @@ class Server(threading.Thread):
             byte_msg = self.conn.recv(PACKET_SIZE)
             # print("[Relay] Received", len(byte_msg), "bytes")
             player = byte_msg[0]
+            if byte_msg[2] == GLOVE:
+                # print("Glove")
+                self.relay_pred[self.group_id].put(byte_msg)
+                continue
+
             if byte_msg[1] == GLOVE:
                 # print(float.fromhex(byte_msg[1:2]))
                 extracted_features = []

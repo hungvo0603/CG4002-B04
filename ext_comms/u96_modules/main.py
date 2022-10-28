@@ -3,6 +3,7 @@
 # 2 player: can either have shield first then damage or vice versa
 # Todo:
 # mass logout of process
+# add bluetooth whole pipeline
 
 
 # Main modules

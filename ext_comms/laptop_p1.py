@@ -9,7 +9,6 @@ import dotenv
 import sshtunnel
 from queue import Queue
 import struct
-from tracemalloc import start
 from statistics import median, mean, variance
 from scipy.fftpack import fft
 import time
@@ -27,13 +26,14 @@ SUNFIRE_HOST = 'stu.comp.nus.edu.sg'
 SYN = 'S'
 ACK = 'A'
 NAK = 'N'
+DISCONNECT = 7
 GLOVE = "0"
 VEST = "1"
 GUN = "2"
 SHOT_FIRED = "188"
 SHOT_HIT = "161"
 SOM_THRESHOLD = 0.8  # threshold value for start of move
-PACKET_SIZE = 50  # player + type + 6 floats
+PACKET_SIZE = 51  # player + type + 6 floats + disconnect
 P1 = 0
 P2 = 1
 GUN_MAC = "D0:39:72:BF:C1:BF"
@@ -52,6 +52,10 @@ start = False
 dataCounter = 0
 cycle = False
 actual_cycle = False
+
+has_connected = {
+    GUN_MAC: False, GLOVE_MAC: False, VEST_MAC: False
+}
 
 
 class ScannerDelegate(DefaultDelegate):
@@ -125,6 +129,7 @@ def handshake(bluno, char, addr):
         else:
             char.write(str.encode(SYN))
     print(addr + " completed handshake")
+    has_connected[addr] = True
     return done_handshake
 
 
@@ -166,13 +171,18 @@ def connection_thread(bluno, char, addr):
             bluno.disconnect()
             break
         except BTLEDisconnectError:
-            print("Bluno " + addr + " has disconnected due to an error")
-            if(addr == GUN_MAC):
+            if(addr == GUN_MAC and has_connected[addr]):
+                has_connected[GUN_MAC] = False
+                relay_buffer.put([GUN, DISCONNECT])
                 print("Gun disconnected")
-            elif(addr == GLOVE_MAC):
+            elif(addr == GLOVE_MAC and has_connected[addr]):
+                has_connected[GLOVE_MAC] = False
                 print("Glove disconnected")
-            elif(addr == VEST_MAC):
+                relay_buffer.put([GLOVE, DISCONNECT])
+            elif(addr == VEST_MAC and has_connected[addr]):
+                has_connected[VEST_MAC] = False
                 print("Green LED Vest Disconnected")
+                relay_buffer.put([VEST, DISCONNECT])
             bluno_handshake = False
             bluno, char = connection(addr)
 
@@ -180,7 +190,7 @@ def connection_thread(bluno, char, addr):
 def checksum(data):
     global counter
     checksum = 0
-    pkt = bytearray(data)
+    # pkt = bytearray(data)
     for digit in range(len(data) - 1):  # same way calc on beetle
         checksum = (checksum ^ data[digit]) & 0xFF
     if checksum == data[len(data)-1]:
@@ -279,7 +289,13 @@ class Client(threading.Thread):
         while not has_closed:
             try:
                 pkt = relay_buffer.get()
-                if(pkt[0] == 0):
+                if(pkt[0] == GLOVE):
+                    if pkt[1] == DISCONNECT:
+                        message = int(P1).to_bytes(
+                            1, 'big') + bytearray(pkt) + bytearray(PACKET_SIZE-len(pkt)-1)
+                        self.send_data(pkt)
+                        continue
+
                     message = self.preprocess(pkt)
                     if message is not None:
                         # print("Len msg: ", len(message))
@@ -307,6 +323,10 @@ class Client(threading.Thread):
                         # wait for a while then clear pending data (debounce)
                         time.sleep(0.3)
                         relay_buffer.queue.clear()
+                elif(pkt[0] == 1 or pkt[0] == 2) and pkt[3] == DISCONNECT:
+                    message = int(P1).to_bytes(
+                        1, 'big') + bytearray(pkt) + bytearray(PACKET_SIZE-len(pkt)-1)
+                    self.send_data(pkt)
                 else:
                     print("Unknown packet: ", pkt)
             except (KeyboardInterrupt, ConnectionResetError, BrokenPipeError):
