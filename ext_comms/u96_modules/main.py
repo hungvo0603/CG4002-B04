@@ -1,6 +1,9 @@
-# Todo:
+# Try:
+# shield should be later than shoot
 # 2 player: can either have shield first then damage or vice versa
+# Todo:
 # mass logout of process
+
 
 # Main modules
 from EvalServer import EvalServer

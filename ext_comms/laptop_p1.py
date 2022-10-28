@@ -36,6 +36,9 @@ SOM_THRESHOLD = 0.8  # threshold value for start of move
 PACKET_SIZE = 50  # player + type + 6 floats
 P1 = 0
 P2 = 1
+GUN_MAC = "D0:39:72:BF:C1:BF"
+GLOVE_MAC = "C4:BE:84:20:1C:05"
+VEST_MAC = "D0:39:72:BF:BF:ED"
 
 # Need to send ACK and SYN as 20 byte packets as well
 packetOne_len = 20
@@ -164,6 +167,12 @@ def connection_thread(bluno, char, addr):
             break
         except BTLEDisconnectError:
             print("Bluno " + addr + " has disconnected due to an error")
+            if(addr == GUN_MAC):
+                print("Gun disconnected")
+            elif(addr == GLOVE_MAC):
+                print("Glove disconnected")
+            elif(addr == VEST_MAC):
+                print("Green LED Vest Disconnected")
             bluno_handshake = False
             bluno, char = connection(addr)
 
@@ -207,7 +216,7 @@ class Client(threading.Thread):
         extracted = []
         extracted = np.append(extracted, (np.min(raw_data)))
         extracted = np.append(extracted, (np.max(raw_data)))
-        extracted = np.append(extracted, (mean(raw_data)))
+        extracted = np.append(extracted, (sum(raw_data)))
         extracted = np.append(extracted, (median(raw_data)))
         extracted = np.append(extracted, (variance(raw_data)))
         raw_data = fft(raw_data)
@@ -243,22 +252,23 @@ class Client(threading.Thread):
         else:
             if (len(self.array_ax) >= 40):
                 print("40 data set collected")
-                array_axayaz_gxgygz = []
-                array_axayaz_gxgygz = np.concatenate((
-                    array_axayaz_gxgygz, self.extract_features(self.array_ax)))
-                array_axayaz_gxgygz = np.concatenate((
-                    array_axayaz_gxgygz, self.extract_features(self.array_ay)))
-                array_axayaz_gxgygz = np.concatenate((
-                    array_axayaz_gxgygz, self.extract_features(self.array_az)))
-                array_axayaz_gxgygz = np.concatenate((
-                    array_axayaz_gxgygz, self.extract_features(self.array_gx)))
-                array_axayaz_gxgygz = np.concatenate((
-                    array_axayaz_gxgygz, self.extract_features(self.array_gy)))
-                array_axayaz_gxgygz = np.concatenate((
-                    array_axayaz_gxgygz, self.extract_features(self.array_gz)))
-                self.start_collection = False
-                array_axayaz_gxgygz = np.float_(array_axayaz_gxgygz)
-                return array_axayaz_gxgygz.tobytes()
+                if (np.max(self.array_ax) > 0.5 and np.max(self.array_ay) > 0.5 and np.max(self.array_az) > 0.5):
+                    array_axayaz_gxgygz = []
+                    array_axayaz_gxgygz = np.concatenate((
+                        array_axayaz_gxgygz, self.extract_features(self.array_ax)))
+                    array_axayaz_gxgygz = np.concatenate((
+                        array_axayaz_gxgygz, self.extract_features(self.array_ay)))
+                    array_axayaz_gxgygz = np.concatenate((
+                        array_axayaz_gxgygz, self.extract_features(self.array_az)))
+                    array_axayaz_gxgygz = np.concatenate((
+                        array_axayaz_gxgygz, self.extract_features(self.array_gx)))
+                    array_axayaz_gxgygz = np.concatenate((
+                        array_axayaz_gxgygz, self.extract_features(self.array_gy)))
+                    array_axayaz_gxgygz = np.concatenate((
+                        array_axayaz_gxgygz, self.extract_features(self.array_gz)))
+                    self.start_collection = False
+                    array_axayaz_gxgygz = np.float_(array_axayaz_gxgygz)
+                    return array_axayaz_gxgygz.tobytes()
         return None
 
     def run(self):
@@ -348,8 +358,8 @@ if __name__ == '__main__':
     group_id = sys.argv[3]
     conn_u96 = Client(local_port, remote_port, group_id)
     conn_u96.start()
-    addr_list = ["C4:BE:84:20:1C:05", "D0:39:72:BF:C1:BF",
-                 "D0:39:72:BF:BF:ED"]
+
+    addr_list = [GLOVE_MAC, GUN_MAC, VEST_MAC]
     bluno_list = []
     char_list = []
     for addr in addr_list:

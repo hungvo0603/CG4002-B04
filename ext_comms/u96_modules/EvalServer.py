@@ -30,6 +30,7 @@ class EvalServer(multiprocessing.Process):
         self.secret_key = secret_key
         # has received p1, p2 actions
         self.has_action = [threading.Event(), threading.Event()]
+        self.has_shield = [threading.Event(), threading.Event()]
         self.has_incoming_bullet_p1_out = has_incoming_bullet_p1_out
         self.has_incoming_bullet_p2_out = has_incoming_bullet_p2_out
 
@@ -74,12 +75,25 @@ class EvalServer(multiprocessing.Process):
             self.has_action[P1].wait()
             self.has_action[P2].wait()
 
+            # Set shield if got
+            if self.has_shield[P1].is_set():
+                self.gamestate.update_player('shield', P1)
+                self.eval_viz.send(
+                    self.gamestate.get_data_plain_text(P1))
+
+            if self.has_shield[P2].is_set():
+                self.gamestate.update_player('shield', P2)
+                self.eval_viz.send(
+                    self.gamestate.get_data_plain_text(P2))
+
             # Clear all pedning data in pipe
             print("Clearing eval pipe")
             clear(self.eval_pred)
             clear(self.eval_relay)
             clear(self.eval_viz)
 
+            self.has_shield[P1].clear()
+            self.has_shield[P2].clear()
             self.has_action[P1].clear()
             self.has_action[P2].clear()
             print("Cleared action")
@@ -130,34 +144,40 @@ class EvalServer(multiprocessing.Process):
             print("Glove action received:", action)
 
             if player == P1 and not self.has_action[P1].is_set():
-                self.gamestate.update_player(action, player)
-                self.eval_viz.send(
-                    self.gamestate.get_data_plain_text(player))
+                if action != 'shield':
+                    self.gamestate.update_player(action, player)
+                    self.eval_viz.send(
+                        self.gamestate.get_data_plain_text(player))
+                else:
+                    self.has_shield[player].set()
 
                 if action == 'grenade':
                     # uncomment this on viz
-                    player_hit = self.eval_viz.recv()
-                    print(
-                        f"Data received from Visualizer {player_hit}")
-                    if player_hit != "none":
-                        self.gamestate.update_player(
-                            "grenade_damage", P2)
+                    # player_hit = self.eval_viz.recv()
+                    # print(
+                    #     f"Data received from Visualizer {player_hit}")
+                    # if player_hit != "none":
+                    self.gamestate.update_player(
+                        "grenade_damage", P2)
                 print(f"Player 1 action done : {action}")
                 self.has_action[P1].set()
 
             if player == P2 and not self.has_action[P2].is_set():
-                self.gamestate.update_player(action, player)
-                self.eval_viz.send(
-                    self.gamestate.get_data_plain_text(player))
+                if action != 'shield':
+                    self.gamestate.update_player(action, player)
+                    self.eval_viz.send(
+                        self.gamestate.get_data_plain_text(player))
+                else:
+                    self.has_shield[player].set()
 
                 if action == 'grenade':
                     # uncomment on viz
-                    player_hit = self.eval_viz.recv()
-                    print(
-                        f"Data received from Visualizer {player_hit}")
-                    if player_hit != "none":
-                        self.gamestate.update_player(
-                            "grenade_damage", P1)
+                    # player_hit = self.eval_viz.recv()
+                    # print(
+                    #     f"Data received from Visualizer {player_hit}")
+                    # if player_hit != "none":
+                    self.gamestate.update_player(
+                        "grenade_damage", P1)
                 print(f"Player 2 action done : {action}")
                 self.has_action[P2].set()
 
@@ -165,7 +185,7 @@ class EvalServer(multiprocessing.Process):
         while not self.has_terminated.value:
             action, player = self.eval_relay.recv()
             clear(self.eval_relay)
-            print("Gun action received:", action)
+            print("Gun action received:", action, "for player", player)
             if player == P1 and not self.has_action[P1].is_set():
                 self.gamestate.update_player(action, player)
                 # first only action, state from eval
