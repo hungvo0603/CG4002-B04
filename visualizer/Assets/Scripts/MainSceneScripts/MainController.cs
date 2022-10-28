@@ -108,7 +108,7 @@ namespace M2MQTT.MainController
             else {
             // TESTING FOR VISUALIZER
             // string sample_json_string = "{\"p1\": {\"hp\": 100, \"action\": \"shoot\", \"bullets\": 5, \"grenades\": 1, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 2, \"num_shield\": 3}, \"p2\": {\"hp\": 60, \"action\": \"none\", \"bullets\": 6, \"grenades\": 2, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 3, \"num_shield\": 3}}";
-            string sample_json_string = "{\"p1\": {\"hp\": 100, \"action\": \"shield\", \"bullets\": 5, \"grenades\": 2, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 0, \"num_shield\": 3}, \"p2\": {\"hp\": 100, \"action\": \"shield\", \"bullets\": 6, \"grenades\": 2, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 0, \"num_shield\": 3}}";
+            string sample_json_string = "{\"p1\": {\"hp\": 100, \"action\": \"reload\", \"bullets\": 5, \"grenades\": 2, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 0, \"num_shield\": 3}, \"p2\": {\"hp\": 100, \"action\": \"shoot\", \"bullets\": 6, \"grenades\": 2, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 0, \"num_shield\": 3}}";
             // string sample_json_string = "{\"p1\": {\"hp\": 100, \"action\": \"reload\", \"bullets\": 6, \"grenades\": 1, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 0, \"num_shield\": 2}, \"p2\": {\"hp\": 60, \"action\": \"none\", \"bullets\": 6, \"grenades\": 2, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 0, \"num_shield\": 3}}";
             // string sample_json_string = "{\"p1\": {\"hp\": 100, \"action\": \"none\", \"bullets\": 6, \"grenades\": 1, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 0, \"num_shield\": 2}, \"p2\": {\"hp\": 60, \"action\": \"grenade\", \"bullets\": 4, \"grenades\": 1, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 0, \"num_shield\": 3}}";
             // string sample_json_string = "{\"p1\": {\"hp\": 100, \"action\": \"logout\", \"bullets\": 5, \"grenades\": 1, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 2, \"num_shield\": 3}, \"p2\": {\"hp\": 60, \"action\": \"none\", \"bullets\": 6, \"grenades\": 2, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 3, \"num_shield\": 3}}";
@@ -279,7 +279,10 @@ namespace M2MQTT.MainController
                 player1Data = playerData.p1;
                 player2Data = playerData.p2;
                 updateUI = true;
-                ProcessAction(player1Data.action, player2Data.action);
+                int whichPlayer = SettingsController.REGISTERED_PLAYER;
+                string selfAction = (whichPlayer == 1) ? player1Data.action : player2Data.action;
+                string opponentAction = (whichPlayer == 1) ? player2Data.action : player1Data.action;
+                ProcessAction(selfAction, opponentAction);
                 ProcessHealthBarUpdate(player1Data.hp, player2Data.hp);
                 ProcessBulletUpdate(player1Data.bullets, player2Data.bullets);
                 ProcessKDAUpdate(player2Data.num_deaths, player1Data.num_deaths);
@@ -354,10 +357,10 @@ namespace M2MQTT.MainController
             shieldCountdown.SetShieldTime(shieldTimeP1, shieldTimeP2);
         }
 
-        private void ProcessAction(string actionP1, string actionP2)
+        private void ProcessAction(string selfAction, string opponentAction)
         {
             string currentPlayer = "p" + SettingsController.REGISTERED_PLAYER.ToString();
-            switch (actionP1)
+            switch (selfAction)
             {
                 case "grenade":
                     grenadeController.ExplosionButtonPressPlayer1();
@@ -365,18 +368,17 @@ namespace M2MQTT.MainController
                     ProcessGrenadeHitFeedback(currentPlayer);
                     break;
                 case "shoot":
-                    shootController.GunShotPlayer1();
                     gunController.PlayGunShotEffect();
                     break;
                 case "shield":
                     shieldController.ActivateShieldPlayer1();
                     break;
                 case "reload":
-                    shootController.ReloadPlayer1();
                     gunController.PlayReloadEffect();
                     break;
                 case "logout":
                     scoreboardOverlay.gameObject.SetActive(true);
+                    StartCoroutine(HideScoreboardOverlay());
                     break;
                 case "connect":
                     bluetoothConnected.gameObject.SetActive(true);
@@ -390,16 +392,14 @@ namespace M2MQTT.MainController
                     break;
             }
         
-            switch (actionP2)
+            switch (opponentAction)
             {
                 case "grenade":
-                    Debug.Log("Go into this");
                     grenadeController.ExplosionButtonPressPlayer2();
                     enemyGrenadeTriggerAnimation.TriggerAnimation();
                     ProcessGrenadeHitFeedback(currentPlayer);
                     break;
                 case "shoot":
-                    shootController.GunShotPlayer2();
                     gunController.PlayGunShotEffectPlayer2();
                     break;
                 case "shield":
@@ -407,6 +407,10 @@ namespace M2MQTT.MainController
                     break;
                 case "reload":
                     shootController.ReloadPlayer2();
+                    break;
+                case "logout":
+                    scoreboardOverlay.gameObject.SetActive(true);
+                    StartCoroutine(HideScoreboardOverlay());
                     break;
                 case "connect":
                     bluetoothConnected.gameObject.SetActive(true);
@@ -439,6 +443,12 @@ namespace M2MQTT.MainController
             {
                 PublishMessage("none");
             }
+        }
+
+        IEnumerator HideScoreboardOverlay()
+        {
+            yield return new WaitForSeconds(5f);
+            scoreboardOverlay.gameObject.SetActive(false);
         }
     }
 }

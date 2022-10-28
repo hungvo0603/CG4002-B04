@@ -42,16 +42,11 @@ public class ShieldController : MonoBehaviour
     {
         if (currentShieldCountPlayer1 > 0)
         {
-            // currentShieldCountPlayer1 -= 1;
             shieldPlayer1.gameObject.SetActive(true);
             isShieldActivatedPlayer1 = true;
             shieldActivateButtonPlayer1.interactable = false;
             shieldActivationSoundPlayer1.Play();
             StartCoroutine(DeactivateShieldPlayer1());
-        }
-        else
-        {
-            currentShieldCountPlayer1 = MAX_SHIELD; // delete
         }
     }
     
@@ -59,16 +54,11 @@ public class ShieldController : MonoBehaviour
     {
         if (currentShieldCountPlayer2 > 0)
         {
-            // currentShieldCountPlayer2 -= 1;
             shieldPlayer2.gameObject.SetActive(true);
             isShieldActivatedPlayer2 = true;
             shieldActivateButtonPlayer2.interactable = false;
             shieldActivationSoundPlayer2.Play();
             StartCoroutine(DeactivateShieldPlayer2());
-        }
-        else
-        {
-            currentShieldCountPlayer2 = MAX_SHIELD; // delete
         }
 
     }

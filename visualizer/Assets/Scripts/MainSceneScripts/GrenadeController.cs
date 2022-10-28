@@ -52,11 +52,6 @@ public class GrenadeController : MonoBehaviour
         {
             StartCoroutine(ThrowGrenadePlayer1());
         }
-        else
-        {
-            player1Grenade = MAX_GRENADE;
-            SelfUpdateGrenadeDisplay();
-        }
     }
 
     public void ExplosionButtonPressPlayer2()
@@ -64,11 +59,6 @@ public class GrenadeController : MonoBehaviour
         if (player2Grenade > 0)
         {
             StartCoroutine(ThrowGrenadePlayer2());
-        }
-        else
-        {
-            player2Grenade = MAX_GRENADE;
-            OpponentUpdateGrenadeDisplay();
         }
     }
 
