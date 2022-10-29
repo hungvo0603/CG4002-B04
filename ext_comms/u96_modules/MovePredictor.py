@@ -67,7 +67,8 @@ class MovePredictor(multiprocessing.Process):
                 action = self.pred_action(data, player)
 
                 if action is not None:
-                    print("[MovePredictor] Predicted action: ", action)
+                    print("[MovePredictor] Predicted action: ",
+                          action, " for player ", player)
 
                 if action is not None and action != "nomovement":
                     self.pred_eval.send((action, player))

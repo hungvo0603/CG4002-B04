@@ -93,9 +93,11 @@ class PlayerStateStudent(PlayerStateBase):
     """
 
     def update_actl(self, new_data):
+        if new_data == "glove disconnect" or new_data == "gun disconnect" or new_data == "vest disconnect":
+            self.action = new_data
         if new_data == 'shoot':
             self.action = 'shoot'
-            self.bullets = max(0, self.bullets-1)
+            self.bullets = self.bullets-1
         if new_data == 'grenade':
             self.action = 'grenade'
             self.grenades = max(0, self.grenades-1)
@@ -114,6 +116,10 @@ class PlayerStateStudent(PlayerStateBase):
         if new_data == 'logout':
             self.action = 'logout'
         if new_data == 'bullet_hit':
+            if self.bullets == -1:
+                self.bullets = 0
+                pass
+
             if self.shield_time:
                 if self.shield_health - 10 < 0:
                     leftover = 10 - self.shield_health
@@ -124,7 +130,6 @@ class PlayerStateStudent(PlayerStateBase):
             else:
                 self.hp = max(self.hp-10, 0)
         if new_data == 'grenade_damage':
-            #self.action = 'none'
             if self.shield_time:
                 if self.shield_health - 30 < 0:
                     leftover = 30 - self.shield_health

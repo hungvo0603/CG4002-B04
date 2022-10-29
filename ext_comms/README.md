@@ -24,6 +24,27 @@ XILINX_HOST = '[xilinx host IP address]'
 SUNFIRE_USER = '[sunfire username]'
 SUNFIRE_PWD = '[sunfire password]'
 
+DONT USE PORT NUM < 2000
+
+Eval:
+1234567890123456
+python eval_sever/eval_server.py 8000 4 2
+-
+
+u96:
+python u96_modules/main.py 4 8000 localhost 1234567890123456
+- to kill proces in port: 
+fuser -k 10000/tcp 
+fuser -k 9000/tcp 
+fuser -k 8000/tcp
+
+relay:
+lap1: 
+python3 laptop_p1.py 8000 9000 4
+lap2: 
+python3 laptop_p2.py 8000 10000 4
+-
+
 # Start virtual env
 `source <virtual_env_name>/bin/activate`
 `python3 eval_server.py <PORT> <GROUP_ID> <NUM_PLAYERS>`
