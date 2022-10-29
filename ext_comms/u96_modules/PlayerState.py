@@ -93,6 +93,8 @@ class PlayerStateStudent(PlayerStateBase):
     """
 
     def update_actl(self, new_data):
+        if new_data == "glove disconnect" or new_data == "gun disconnect" or new_data == "vest disconnect":
+            self.action = new_data
         if new_data == 'shoot':
             self.action = 'shoot'
             self.bullets = self.bullets-1

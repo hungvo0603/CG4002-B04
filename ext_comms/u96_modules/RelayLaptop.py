@@ -17,7 +17,7 @@ SHOT_FIRED_2 = 182
 SHOT_HIT_2 = 168
 P1 = 0
 P2 = 1
-PACKET_SIZE = 50  # player + type + 6 floats
+PACKET_SIZE = 51  # player + type + 6 floats + disconnect
 PORT_1 = 9000
 PORT_2 = 10000
 
@@ -73,20 +73,24 @@ class Server(threading.Thread):
     def run(self):
         self.setup_connection()
         while not self.has_terminated.value:
-            # max packt player + sender + 6 extracted features (8 each)
+            # max packt player + sender + 6 extracted features (8 each) + dc
             # s = time.perf_counter()
             byte_msg = self.conn.recv(PACKET_SIZE)
             # print("[Relay] Received", len(byte_msg), "bytes")
             player = byte_msg[0]
-            if byte_msg[2] == GLOVE:
-                # print("Glove")
-                self.relay_pred[self.group_id].put(byte_msg)
+            if byte_msg[PACKET_SIZE-1] == DISCONNECT:
+                if byte_msg[1] == GLOVE:
+                    self.relay_eval.send(("glove disconnect", player))
+                elif byte_msg[1] == GUN:
+                    self.relay_eval.send(("gun disconnect", player))
+                elif byte_msg[1] == VEST:
+                    self.relay_eval.send(("vest disconnect", player))
                 continue
 
             if byte_msg[1] == GLOVE:
                 # print(float.fromhex(byte_msg[1:2]))
                 extracted_features = []
-                for i in range(2, PACKET_SIZE, 8):
+                for i in range(2, PACKET_SIZE-1, 8):
                     extracted_features.append(
                         struct.unpack('<d', byte_msg[i:i+8])[0])
                 self.relay_pred.send(

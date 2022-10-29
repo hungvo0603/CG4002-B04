@@ -1,3 +1,4 @@
+from asyncio.windows_events import CONNECT_PIPE_INIT_DELAY
 from bluepy.btle import Peripheral, DefaultDelegate, BTLEDisconnectError
 import numpy as np
 import struct
@@ -27,6 +28,7 @@ SYN = 'S'
 ACK = 'A'
 NAK = 'N'
 DISCONNECT = 7
+CONNECT = 0
 GLOVE = "0"
 VEST = "1"
 GUN = "2"
@@ -291,9 +293,10 @@ class Client(threading.Thread):
                 pkt = relay_buffer.get()
                 if(pkt[0] == GLOVE):
                     if pkt[1] == DISCONNECT:
-                        message = int(P1).to_bytes(
-                            1, 'big') + bytearray(pkt) + bytearray(PACKET_SIZE-len(pkt)-1)
-                        self.send_data(pkt)
+                        message = int(P1).to_bytes(1, 'big') + bytearray(pkt) + bytearray(PACKET_SIZE-len(pkt)-2) + \
+                            int(DISCONNECT).to_bytes(1, 'big')
+                        print("DC Message: ", message)
+                        self.send_data(message)
                         continue
 
                     message = self.preprocess(pkt)
@@ -301,9 +304,11 @@ class Client(threading.Thread):
                         # print("Len msg: ", len(message))
                         for i in range(0, 10):
                             # send data in chunks of 48 -> 6*10*8 = 480
-                            self.send_data(int(P1).to_bytes(
+                            message = int(P1).to_bytes(
                                 1, 'big') + pkt[0].to_bytes(
-                                1, 'big') + message[i*(PACKET_SIZE-2):(i+1)*(PACKET_SIZE-2)])
+                                1, 'big') + message[i*(PACKET_SIZE-3):(i+1)*(PACKET_SIZE-3)] + int(CONNECT).to_bytes(1, 'big')
+                            print("Message: ", message)
+                            self.send_data(message)
                             time.sleep(0.2)
                         # check me (clear aft action)
                         time.sleep(5)
@@ -315,8 +320,8 @@ class Client(threading.Thread):
                         self.array_gy = []
                         self.array_gz = []
                 elif(pkt[0] == 1 and str(pkt[3]) == '161') or (pkt[0] == 2 and str(pkt[3]) == '188'):
-                    message = int(P1).to_bytes(
-                        1, 'big') + pkt + bytearray(PACKET_SIZE-len(pkt)-1)
+                    message = int(P1).to_bytes(1, 'big') + pkt + bytearray(PACKET_SIZE-len(pkt)-2) + \
+                        int(CONNECT).to_bytes(1, 'big')
                     print("Message: ", message)
                     self.send_data(message)
                     if pkt[0] == 2:
@@ -324,9 +329,10 @@ class Client(threading.Thread):
                         time.sleep(0.3)
                         relay_buffer.queue.clear()
                 elif(pkt[0] == 1 or pkt[0] == 2) and pkt[3] == DISCONNECT:
-                    message = int(P1).to_bytes(
-                        1, 'big') + bytearray(pkt) + bytearray(PACKET_SIZE-len(pkt)-1)
-                    self.send_data(pkt)
+                    message = int(P1).to_bytes(1, 'big') + bytearray(pkt[0:3]) + bytearray(PACKET_SIZE-len(pkt)-2) + \
+                        int(DISCONNECT).to_bytes(1, 'big')
+                    print("DC Message: ", message)
+                    self.send_data(message)
                 else:
                     print("Unknown packet: ", pkt)
             except (KeyboardInterrupt, ConnectionResetError, BrokenPipeError):

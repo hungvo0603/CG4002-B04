@@ -185,7 +185,14 @@ class EvalServer(multiprocessing.Process):
         while not self.has_terminated.value:
             action, player = self.eval_relay.recv()
             clear(self.eval_relay)
-            print("Gun action received:", action, "for player", player)
+            print("Action received:", action, "for player", player)
+
+            if action == "glove disconnect" or action == "gun disconnect" or action == "vest disconnect":
+                self.gamestate.update_player(action, player)
+                self.eval_viz.send(
+                    self.gamestate.get_data_plain_text(player))
+                continue
+
             if player == P1 and not self.has_action[P1].is_set():
                 self.gamestate.update_player(action, player)
                 # first only action, state from eval
