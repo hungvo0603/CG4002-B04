@@ -37,9 +37,9 @@ SOM_THRESHOLD = 0.8  # threshold value for start of move
 PACKET_SIZE = 51  # player + type + 6 floats + disconnect
 P2 = 0
 P2 = 1
-GUN_MAC = "D0:39:72:BF:C1:BF"
-GLOVE_MAC = "C4:BE:84:20:1C:05"
-VEST_MAC = "D0:39:72:BF:BF:ED"
+GUN_MAC = "D0:39:72:BF:C3:B8"
+GLOVE_MAC = "78:DB:2F:BF:34:35"
+VEST_MAC = "D0:39:72:BF:C6:0D"
 
 
 # Need to send ACK and SYN as 20 byte packets as well
