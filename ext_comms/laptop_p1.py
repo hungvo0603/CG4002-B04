@@ -26,11 +26,11 @@ SUNFIRE_HOST = 'stu.comp.nus.edu.sg'
 SYN = 'S'
 ACK = 'A'
 NAK = 'N'
-DISCONNECT = 7
+DISCONNECT = 1
 CONNECT = 0
-GLOVE = "0"
-VEST = "1"
-GUN = "2"
+GLOVE = 0
+VEST = 1
+GUN = 2
 SHOT_FIRED = "188"
 SHOT_HIT = "161"
 SOM_THRESHOLD = 0.8  # threshold value for start of move
@@ -40,6 +40,7 @@ P2 = 1
 GUN_MAC = "D0:39:72:BF:C1:BF"
 GLOVE_MAC = "C4:BE:84:20:1C:05"
 VEST_MAC = "D0:39:72:BF:BF:ED"
+
 
 # Need to send ACK and SYN as 20 byte packets as well
 packetOne_len = 20
@@ -72,7 +73,7 @@ class ScannerDelegate(DefaultDelegate):
             pkt = bytearray(data)
             # print("Packet: " + str(pkt))  # to see the packet
             if(len(pkt) == packetOne_len and pkt[0] == 0):
-                # print("Packet: " + str(pkt)) #to see the packet
+                # print("Glove Packet: " + str(pkt)) #to see the packet
                 if pkt[2] == 0:
                     correct_pkt = checksum(pkt)
                     self.SeqID = (self.SeqID + 1) & 0xFF
@@ -93,22 +94,22 @@ class ScannerDelegate(DefaultDelegate):
                 if(not full_packet and (self.packetOne[1] + 1 == self.packetTwo[1])):
                     relay_buffer.put(self.packetOne + self.packetTwo[3:15])
             elif(len(pkt) == packetOne_len and pkt[0] == 1):
-                print("IR detected")
+                # print("IR detected")
                 correct_pkt = checksum(pkt)
                 self.SeqID = (self.SeqID + 1) & 0xFF
                 if(correct_pkt):
                     self.char.write(str.encode(ACK))
-                    print("Vest correct")
+                    # print("Vest correct")
                     relay_buffer.put(pkt)
                 else:
                     self.char.write(str.encode(NAK))
             elif(len(pkt) == packetOne_len and pkt[0] == 2):
-                print("Shot detected")
+                # print("Shot detected")
                 correct_pkt = checksum(pkt)
                 self.SeqID = (self.SeqID + 1) & 0xFF
                 if(correct_pkt):
                     self.char.write(str.encode(ACK))
-                    print("Gun correct")
+                    # print("Gun correct")
                     relay_buffer.put(pkt)
                 else:
                     self.char.write(str.encode(NAK))
@@ -263,23 +264,37 @@ class Client(threading.Thread):
         else:
             if (len(self.array_ax) >= 40):
                 print("40 data set collected")
+                array_axayaz_gxgygz = []
+                self.start_collection = False
+                array_axayaz_gxgygz = np.concatenate((
+                    array_axayaz_gxgygz, self.extract_features(self.array_ax)))
+                array_axayaz_gxgygz = np.concatenate((
+                    array_axayaz_gxgygz, self.extract_features(self.array_ay)))
+                array_axayaz_gxgygz = np.concatenate((
+                    array_axayaz_gxgygz, self.extract_features(self.array_az)))
+                array_axayaz_gxgygz = np.concatenate((
+                    array_axayaz_gxgygz, self.extract_features(self.array_gx)))
+                array_axayaz_gxgygz = np.concatenate((
+                    array_axayaz_gxgygz, self.extract_features(self.array_gy)))
+                array_axayaz_gxgygz = np.concatenate((
+                    array_axayaz_gxgygz, self.extract_features(self.array_gz)))
+                array_axayaz_gxgygz = np.float_(array_axayaz_gxgygz)
                 if (np.max(self.array_ax) > 0.5 and np.max(self.array_ay) > 0.5 and np.max(self.array_az) > 0.5):
-                    array_axayaz_gxgygz = []
-                    array_axayaz_gxgygz = np.concatenate((
-                        array_axayaz_gxgygz, self.extract_features(self.array_ax)))
-                    array_axayaz_gxgygz = np.concatenate((
-                        array_axayaz_gxgygz, self.extract_features(self.array_ay)))
-                    array_axayaz_gxgygz = np.concatenate((
-                        array_axayaz_gxgygz, self.extract_features(self.array_az)))
-                    array_axayaz_gxgygz = np.concatenate((
-                        array_axayaz_gxgygz, self.extract_features(self.array_gx)))
-                    array_axayaz_gxgygz = np.concatenate((
-                        array_axayaz_gxgygz, self.extract_features(self.array_gy)))
-                    array_axayaz_gxgygz = np.concatenate((
-                        array_axayaz_gxgygz, self.extract_features(self.array_gz)))
-                    self.start_collection = False
-                    array_axayaz_gxgygz = np.float_(array_axayaz_gxgygz)
+                    print("action detected")
+                    self.array_ax = []
+                    self.array_ay = []
+                    self.array_az = []
+                    self.array_gx = []
+                    self.array_gy = []
+                    self.array_gz = []
                     return array_axayaz_gxgygz.tobytes()
+                self.array_ax = []
+                self.array_ay = []
+                self.array_az = []
+                self.array_gx = []
+                self.array_gy = []
+                self.array_gz = []
+
         return None
 
     def run(self):
@@ -291,34 +306,35 @@ class Client(threading.Thread):
             try:
                 pkt = relay_buffer.get()
                 if(pkt[0] == GLOVE):
-                    if pkt[1] == DISCONNECT:
-                        message = int(P1).to_bytes(1, 'big') + bytearray(pkt) + bytearray(PACKET_SIZE-len(pkt)-2) + \
+                    if len(pkt)==2 and pkt[1] == DISCONNECT:
+                        message = int(P1).to_bytes(1, 'big') + int(pkt[0]).to_bytes(1, 'big') + bytearray(PACKET_SIZE-3) + \
                             int(DISCONNECT).to_bytes(1, 'big')
+                        print("Len: ", len(message))
                         print("DC Message: ", message)
                         self.send_data(message)
                         continue
 
                     message = self.preprocess(pkt)
                     if message is not None:
-                        # print("Len msg: ", len(message))
+                        print("Len msg: ", len(message))
                         for i in range(0, 10):
                             # send data in chunks of 48 -> 6*10*8 = 480
-                            message = int(P1).to_bytes(
+                            text = int(P1).to_bytes(
                                 1, 'big') + pkt[0].to_bytes(
                                 1, 'big') + message[i*(PACKET_SIZE-3):(i+1)*(PACKET_SIZE-3)] + int(CONNECT).to_bytes(1, 'big')
-                            print("Message: ", message)
-                            self.send_data(message)
+                            print("Message: ", text)
+                            self.send_data(text)
                             time.sleep(0.2)
                         # check me (clear aft action)
                         time.sleep(5)
                         relay_buffer.queue.clear()
-                        self.array_ax = []
-                        self.array_ay = []
-                        self.array_az = []
-                        self.array_gx = []
-                        self.array_gy = []
-                        self.array_gz = []
-                elif(pkt[0] == 1 and str(pkt[3]) == '161') or (pkt[0] == 2 and str(pkt[3]) == '188'):
+                elif(pkt[0] == 1 or pkt[0] == 2) and len(pkt)==2 and pkt[1] == DISCONNECT:
+                    message = int(P1).to_bytes(1, 'big') + int(pkt[0]).to_bytes(1, 'big') + bytearray(PACKET_SIZE-3) + \
+                        int(DISCONNECT).to_bytes(1, 'big')
+                    print("Len: ", len(message))
+                    print("DC Message: ", message)
+                    self.send_data(message)
+                elif(pkt[0] == 1 and str(pkt[3]) == '168') or (pkt[0] == 2 and str(pkt[3]) == '182'):
                     message = int(P1).to_bytes(1, 'big') + pkt + bytearray(PACKET_SIZE-len(pkt)-2) + \
                         int(CONNECT).to_bytes(1, 'big')
                     print("Message: ", message)
@@ -327,13 +343,9 @@ class Client(threading.Thread):
                         # wait for a while then clear pending data (debounce)
                         time.sleep(0.3)
                         relay_buffer.queue.clear()
-                elif(pkt[0] == 1 or pkt[0] == 2) and pkt[3] == DISCONNECT:
-                    message = int(P1).to_bytes(1, 'big') + bytearray(pkt[0:3]) + bytearray(PACKET_SIZE-len(pkt)-2) + \
-                        int(DISCONNECT).to_bytes(1, 'big')
-                    print("DC Message: ", message)
-                    self.send_data(message)
-                else:
-                    print("Unknown packet: ", pkt)
+                
+                # else:
+                    # print("Unknown packet: ", pkt)
             except (KeyboardInterrupt, ConnectionResetError, BrokenPipeError):
                 print("Program stopped")
                 has_closed = True

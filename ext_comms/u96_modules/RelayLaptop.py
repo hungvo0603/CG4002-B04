@@ -10,7 +10,7 @@ import time
 GLOVE = 0
 VEST = 1
 GUN = 2
-DISCONNECT = 7
+DISCONNECT = 1
 SHOT_FIRED_1 = 188
 SHOT_HIT_1 = 161
 SHOT_FIRED_2 = 182
@@ -20,7 +20,6 @@ P2 = 1
 PACKET_SIZE = 51  # player + type + 6 floats + disconnect
 PORT_1 = 9000
 PORT_2 = 10000
-
 
 class RelayLaptop(multiprocessing.Process):
     def __init__(self, group_id, relay_pred, relay_eval, has_terminated, has_incoming_bullet_p1_in, has_incoming_bullet_p2_in):
@@ -76,6 +75,7 @@ class Server(threading.Thread):
             # max packt player + sender + 6 extracted features (8 each) + dc
             # s = time.perf_counter()
             byte_msg = self.conn.recv(PACKET_SIZE)
+            
             # print("[Relay] Received", len(byte_msg), "bytes")
             player = byte_msg[0]
             if byte_msg[PACKET_SIZE-1] == DISCONNECT:
