@@ -1,4 +1,3 @@
-from asyncio.windows_events import CONNECT_PIPE_INIT_DELAY
 from bluepy.btle import Peripheral, DefaultDelegate, BTLEDisconnectError
 import numpy as np
 import struct
