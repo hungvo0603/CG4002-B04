@@ -7,6 +7,8 @@ from _socket import SHUT_RDWR
 import struct
 import time
 
+from ext_comms.laptop_p1 import CONNECT
+
 GLOVE = 0
 VEST = 1
 GUN = 2
@@ -20,6 +22,7 @@ P2 = 1
 PACKET_SIZE = 51  # player + type + 6 floats + disconnect
 PORT_1 = 9000
 PORT_2 = 10000
+
 
 class RelayLaptop(multiprocessing.Process):
     def __init__(self, group_id, relay_pred, relay_eval, has_terminated, has_incoming_bullet_p1_in, has_incoming_bullet_p2_in):
@@ -40,6 +43,7 @@ class RelayLaptop(multiprocessing.Process):
 class Server(threading.Thread):
     def __init__(self, player, port_num, group_id, relay_pred, relay_eval, has_terminated, has_incoming_bullet_in, shot_fired, shot_hit):
         super().__init__()
+        self.is_active = [False, False, False]
         self.player = player
         self.daemon = True
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -75,7 +79,7 @@ class Server(threading.Thread):
             # max packt player + sender + 6 extracted features (8 each) + dc
             # s = time.perf_counter()
             byte_msg = self.conn.recv(PACKET_SIZE)
-            
+
             # print("[Relay] Received", len(byte_msg), "bytes")
             player = byte_msg[0]
             if byte_msg[PACKET_SIZE-1] == DISCONNECT:
@@ -85,7 +89,17 @@ class Server(threading.Thread):
                     self.relay_eval.send(("gun disconnect", player))
                 elif byte_msg[1] == VEST:
                     self.relay_eval.send(("vest disconnect", player))
+                self.is_active[byte_msg[1]] = False
                 continue
+
+            if not self.is_active[byte_msg[1]] and byte_msg[PACKET_SIZE-1] == CONNECT:
+                self.is_active[byte_msg[1]] = True
+                if byte_msg[1] == GLOVE:
+                    self.relay_eval.send(("glove connect", player))
+                elif byte_msg[1] == GUN:
+                    self.relay_eval.send(("gun connect", player))
+                elif byte_msg[1] == VEST:
+                    self.relay_eval.send(("vest connect", player))
 
             if byte_msg[1] == GLOVE:
                 # print(float.fromhex(byte_msg[1:2]))

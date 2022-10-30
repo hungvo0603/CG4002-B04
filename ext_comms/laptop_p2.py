@@ -31,8 +31,8 @@ CONNECT = 0
 GLOVE = 0
 VEST = 1
 GUN = 2
-SHOT_FIRED = "188"
-SHOT_HIT = "161"
+SHOT_FIRED = 182
+SHOT_HIT = 168
 SOM_THRESHOLD = 0.8  # threshold value for start of move
 PACKET_SIZE = 51  # player + type + 6 floats + disconnect
 P2 = 0
@@ -288,6 +288,7 @@ class Client(threading.Thread):
                     self.array_gy = []
                     self.array_gz = []
                     return array_axayaz_gxgygz.tobytes()
+
                 self.array_ax = []
                 self.array_ay = []
                 self.array_az = []
@@ -306,7 +307,7 @@ class Client(threading.Thread):
             try:
                 pkt = relay_buffer.get()
                 if(pkt[0] == GLOVE):
-                    if len(pkt)==2 and pkt[1] == DISCONNECT:
+                    if len(pkt) == 2 and pkt[1] == DISCONNECT:
                         message = int(P2).to_bytes(1, 'big') + int(pkt[0]).to_bytes(1, 'big') + bytearray(PACKET_SIZE-3) + \
                             int(DISCONNECT).to_bytes(1, 'big')
                         print("Len: ", len(message))
@@ -328,13 +329,13 @@ class Client(threading.Thread):
                         # check me (clear aft action)
                         time.sleep(5)
                         relay_buffer.queue.clear()
-                elif(pkt[0] == 1 or pkt[0] == 2) and len(pkt)==2 and pkt[1] == DISCONNECT:
+                elif(pkt[0] == VEST or pkt[0] == GUN) and len(pkt) == 2 and pkt[1] == DISCONNECT:
                     message = int(P2).to_bytes(1, 'big') + int(pkt[0]).to_bytes(1, 'big') + bytearray(PACKET_SIZE-3) + \
                         int(DISCONNECT).to_bytes(1, 'big')
-                    print("Len: ", len(message))
+                    # print("Len: ", len(message))
                     print("DC Message: ", message)
                     self.send_data(message)
-                elif(pkt[0] == 1 and str(pkt[3]) == '168') or (pkt[0] == 2 and str(pkt[3]) == '182'):
+                elif(pkt[0] == VEST and pkt[3] == SHOT_HIT) or (pkt[0] == GUN and pkt[3] == SHOT_FIRED):
                     message = int(P2).to_bytes(1, 'big') + pkt + bytearray(PACKET_SIZE-len(pkt)-2) + \
                         int(CONNECT).to_bytes(1, 'big')
                     print("Message: ", message)
@@ -343,7 +344,7 @@ class Client(threading.Thread):
                         # wait for a while then clear pending data (debounce)
                         time.sleep(0.3)
                         relay_buffer.queue.clear()
-                
+
                 # else:
                     # print("Unknown packet: ", pkt)
             except (KeyboardInterrupt, ConnectionResetError, BrokenPipeError):

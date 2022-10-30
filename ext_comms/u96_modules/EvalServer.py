@@ -56,7 +56,7 @@ class EvalServer(multiprocessing.Process):
         glove_thread = threading.Thread(target=self.process_glove)
         glove_thread.start()
 
-        gun_thread = threading.Thread(target=self.process_gun)
+        gun_thread = threading.Thread(target=self.process_others)
         gun_thread.start()
 
         while not self.has_terminated.value:
@@ -181,16 +181,17 @@ class EvalServer(multiprocessing.Process):
                 print(f"Player 2 action done : {action}")
                 self.has_action[P2].set()
 
-    def process_gun(self):
+    def process_others(self):
         while not self.has_terminated.value:
             action, player = self.eval_relay.recv()
             clear(self.eval_relay)
-            print("Action received:", action, "for player", player)
 
-            if action == "glove disconnect" or action == "gun disconnect" or action == "vest disconnect":
+            if action == "glove disconnect" or action == "gun disconnect" or action == "vest disconnect"\
+                    or action == "glove connect" or action == "gun connect" or action == "vest connect":
                 self.gamestate.update_player(action, player)
                 self.eval_viz.send(
                     self.gamestate.get_data_plain_text(player))
+                print("Action received:", action, "for player", player+1)
                 continue
 
             if player == P1 and not self.has_action[P1].is_set():
