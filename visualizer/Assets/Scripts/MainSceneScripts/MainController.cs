@@ -106,7 +106,7 @@ namespace M2MQTT.MainController
             else {
             // TESTING FOR VISUALIZER
             // string sample_json_string = "{\"p1\": {\"hp\": 100, \"action\": \"shoot\", \"bullets\": 5, \"grenades\": 1, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 2, \"num_shield\": 3}, \"p2\": {\"hp\": 60, \"action\": \"none\", \"bullets\": 6, \"grenades\": 2, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 3, \"num_shield\": 3}}";
-            string sample_json_string = "{\"p1\": {\"hp\": 100, \"action\": \"shoot\", \"bullets\": 5, \"grenades\": 2, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 0, \"num_shield\": 3}, \"p2\": {\"hp\": 100, \"action\": \"grenade\", \"bullets\": 6, \"grenades\": 2, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 0, \"num_shield\": 3}}";
+            string sample_json_string = "{\"p1\": {\"hp\": 100, \"action\": \"shield\", \"bullets\": 5, \"grenades\": 2, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 0, \"num_shield\": 3}, \"p2\": {\"hp\": 100, \"action\": \"shield\", \"bullets\": 6, \"grenades\": 2, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 0, \"num_shield\": 3}}";
             // string sample_json_string = "{\"p1\": {\"hp\": 100, \"action\": \"reload\", \"bullets\": 6, \"grenades\": 1, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 0, \"num_shield\": 2}, \"p2\": {\"hp\": 60, \"action\": \"none\", \"bullets\": 6, \"grenades\": 2, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 0, \"num_shield\": 3}}";
             // string sample_json_string = "{\"p1\": {\"hp\": 100, \"action\": \"none\", \"bullets\": 6, \"grenades\": 1, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 0, \"num_shield\": 2}, \"p2\": {\"hp\": 60, \"action\": \"grenade\", \"bullets\": 4, \"grenades\": 1, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 0, \"num_shield\": 3}}";
             // string sample_json_string = "{\"p1\": {\"hp\": 100, \"action\": \"logout\", \"bullets\": 5, \"grenades\": 1, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 2, \"num_shield\": 3}, \"p2\": {\"hp\": 60, \"action\": \"none\", \"bullets\": 6, \"grenades\": 2, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 3, \"num_shield\": 3}}";
@@ -126,7 +126,11 @@ namespace M2MQTT.MainController
         protected override void OnConnected()
         {
             base.OnConnected();
-            selfBrokerConnection.color = UnityEngine.Color.green;
+            int whichPlayer = SettingsController.REGISTERED_PLAYER;
+            if (whichPlayer == 1)
+                selfBrokerConnection.color = UnityEngine.Color.green;
+            else if (whichPlayer == 2)
+                opponentBrokerConnection.color = UnityEngine.Color.green;
             updateUI = true;
         }
 
@@ -151,7 +155,11 @@ namespace M2MQTT.MainController
         protected override void OnDisconnected()
         {
             Debug.Log("DISCONNECTED");
-            selfBrokerConnection.color = UnityEngine.Color.red;
+            int whichPlayer = SettingsController.REGISTERED_PLAYER;
+            if (whichPlayer == 1)
+                selfBrokerConnection.color = UnityEngine.Color.red;
+            else if (whichPlayer == 2)
+                opponentBrokerConnection.color = UnityEngine.Color.red;
             updateUI = true;
         }
 
@@ -256,12 +264,6 @@ namespace M2MQTT.MainController
         private void ProcessMessage(string msg)
         {
             // string[] specialMessage = new string[] {"p1", "p2", "none"};
-            // if (msg in specialMessage)
-            // {
-            //     grenadeHitData = GrenadeHitJson.CreateHitDataFromJSON(msg);
-            // }
-            // else
-            // {
             if (msg == "p1" || msg == "p2" || msg == "none")
             {
                 Debug.Log("Feedback received");
@@ -378,6 +380,7 @@ namespace M2MQTT.MainController
         private void ProcessAction(string selfAction, string opponentAction)
         {
             string currentPlayer = "p" + SettingsController.REGISTERED_PLAYER.ToString();
+            UpdateConnectionStatus(currentPlayer, selfAction);
             switch (selfAction)
             {
                 case "grenade":
@@ -397,24 +400,6 @@ namespace M2MQTT.MainController
                 case "logout":
                     scoreboardOverlay.gameObject.SetActive(true);
                     StartCoroutine(HideScoreboardOverlay());
-                    break;
-                case "gun connect":
-                    selfGunConnection.color = UnityEngine.Color.green;
-                    break;
-                case "gun disconnect":
-                    selfGunConnection.color = UnityEngine.Color.red;
-                    break;
-                case "vest connect":
-                    selfVestConnection.color = UnityEngine.Color.green;
-                    break;
-                case "vest disconnect":
-                    selfVestConnection.color = UnityEngine.Color.red;
-                    break;
-                case "glove connect":
-                    selfVestConnection.color = UnityEngine.Color.green;
-                    break;
-                case "glove disconnect":
-                    selfVestConnection.color = UnityEngine.Color.red;
                     break;
                 default:
                     break;
@@ -440,26 +425,64 @@ namespace M2MQTT.MainController
                     scoreboardOverlay.gameObject.SetActive(true);
                     StartCoroutine(HideScoreboardOverlay());
                     break;
-                case "gun connect":
-                    selfGunConnection.color = UnityEngine.Color.green;
-                    break;
-                case "gun disconnect":
-                    selfGunConnection.color = UnityEngine.Color.red;
-                    break;
-                case "vest connect":
-                    selfVestConnection.color = UnityEngine.Color.green;
-                    break;
-                case "vest disconnect":
-                    selfVestConnection.color = UnityEngine.Color.red;
-                    break;
-                case "glove connect":
-                    selfVestConnection.color = UnityEngine.Color.green;
-                    break;
-                case "glove disconnect":
-                    selfVestConnection.color = UnityEngine.Color.red;
-                    break;
                 default:
                     break;
+            }
+        }
+
+        private void UpdateConnectionStatus(string currentPlayer, string selfAction)
+        {
+            if (currentPlayer == "p1")
+            {
+                switch (selfAction)
+                {
+                    case "gun connect":
+                        selfGunConnection.color = UnityEngine.Color.green;
+                        break;
+                    case "gun disconnect":
+                        selfGunConnection.color = UnityEngine.Color.red;
+                        break;
+                    case "vest connect":
+                        selfVestConnection.color = UnityEngine.Color.green;
+                        break;
+                    case "vest disconnect":
+                        selfVestConnection.color = UnityEngine.Color.red;
+                        break;
+                    case "glove connect":
+                        selfGloveConnection.color = UnityEngine.Color.green;
+                        break;
+                    case "glove disconnect":
+                        selfGloveConnection.color = UnityEngine.Color.red;
+                        break;
+                    default:
+                        break;
+                }
+            }
+            else if (currentPlayer == "p2")
+            {
+                switch (selfAction)
+                {
+                    case "gun connect":
+                        opponentGunConnection.color = UnityEngine.Color.green;
+                        break;
+                    case "gun disconnect":
+                        opponentGunConnection.color = UnityEngine.Color.red;
+                        break;
+                    case "vest connect":
+                        opponentVestConnection.color = UnityEngine.Color.green;
+                        break;
+                    case "vest disconnect":
+                        opponentVestConnection.color = UnityEngine.Color.red;
+                        break;
+                    case "glove connect":
+                        opponentGloveConnection.color = UnityEngine.Color.green;
+                        break;
+                    case "glove disconnect":
+                        opponentGloveConnection.color = UnityEngine.Color.red;
+                        break;
+                    default:
+                        break;
+                }
             }
         }
 
@@ -468,18 +491,13 @@ namespace M2MQTT.MainController
             bool enemyDetected = enemyDetector.hasEnemy;
             if (enemyDetected)
             {
-                if (thrower == "p1")
-                {
-                    PublishMessage("p2");
-                }
-                else if (thrower == "p2")
-                {
-                    PublishMessage("p1");
-                }
+                string message = (thrower == "p1") ? "p1-hit" : (thrower == "p2") ? "p2-hit" : "invalid-message";
+                PublishMessage(message);
             }
             else
             {
-                PublishMessage("none");
+                string message = (thrower == "p1") ? "p1-miss" : (thrower == "p2") ? "p2-miss" : "invalid-message";
+                PublishMessage(message);
             }
         }
 
