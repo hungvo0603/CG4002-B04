@@ -81,7 +81,7 @@ class Server(threading.Thread):
 
             # print("[Relay] Received", len(byte_msg), "bytes")
             player = byte_msg[0]
-            if byte_msg[PACKET_SIZE-1] == DISCONNECT:
+            if self.is_active[byte_msg[1]] and byte_msg[PACKET_SIZE-1] == DISCONNECT:
                 if byte_msg[1] == GLOVE:
                     self.relay_eval.send(("glove disconnect", player))
                 elif byte_msg[1] == GUN:
@@ -99,6 +99,7 @@ class Server(threading.Thread):
                     self.relay_eval.send(("gun connect", player))
                 elif byte_msg[1] == VEST:
                     self.relay_eval.send(("vest connect", player))
+                continue
 
             if byte_msg[1] == GLOVE:
                 # print(float.fromhex(byte_msg[1:2]))

@@ -35,7 +35,7 @@ SHOT_FIRED = 182
 SHOT_HIT = 168
 SOM_THRESHOLD = 0.8  # threshold value for start of move
 PACKET_SIZE = 51  # player + type + 6 floats + disconnect
-P2 = 0
+P1 = 0
 P2 = 1
 GUN_MAC = "D0:39:72:BF:C3:B8"
 GLOVE_MAC = "78:DB:2F:BF:34:35"
@@ -54,7 +54,6 @@ start = False
 dataCounter = 0
 cycle = False
 actual_cycle = False
-
 has_connected = {
     GUN_MAC: False, GLOVE_MAC: False, VEST_MAC: False
 }
@@ -130,7 +129,18 @@ def handshake(bluno, char, addr):
 
         else:
             char.write(str.encode(SYN))
+
     print(addr + " completed handshake")
+
+    if(addr == GUN_MAC and not has_connected[addr]):
+        relay_buffer.put([GUN, CONNECT])
+        print("Gun connected")
+    elif(addr == GLOVE_MAC and not has_connected[addr]):
+        print("Glove connected")
+        relay_buffer.put([GLOVE, CONNECT])
+    elif(addr == VEST_MAC and not has_connected[addr]):
+        print("Green LED Vest connected")
+        relay_buffer.put([VEST, CONNECT])
     has_connected[addr] = True
     return done_handshake
 
@@ -174,17 +184,15 @@ def connection_thread(bluno, char, addr):
             break
         except BTLEDisconnectError:
             if(addr == GUN_MAC and has_connected[addr]):
-                has_connected[GUN_MAC] = False
                 relay_buffer.put([GUN, DISCONNECT])
                 print("Gun disconnected")
             elif(addr == GLOVE_MAC and has_connected[addr]):
-                has_connected[GLOVE_MAC] = False
                 print("Glove disconnected")
                 relay_buffer.put([GLOVE, DISCONNECT])
             elif(addr == VEST_MAC and has_connected[addr]):
-                has_connected[VEST_MAC] = False
                 print("Green LED Vest Disconnected")
                 relay_buffer.put([VEST, DISCONNECT])
+            has_connected[addr] = False
             bluno_handshake = False
             bluno, char = connection(addr)
 
@@ -288,7 +296,6 @@ class Client(threading.Thread):
                     self.array_gy = []
                     self.array_gz = []
                     return array_axayaz_gxgygz.tobytes()
-
                 self.array_ax = []
                 self.array_ay = []
                 self.array_az = []
@@ -307,9 +314,9 @@ class Client(threading.Thread):
             try:
                 pkt = relay_buffer.get()
                 if(pkt[0] == GLOVE):
-                    if len(pkt) == 2 and pkt[1] == DISCONNECT:
+                    if len(pkt) == 2 and (pkt[1] == DISCONNECT or pkt[1] == CONNECT):
                         message = int(P2).to_bytes(1, 'big') + int(pkt[0]).to_bytes(1, 'big') + bytearray(PACKET_SIZE-3) + \
-                            int(DISCONNECT).to_bytes(1, 'big')
+                            int(pkt[1]).to_bytes(1, 'big')
                         print("Len: ", len(message))
                         print("DC Message: ", message)
                         self.send_data(message)
@@ -329,9 +336,9 @@ class Client(threading.Thread):
                         # check me (clear aft action)
                         time.sleep(5)
                         relay_buffer.queue.clear()
-                elif(pkt[0] == VEST or pkt[0] == GUN) and len(pkt) == 2 and pkt[1] == DISCONNECT:
+                elif(pkt[0] == VEST or pkt[0] == GUN) and len(pkt) == 2 and (pkt[1] == DISCONNECT or pkt[1] == CONNECT):
                     message = int(P2).to_bytes(1, 'big') + int(pkt[0]).to_bytes(1, 'big') + bytearray(PACKET_SIZE-3) + \
-                        int(DISCONNECT).to_bytes(1, 'big')
+                        int(pkt[1]).to_bytes(1, 'big')
                     # print("Len: ", len(message))
                     print("DC Message: ", message)
                     self.send_data(message)

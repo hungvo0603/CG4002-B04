@@ -70,7 +70,7 @@ class Mqtt():
         try:
             result = self.conn.publish(self.topic, state, qos=2)
             self.conn.loop(1, 1)  # loop to prevent mqtt from blocking
-            # print("[Mqtt]Sent data: ", state)
+            print("[Mqtt]Sent data: ", state)
             # print("[Mqtt]Publish result: ", result)
             if result[0] != 0:
                 print("Failed to publish, return code: ", result[0])
