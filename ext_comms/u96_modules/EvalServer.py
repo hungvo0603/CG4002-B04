@@ -64,7 +64,7 @@ class EvalServer(multiprocessing.Process):
                 time.sleep(10)
                 print("Logout move")
                 self.gamestate.update_player("logout", P1)
-                self.eval_viz.send(
+                self.eval_viz.put(
                     self.gamestate.get_data_plain_text(P1))
                 self.gamestate.send_encrypted(self.conn, self.secret_key)
                 self.logout()
@@ -78,19 +78,19 @@ class EvalServer(multiprocessing.Process):
             # Set shield if got
             if self.has_shield[P1].is_set():
                 self.gamestate.update_player('shield', P1)
-                self.eval_viz.send(
+                self.eval_viz.put(
                     self.gamestate.get_data_plain_text(P1))
 
             if self.has_shield[P2].is_set():
                 self.gamestate.update_player('shield', P2)
-                self.eval_viz.send(
+                self.eval_viz.put(
                     self.gamestate.get_data_plain_text(P2))
 
             # Clear all pedning data in pipe
             print("Clearing eval pipe")
             clear(self.eval_pred)
             clear(self.eval_relay)
-            clear(self.eval_viz)
+            # clear(self.eval_viz)
 
             self.has_shield[P1].clear()
             self.has_shield[P2].clear()
@@ -122,7 +122,7 @@ class EvalServer(multiprocessing.Process):
                     break
                 # self.has_action[P1].clear()
                 # self.has_action[P2].clear()  # need to change
-                self.eval_viz.send(
+                self.eval_viz.put(
                     self.gamestate.get_data_plain_text(BOTH))
             except Exception as e:
                 print(e)
@@ -146,38 +146,38 @@ class EvalServer(multiprocessing.Process):
             if player == P1 and not self.has_action[P1].is_set():
                 if action != 'shield':
                     self.gamestate.update_player(action, player)
-                    self.eval_viz.send(
+                    self.eval_viz.put(
                         self.gamestate.get_data_plain_text(player))
                 else:
                     self.has_shield[player].set()
 
                 if action == 'grenade':
-                    # uncomment this on viz
-                    # player_hit = self.eval_viz.recv()
-                    # print(
-                    #     f"Data received from Visualizer {player_hit}")
-                    # if player_hit != "none":
-                    self.gamestate.update_player(
-                        "grenade_damage", P2)
+                    # wait for 2 seconds
+                    player_hit = self.eval_viz.get()
+                    print(
+                        f"Data received from Visualizer {player_hit}")
+                    if player_hit and player_hit != "none":
+                        self.gamestate.update_player(
+                            "grenade_damage", P2)
                 print(f"Player 1 action done : {action}")
                 self.has_action[P1].set()
 
             if player == P2 and not self.has_action[P2].is_set():
                 if action != 'shield':
                     self.gamestate.update_player(action, player)
-                    self.eval_viz.send(
+                    self.eval_viz.put(
                         self.gamestate.get_data_plain_text(player))
                 else:
                     self.has_shield[player].set()
 
                 if action == 'grenade':
                     # uncomment on viz
-                    # player_hit = self.eval_viz.recv()
-                    # print(
-                    #     f"Data received from Visualizer {player_hit}")
-                    # if player_hit != "none":
-                    self.gamestate.update_player(
-                        "grenade_damage", P1)
+                    player_hit = self.eval_viz.get()
+                    print(
+                        f"Data received from Visualizer {player_hit}")
+                    if player_hit and player_hit != "none":
+                        self.gamestate.update_player(
+                            "grenade_damage", P1)
                 print(f"Player 2 action done : {action}")
                 self.has_action[P2].set()
 
@@ -189,7 +189,7 @@ class EvalServer(multiprocessing.Process):
             if action == "glove disconnect" or action == "gun disconnect" or action == "vest disconnect"\
                     or action == "glove connect" or action == "gun connect" or action == "vest connect":
                 self.gamestate.update_player(action, player)
-                self.eval_viz.send(
+                self.eval_viz.put(
                     self.gamestate.get_data_plain_text(player))
                 print("Action received:", action, "for player", player+1)
                 continue
@@ -197,7 +197,7 @@ class EvalServer(multiprocessing.Process):
             if player == P1 and not self.has_action[P1].is_set():
                 self.gamestate.update_player(action, player)
                 # first only action, state from eval
-                self.eval_viz.send(
+                self.eval_viz.put(
                     self.gamestate.get_data_plain_text(player))
                 if action == "shoot":
                     # check for vest ir receiver
@@ -212,7 +212,7 @@ class EvalServer(multiprocessing.Process):
             if player == P2 and not self.has_action[P2].is_set():
                 self.gamestate.update_player(action, player)
                 # first only action, state from eval
-                self.eval_viz.send(
+                self.eval_viz.put(
                     self.gamestate.get_data_plain_text(player))
                 if action == "shoot":
                     # check for vest ir receiver

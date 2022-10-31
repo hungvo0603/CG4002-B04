@@ -13,7 +13,7 @@ from RelayLaptop import RelayLaptop
 from Visualizer import Visualizer
 
 import sys
-from multiprocessing import Pipe, Value, Event
+from multiprocessing import Pipe, Value, Queue
 import time
 
 # Data buffer
@@ -22,7 +22,7 @@ eval_pred, pred_eval = Pipe()  # data, action
 has_incoming_bullet_p1_out, has_incoming_bullet_p1_in = Pipe()
 has_incoming_bullet_p2_out, has_incoming_bullet_p2_in = Pipe()
 eval_relay, relay_eval = Pipe()  # internal data, action
-viz_eval, eval_viz = Pipe(duplex=True)  # player_hit, state
+viz_eval = Queue()  # player_hit, state
 has_terminated = Value('i', False)
 
 # Events
@@ -48,7 +48,7 @@ if __name__ == '__main__':
                         relay_pred, relay_eval, has_terminated, has_incoming_bullet_p1_in, has_incoming_bullet_p2_in)
     predictor = MovePredictor(pred_relay, pred_eval, has_terminated)
     eval = EvalServer(eval_ip, eval_port, group_id,
-                      secret_key, eval_pred, eval_relay, eval_viz, has_terminated, has_incoming_bullet_p1_out, has_incoming_bullet_p2_out)
+                      secret_key, eval_pred, eval_relay, viz_eval, has_terminated, has_incoming_bullet_p1_out, has_incoming_bullet_p2_out)
     visualizer = Visualizer(viz_eval, has_terminated)
 
     relay.start()

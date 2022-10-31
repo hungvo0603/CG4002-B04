@@ -19,7 +19,7 @@ class Visualizer():
 
     def publish(self):
         while not self.has_terminated.value:
-            state = self.viz_eval.recv()
+            state = self.viz_eval.get()
             # clear(self.viz_eval)
             # print("Visualizer state bef pub: ", state)
             self.pub.publish(json.dumps(state))
@@ -87,8 +87,7 @@ class Mqtt():
         def on_message(client, userdata, msg):
             player_hit = msg.payload.decode()
             # include when add viz
-            # if player_hit != "none":
-            self.viz_eval.send(player_hit)
+            self.viz_eval.put(player_hit)
             print("[Mqtt]Received data: ", player_hit)
 
         self.conn.on_message = on_message

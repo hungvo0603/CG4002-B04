@@ -7,12 +7,11 @@ from _socket import SHUT_RDWR
 import struct
 import time
 
-from ext_comms.laptop_p1 import CONNECT
-
 GLOVE = 0
 VEST = 1
 GUN = 2
 DISCONNECT = 1
+CONNECT = 0
 SHOT_FIRED_1 = 188
 SHOT_HIT_1 = 161
 SHOT_FIRED_2 = 182
