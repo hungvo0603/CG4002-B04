@@ -170,6 +170,7 @@ StyleCopReport.xml
 *.scc
 *.tgz
 
+*.csv
 # Chutzpah Test files
 _Chutzpah*
 

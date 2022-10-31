@@ -334,7 +334,7 @@ class Client(threading.Thread):
                             self.send_data(text)
                             time.sleep(0.2)
                         # check me (clear aft action)
-                        time.sleep(5)
+                        time.sleep(2)
                         relay_buffer.queue.clear()
                 elif(pkt[0] == VEST or pkt[0] == GUN) and len(pkt) == 2 and (pkt[1] == DISCONNECT or pkt[1] == CONNECT):
                     message = int(P2).to_bytes(1, 'big') + int(pkt[0]).to_bytes(1, 'big') + bytearray(PACKET_SIZE-3) + \
