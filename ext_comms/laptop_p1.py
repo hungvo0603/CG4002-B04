@@ -338,13 +338,13 @@ class Client(threading.Thread):
                         time.sleep(5)
                         relay_buffer.queue.clear()
                 elif(pkt[0] == VEST or pkt[0] == GUN) and len(pkt) == 2 and (pkt[1] == DISCONNECT or pkt[1] == CONNECT):
-                    message = int(P2).to_bytes(1, 'big') + int(pkt[0]).to_bytes(1, 'big') + bytearray(PACKET_SIZE-3) + \
+                    message = int(P1).to_bytes(1, 'big') + int(pkt[0]).to_bytes(1, 'big') + bytearray(PACKET_SIZE-3) + \
                         int(pkt[1]).to_bytes(1, 'big')
                     # print("Len: ", len(message))
                     print("DC Message: ", message)
                     self.send_data(message)
                 elif(pkt[0] == VEST and pkt[3] == SHOT_HIT) or (pkt[0] == GUN and pkt[3] == SHOT_FIRED):
-                    message = int(P2).to_bytes(1, 'big') + pkt + bytearray(PACKET_SIZE-len(pkt)-2) + \
+                    message = int(P1).to_bytes(1, 'big') + pkt + bytearray(PACKET_SIZE-len(pkt)-2) + \
                         int(CONNECT).to_bytes(1, 'big')
                     print("Message: ", message)
                     self.send_data(message)

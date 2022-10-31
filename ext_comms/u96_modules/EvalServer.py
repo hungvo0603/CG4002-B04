@@ -22,7 +22,7 @@ def clear(pipe):
 
 class EvalServer(multiprocessing.Process):
     # Client to eval_server
-    def __init__(self, ip_addr, port_num, group_id, secret_key, eval_pred, eval_relay, eval_viz, has_terminated, has_incoming_bullet_p1_out, has_incoming_bullet_p2_out):
+    def __init__(self, ip_addr, port_num, group_id, secret_key, eval_pred, eval_relay, eval_viz, viz_eval_p1, viz_eval_p2, has_terminated, has_incoming_bullet_p1_out, has_incoming_bullet_p2_out):
         super().__init__()  # init parent (Thread)
         self.conn = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.server_address = (ip_addr, port_num)
@@ -45,6 +45,8 @@ class EvalServer(multiprocessing.Process):
         self.eval_pred = eval_pred
         self.eval_relay = eval_relay
         self.eval_viz = eval_viz
+        self.viz_eval_p1 = viz_eval_p1
+        self.viz_eval_p2 = viz_eval_p2
 
     def run(self):
         self.conn.connect(self.server_address)
@@ -153,10 +155,10 @@ class EvalServer(multiprocessing.Process):
 
                 if action == 'grenade':
                     # wait for 2 seconds
-                    player_hit = self.eval_viz.get()
+                    is_hit = self.viz_eval_p1.get()
                     print(
-                        f"Data received from Visualizer {player_hit}")
-                    if player_hit and player_hit != "none":
+                        f"Data received from Visualizer {is_hit}")
+                    if is_hit:
                         self.gamestate.update_player(
                             "grenade_damage", P2)
                 print(f"Player 1 action done : {action}")
@@ -172,10 +174,10 @@ class EvalServer(multiprocessing.Process):
 
                 if action == 'grenade':
                     # uncomment on viz
-                    player_hit = self.eval_viz.get()
+                    is_hit = self.viz_eval_p2.get()
                     print(
-                        f"Data received from Visualizer {player_hit}")
-                    if player_hit and player_hit != "none":
+                        f"Data received from Visualizer {is_hit}")
+                    if is_hit:
                         self.gamestate.update_player(
                             "grenade_damage", P1)
                 print(f"Player 2 action done : {action}")

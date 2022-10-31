@@ -11,15 +11,15 @@ MQTT_SUB = "cg4002/4/u96_viz"
 
 
 class Visualizer():
-    def __init__(self, viz_eval, has_terminated):
-        self.pub = Mqtt(MQTT_PUB, viz_eval, has_terminated)
-        self.sub = Mqtt(MQTT_SUB, viz_eval, has_terminated)
-        self.viz_eval = viz_eval
+    def __init__(self, eval_viz, viz_eval_p1, viz_eval_p2, has_terminated):
+        self.pub = Mqtt(MQTT_PUB, viz_eval_p1, viz_eval_p2, has_terminated)
+        self.sub = Mqtt(MQTT_SUB, viz_eval_p1, viz_eval_p2, has_terminated)
+        self.eval_viz = eval_viz
         self.has_terminated = has_terminated
 
     def publish(self):
         while not self.has_terminated.value:
-            state = self.viz_eval.get()
+            state = self.eval_viz.get()
             # clear(self.viz_eval)
             # print("Visualizer state bef pub: ", state)
             self.pub.publish(json.dumps(state))
@@ -44,12 +44,13 @@ class Visualizer():
 
 class Mqtt():
     # Connection to visualiser
-    def __init__(self, topic, viz_eval, has_terminated):
+    def __init__(self, topic, p1_buffer, p2_buffer, has_terminated):
         super().__init__()
         self.topic = topic
         self.daemon = True
         self.conn = None
-        self.viz_eval = viz_eval
+        self.p1_buffer = p1_buffer
+        self.p2_buffer = p2_buffer
         self.has_terminated = has_terminated
         self.connect_mqtt()
 
@@ -85,10 +86,14 @@ class Mqtt():
 
     def subscribe(self):
         def on_message(client, userdata, msg):
-            player_hit = msg.payload.decode()
-            # include when add viz
-            self.viz_eval.put(player_hit)
-            print("[Mqtt]Received data: ", player_hit)
+            data = msg.payload.decode()
+            print("[Mqtt]Received data: ", data)
+            player, is_hit = data.split("-")
+            if player == "p1":
+                self.p1_buffer.put(is_hit == "hit")
+
+            if player == "p2":
+                self.p2_buffer.put(is_hit == "hit")
 
         self.conn.on_message = on_message
         self.conn.subscribe(self.topic, qos=2)
