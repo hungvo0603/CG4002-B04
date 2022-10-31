@@ -32,14 +32,8 @@ using uPLibrary.Networking.M2Mqtt.Messages;
 using M2MqttUnity;
 using TMPro;
 
-/// <summary>
-/// Examples for the M2MQTT library (https://github.com/eclipse/paho.mqtt.m2mqtt),
-/// </summary>
 namespace M2MQTT.MainController
 {
-    /// <summary>
-    /// Script for testing M2MQTT with a Unity UI
-    /// </summary>
     public class MainController : M2MqttUnityClient
     {
         [Header("Registered Player")]
@@ -47,11 +41,15 @@ namespace M2MQTT.MainController
         public TextMeshProUGUI playerIdentifier;
 
         [Header("Connection UI")]
-        public Image connectedIcon;
-        public Image disconnectedIcon;
+        public Image selfBrokerConnection;
+        public Image selfGunConnection;
+        public Image selfVestConnection;
+        public Image selfGloveConnection;
+        public Image opponentBrokerConnection;
+        public Image opponentGunConnection;
+        public Image opponentVestConnection;
+        public Image opponentGloveConnection;
         public Button PublishMessageButton;
-        public Image bluetoothConnected;
-        public Image bluetoothDisconnected;
 
         [Header("Healthbar UI")]
         public HealthBarController healthBarPlayer1;
@@ -108,7 +106,7 @@ namespace M2MQTT.MainController
             else {
             // TESTING FOR VISUALIZER
             // string sample_json_string = "{\"p1\": {\"hp\": 100, \"action\": \"shoot\", \"bullets\": 5, \"grenades\": 1, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 2, \"num_shield\": 3}, \"p2\": {\"hp\": 60, \"action\": \"none\", \"bullets\": 6, \"grenades\": 2, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 3, \"num_shield\": 3}}";
-            string sample_json_string = "{\"p1\": {\"hp\": 100, \"action\": \"reload\", \"bullets\": 5, \"grenades\": 2, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 0, \"num_shield\": 3}, \"p2\": {\"hp\": 100, \"action\": \"shoot\", \"bullets\": 6, \"grenades\": 2, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 0, \"num_shield\": 3}}";
+            string sample_json_string = "{\"p1\": {\"hp\": 100, \"action\": \"shoot\", \"bullets\": 5, \"grenades\": 2, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 0, \"num_shield\": 3}, \"p2\": {\"hp\": 100, \"action\": \"grenade\", \"bullets\": 6, \"grenades\": 2, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 0, \"num_shield\": 3}}";
             // string sample_json_string = "{\"p1\": {\"hp\": 100, \"action\": \"reload\", \"bullets\": 6, \"grenades\": 1, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 0, \"num_shield\": 2}, \"p2\": {\"hp\": 60, \"action\": \"none\", \"bullets\": 6, \"grenades\": 2, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 0, \"num_shield\": 3}}";
             // string sample_json_string = "{\"p1\": {\"hp\": 100, \"action\": \"none\", \"bullets\": 6, \"grenades\": 1, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 0, \"num_shield\": 2}, \"p2\": {\"hp\": 60, \"action\": \"grenade\", \"bullets\": 4, \"grenades\": 1, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 0, \"num_shield\": 3}}";
             // string sample_json_string = "{\"p1\": {\"hp\": 100, \"action\": \"logout\", \"bullets\": 5, \"grenades\": 1, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 2, \"num_shield\": 3}, \"p2\": {\"hp\": 60, \"action\": \"none\", \"bullets\": 6, \"grenades\": 2, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 3, \"num_shield\": 3}}";
@@ -128,8 +126,7 @@ namespace M2MQTT.MainController
         protected override void OnConnected()
         {
             base.OnConnected();
-            connectedIcon.gameObject.SetActive(true);
-            disconnectedIcon.gameObject.SetActive(false);
+            selfBrokerConnection.color = UnityEngine.Color.green;
             updateUI = true;
         }
 
@@ -154,8 +151,7 @@ namespace M2MQTT.MainController
         protected override void OnDisconnected()
         {
             Debug.Log("DISCONNECTED");
-            connectedIcon.gameObject.SetActive(false);
-            disconnectedIcon.gameObject.SetActive(true);
+            selfBrokerConnection.color = UnityEngine.Color.red;
             updateUI = true;
         }
 
@@ -195,13 +191,10 @@ namespace M2MQTT.MainController
 
         protected override void Start()
         {
-            connectedIcon.gameObject.SetActive(false);
-            disconnectedIcon.gameObject.SetActive(true);
             scoreboardOverlay.gameObject.SetActive(false);
-            bluetoothConnected.gameObject.SetActive(false);
-            bluetoothDisconnected.gameObject.SetActive(true);
             playerRegistered.text = "Player " + SettingsController.REGISTERED_PLAYER.ToString();
             playerIdentifier.text = "B04";
+            UpdateSelfConnectionStatus();
             StartCoroutine(SetPlayerSide());
             Connect();
             updateUI = true;
@@ -317,6 +310,31 @@ namespace M2MQTT.MainController
             Disconnect();
         }
 
+        private void UpdateSelfConnectionStatus()
+        {
+            int playerNumber = SettingsController.REGISTERED_PLAYER;
+            if (playerNumber == 1)
+            {
+                selfGunConnection.color = UnityEngine.Color.red;
+                selfVestConnection.color = UnityEngine.Color.red;
+                selfGloveConnection.color = UnityEngine.Color.red;
+                opponentBrokerConnection.gameObject.SetActive(false);
+                opponentGloveConnection.gameObject.SetActive(false);
+                opponentGunConnection.gameObject.SetActive(false);
+                opponentVestConnection.gameObject.SetActive(false);
+            }
+            else if (playerNumber == 2)
+            {
+                opponentGunConnection.color = UnityEngine.Color.red;
+                opponentVestConnection.color = UnityEngine.Color.red;
+                opponentGloveConnection.color = UnityEngine.Color.red;
+                selfBrokerConnection.gameObject.SetActive(false);
+                selfGloveConnection.gameObject.SetActive(false);
+                selfGunConnection.gameObject.SetActive(false);
+                selfVestConnection.gameObject.SetActive(false);
+            }
+        }
+
         private void ProcessHealthBarUpdate(int healthP1, int healthP2)
         {
             healthBarPlayer1.SetHealth(healthP1);
@@ -380,13 +398,23 @@ namespace M2MQTT.MainController
                     scoreboardOverlay.gameObject.SetActive(true);
                     StartCoroutine(HideScoreboardOverlay());
                     break;
-                case "connect":
-                    bluetoothConnected.gameObject.SetActive(true);
-                    bluetoothDisconnected.gameObject.SetActive(false);
+                case "gun connect":
+                    selfGunConnection.color = UnityEngine.Color.green;
                     break;
-                case "disconnect":
-                    bluetoothConnected.gameObject.SetActive(false);
-                    bluetoothDisconnected.gameObject.SetActive(true);
+                case "gun disconnect":
+                    selfGunConnection.color = UnityEngine.Color.red;
+                    break;
+                case "vest connect":
+                    selfVestConnection.color = UnityEngine.Color.green;
+                    break;
+                case "vest disconnect":
+                    selfVestConnection.color = UnityEngine.Color.red;
+                    break;
+                case "glove connect":
+                    selfVestConnection.color = UnityEngine.Color.green;
+                    break;
+                case "glove disconnect":
+                    selfVestConnection.color = UnityEngine.Color.red;
                     break;
                 default:
                     break;
@@ -412,13 +440,23 @@ namespace M2MQTT.MainController
                     scoreboardOverlay.gameObject.SetActive(true);
                     StartCoroutine(HideScoreboardOverlay());
                     break;
-                case "connect":
-                    bluetoothConnected.gameObject.SetActive(true);
-                    bluetoothDisconnected.gameObject.SetActive(false);
+                case "gun connect":
+                    selfGunConnection.color = UnityEngine.Color.green;
                     break;
-                case "disconnect":
-                    bluetoothConnected.gameObject.SetActive(false);
-                    bluetoothDisconnected.gameObject.SetActive(true);
+                case "gun disconnect":
+                    selfGunConnection.color = UnityEngine.Color.red;
+                    break;
+                case "vest connect":
+                    selfVestConnection.color = UnityEngine.Color.green;
+                    break;
+                case "vest disconnect":
+                    selfVestConnection.color = UnityEngine.Color.red;
+                    break;
+                case "glove connect":
+                    selfVestConnection.color = UnityEngine.Color.green;
+                    break;
+                case "glove disconnect":
+                    selfVestConnection.color = UnityEngine.Color.red;
                     break;
                 default:
                     break;

@@ -42,7 +42,6 @@ public class ShootController : MonoBehaviour
 
     public void GunShotPlayer1()
     {
-        hasEnemy = enemy.hasEnemy;
         int currentShieldHealthPlayer2 = shieldHealthController.currentShieldHealthPlayer2;
         int shieldHealthPlayer2;
         if (hasEnemy)
