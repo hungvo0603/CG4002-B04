@@ -24,7 +24,7 @@ public class ShieldTriggerAnimation : MonoBehaviour
         shieldLayer.gameObject.SetActive(!_isBrokenShield);
     }
 
-    void TriggerAnimation()
+    public void TriggerAnimation()
     {
         shieldLayer.gameObject.SetActive(true);
         GetComponent<Animator>().Play("ShieldFlashing");

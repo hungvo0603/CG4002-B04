@@ -8,7 +8,7 @@ public class ShieldController : MonoBehaviour
     const int MAX_SHIELD = 3;
 
     // Player 1
-    public GameObject shieldPlayer1;
+    // public GameObject shieldPlayer1;
     public Button shieldActivateButtonPlayer1;
     public bool isShieldActivatedPlayer1;
     public int currentShieldCountPlayer1;
@@ -25,7 +25,7 @@ public class ShieldController : MonoBehaviour
     {
         shieldActivateButtonPlayer1.onClick.AddListener(ActivateShieldPlayer1);
         shieldActivateButtonPlayer2.onClick.AddListener(ActivateShieldPlayer2);
-        shieldPlayer1.gameObject.SetActive(false);
+        // shieldPlayer1.gameObject.SetActive(false);
         shieldPlayer2.gameObject.SetActive(false);
         isShieldActivatedPlayer1 = false;
         isShieldActivatedPlayer2 = false;
@@ -40,38 +40,31 @@ public class ShieldController : MonoBehaviour
 
     public void ActivateShieldPlayer1()
     {
-        if (currentShieldCountPlayer1 > 0)
-        {
-            shieldPlayer1.gameObject.SetActive(true);
+            // shieldPlayer1.gameObject.SetActive(true);
             isShieldActivatedPlayer1 = true;
             shieldActivateButtonPlayer1.interactable = false;
             shieldActivationSoundPlayer1.Play();
             StartCoroutine(DeactivateShieldPlayer1());
-        }
     }
     
     public void ActivateShieldPlayer2()
     {
-        if (currentShieldCountPlayer2 > 0)
-        {
-            shieldPlayer2.gameObject.SetActive(true);
+            // shieldPlayer2.gameObject.SetActive(true);
             isShieldActivatedPlayer2 = true;
             shieldActivateButtonPlayer2.interactable = false;
             shieldActivationSoundPlayer2.Play();
             StartCoroutine(DeactivateShieldPlayer2());
-        }
-
     }
 
     public void BreakShieldPlayer1()
     {
-        shieldPlayer1.gameObject.SetActive(false);
+        // shieldPlayer1.gameObject.SetActive(false);
         isShieldActivatedPlayer1 = false;
     }
 
     public void BreakShieldPlayer2()
     {
-        shieldPlayer2.gameObject.SetActive(false);
+        // shieldPlayer2.gameObject.SetActive(false);
         isShieldActivatedPlayer2 = false;
     }
 
@@ -79,7 +72,7 @@ public class ShieldController : MonoBehaviour
     {
         yield return new WaitForSeconds(10f);
         shieldActivateButtonPlayer1.interactable = true;
-        shieldPlayer1.gameObject.SetActive(false);
+        // shieldPlayer1.gameObject.SetActive(false);
         isShieldActivatedPlayer1 = false;
     }
 
