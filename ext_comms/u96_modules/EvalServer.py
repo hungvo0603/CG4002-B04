@@ -142,7 +142,7 @@ class EvalServer(multiprocessing.Process):
     def process_glove(self):
         while not self.has_terminated.value:
             action, player = self.eval_pred.recv()
-            clear(self.eval_pred)
+            # clear(self.eval_pred)
             print("Glove action received:", action)
 
             if player == P1 and not self.has_action[P1].is_set():
@@ -186,7 +186,7 @@ class EvalServer(multiprocessing.Process):
     def process_others(self):
         while not self.has_terminated.value:
             action, player = self.eval_relay.recv()
-            clear(self.eval_relay)
+            # clear(self.eval_relay)
 
             if action == "glove disconnect" or action == "gun disconnect" or action == "vest disconnect"\
                     or action == "glove connect" or action == "gun connect" or action == "vest connect":

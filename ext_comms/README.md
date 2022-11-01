@@ -26,13 +26,23 @@ SUNFIRE_PWD = '[sunfire password]'
 
 DONT USE PORT NUM < 2000
 
+To run:
+ssh to stu account:
+ssh username@stu.comp.nus.edu.sg
+
+ssh to xilinx:
+ssh xilinx@192.168.246
+
 Eval:
-1234567890123456
 python eval_sever/eval_server.py 8000 4 2
+Secret key: 1234567890123456
 -
 
 u96:
+sudo -i
+cd /home/xilinx
 python u96_modules/main.py 4 8000 localhost 1234567890123456
+
 - to kill proces in port: 
 fuser -k 10000/tcp 
 fuser -k 9000/tcp 
