@@ -125,21 +125,21 @@ class PlayerStateStudent(PlayerStateBase):
                 if self.shield_health - 10 < 0:
                     leftover = 10 - self.shield_health
                     self.shield_health = 0
-                    self.hp = max(self.hp-leftover, 0)
+                    self.hp -= leftover
                 else:
                     self.shield_health = max(self.shield_health-10, 0)
             else:
-                self.hp = max(self.hp-10, 0)
+                self.hp -= 10
         if new_data == 'grenade_damage':
             if self.shield_time:
                 if self.shield_health - 30 < 0:
                     leftover = 30 - self.shield_health
                     self.shield_health = 0
-                    self.hp = max(self.hp-leftover, 0)
+                    self.hp -= leftover
                 else:
                     self.shield_health = max(self.shield_health-30, 0)
             else:
-                self.hp = max(self.hp-30, 0)
+                self.hp -= 30
         if new_data == 'none':
             self.action = 'none'
         if new_data == 'death':
@@ -147,6 +147,11 @@ class PlayerStateStudent(PlayerStateBase):
             self.num_deaths = self.num_deaths + 1
         if new_data == 'respawn':
             pass
+
+        if self.hp < 0:
+            self.hp = 100
+            self.num_deaths += 1
+            print("Player respawned")
 
     def action_is_valid(self, action_self):
         ret = True
