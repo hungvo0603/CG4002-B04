@@ -72,6 +72,7 @@ class MovePredictor(multiprocessing.Process):
 
                 if action is not None and action != "nomovement":
                     self.pred_eval.send((action, player))
+
             except KeyboardInterrupt:
                 print("[MovePredictor]Keyboard Interrupt, terminating")
                 self.has_terminated.value = True
