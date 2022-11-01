@@ -100,6 +100,10 @@ class EvalServer(multiprocessing.Process):
             self.has_action[P2].clear()
             print("Cleared action")
 
+            print("Adjust data")
+            self.gamestate.update_player('adjust_data', P1)
+            self.gamestate.update_player('adjust_data', P2)
+
             print("Sending to eval...")
             self.gamestate.send_encrypted(self.conn, self.secret_key)
             self.action_counter += 1

@@ -1,5 +1,5 @@
-Qn:
-- how are we demoing the eval server conn in thurs?
+Gameplay logic:
+- Invalid action (shoot at no bullet, grenade at no grenade, reload at >0 bullet) -> action registers but no damage
 
 Todo:
 - implement game logic

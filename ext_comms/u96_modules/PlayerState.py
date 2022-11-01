@@ -2,24 +2,26 @@ import time
 import threading
 from abc import abstractmethod
 
+BULLET_DMG = 10
+GRENADE_DMG = 30
+BULLET_NUM = 6
+SHIELD_TIME = 6
+MAX_HP = 100
+GRENADE_NUM = 2
+SHIELD_NUM = 3
+
 
 class PlayerStateBase:
     def __init__(self, main):
-        self.max_grenades = 2
-        self.max_shields = 3
-        self.bullet_hp = 10
-        self.grenade_hp = 30
         self.shield_max_time = 10
-        self.magazine_size = 6
-        self.max_hp = 100
 
-        self.hp = self.max_hp
+        self.hp = MAX_HP
         self.action = 'none'
-        self.bullets = self.magazine_size
-        self.grenades = self.max_grenades
+        self.bullets = BULLET_NUM
+        self.grenades = GRENADE_NUM
         self.shield_time = 0
         self.shield_health = 0
-        self.num_shield = self.max_shields
+        self.num_shield = SHIELD_NUM
         self.num_deaths = 0
 
         self.shield_start_time = time.time()-30
@@ -98,60 +100,72 @@ class PlayerStateStudent(PlayerStateBase):
             self.action = new_data
         if new_data == 'shoot':
             self.action = 'shoot'
-            self.bullets = self.bullets-1
+            self.bullets -= 1
         if new_data == 'grenade':
             self.action = 'grenade'
-            self.grenades = max(0, self.grenades-1)
+            self.grenades -= 1
         if new_data == 'reload':
             self.action = 'reload'
             if self.bullets == 0:
-                self.bullets = self.magazine_size
+                self.bullets = BULLET_NUM
         if new_data == 'shield':
             self.action = 'shield'
             if self.num_shield > 0 and self.shield_time <= 0:
                 self.shield_health = 30
-                self.shield_time = self.shield_max_time
+                self.shield_time = SHIELD_TIME
                 self.num_shield = max(0, self.num_shield-1)
                 t = threading.Thread(target=self.timer_shield, args=())
                 t.start()
         if new_data == 'logout':
             self.action = 'logout'
+
         if new_data == 'bullet_hit':
             if self.bullets == -1:
                 self.bullets = 0
                 pass
 
             if self.shield_time:
-                if self.shield_health - 10 < 0:
-                    leftover = 10 - self.shield_health
+                if self.shield_health - BULLET_DMG < 0:
+                    leftover = BULLET_DMG - self.shield_health
                     self.shield_health = 0
                     self.hp -= leftover
                 else:
-                    self.shield_health = max(self.shield_health-10, 0)
+                    self.shield_health = max(self.shield_health-BULLET_DMG, 0)
             else:
-                self.hp -= 10
+                self.hp -= BULLET_DMG
+
         if new_data == 'grenade_damage':
+            if self.grenades == -1:
+                self.grenades = 0
+                pass
+
             if self.shield_time:
-                if self.shield_health - 30 < 0:
-                    leftover = 30 - self.shield_health
+                if self.shield_health - GRENADE_DMG < 0:
+                    leftover = GRENADE_DMG - self.shield_health
                     self.shield_health = 0
                     self.hp -= leftover
                 else:
-                    self.shield_health = max(self.shield_health-30, 0)
+                    self.shield_health = max(self.shield_health-GRENADE_DMG, 0)
             else:
-                self.hp -= 30
+                self.hp -= GRENADE_DMG
+
         if new_data == 'none':
             self.action = 'none'
-        if new_data == 'death':
-            self.action = 'none'
-            self.num_deaths = self.num_deaths + 1
-        if new_data == 'respawn':
-            pass
+
+        if new_data == 'adjust_data':
+            self.bullets = max(self.bullets, 0)
+            self.grenades = max(self.grenades, 0)
 
         if self.hp < 0:
-            self.hp = 100
             self.num_deaths += 1
-            print("Player respawned")
+            self.hp = MAX_HP
+            self.action = 'none'
+            self.bullets = BULLET_NUM
+            self.grenades = GRENADE_NUM
+            self.shield_time = 0
+            self.shield_health = 0
+            self.num_shield = SHIELD_NUM
+            print("Player died and new person is respawned :D")
 
     def action_is_valid(self, action_self):
         ret = True
