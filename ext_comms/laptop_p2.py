@@ -99,7 +99,7 @@ class ScannerDelegate(DefaultDelegate):
                 self.SeqID = (self.SeqID + 1) & 0xFF
                 if(correct_pkt):
                     self.char.write(str.encode(ACK))
-                    print("Vest correct")
+                    # print("Vest correct")
                     relay_buffer.put(pkt)
                 else:
                     self.char.write(str.encode(NAK))
@@ -109,7 +109,7 @@ class ScannerDelegate(DefaultDelegate):
                 self.SeqID = (self.SeqID + 1) & 0xFF
                 if(correct_pkt):
                     self.char.write(str.encode(ACK))
-                    print("Gun correct")
+                    # print("Gun correct")
                     relay_buffer.put(pkt)
                 else:
                     self.char.write(str.encode(NAK))
