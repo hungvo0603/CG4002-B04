@@ -318,6 +318,7 @@ class Client(threading.Thread):
         while not has_closed:
             try:
                 pkt = relay_buffer.get()
+                print("Packet:", pkt)
                 if(pkt[0] == GLOVE):
                     if len(pkt) == 2 and (pkt[1] == DISCONNECT or pkt[1] == CONNECT):
                         message = int(P2).to_bytes(1, 'big') + int(pkt[0]).to_bytes(1, 'big') + bytearray(PACKET_SIZE-3) + \
