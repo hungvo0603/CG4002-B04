@@ -27,14 +27,6 @@ viz_eval_p2 = Queue()
 eval_viz = Queue()
 has_terminated = Value('i', False)
 
-# Events
-# relay_pred_event = Event()
-# pred_eval_event = Event()
-# relay_eval_event = Event()
-# eval_viz_event = Event()
-# viz_eval_event = Event()
-
-
 if __name__ == '__main__':
     if len(sys.argv) != 5:
         print('Invalid number of arguments')

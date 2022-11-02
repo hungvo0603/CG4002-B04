@@ -38,9 +38,6 @@ class EvalServer(multiprocessing.Process):
         self.has_terminated = has_terminated
         self.action_counter = 0
         self.daemon = True
-        # self.cd_shield = False
-        # self.pred_eval_event = pred_eval_event
-        # self.relay_eval_event = relay_eval_event
 
         self.eval_pred = eval_pred
         self.eval_relay = eval_relay
@@ -100,7 +97,7 @@ class EvalServer(multiprocessing.Process):
             self.has_action[P2].clear()
             print("Cleared action")
 
-            print("Adjust data")
+            print("Adjusting data")
             self.gamestate.update_player('adjust_data', P1)
             self.gamestate.update_player('adjust_data', P2)
 
@@ -115,19 +112,9 @@ class EvalServer(multiprocessing.Process):
             try:
                 print("[eval] get data from eval")
                 success = self.gamestate.recv_and_update(self.conn)
-                # if self.gamestate.player_1.get_dict()['action'] == 'logout' and self.gamestate.player_2.get_dict()['action'] == 'logout':
-                # spam logout to eveyone
-                # visual_pipe_client.send(
-                #     self.gamestate.get_data_plain_text('1'))
-                # pipe5.send('logout')
-                # server_pipe_client.send('logout')
-                # ultra96_pipe_client.send('logout')
-                # self.logout()
                 if not success:
                     print("connection with eval server closed")
                     break
-                # self.has_action[P1].clear()
-                # self.has_action[P2].clear()  # need to change
                 self.eval_viz.put(
                     self.gamestate.get_data_plain_text(BOTH))
             except Exception as e:
