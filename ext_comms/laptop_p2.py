@@ -123,7 +123,7 @@ class ScannerDelegate(DefaultDelegate):
 def handshake(bluno, char, addr):
     done_handshake = False
     while done_handshake == False:
-        if bluno.waitForNotifications(2.0):  # establish connection
+        if bluno.waitForNotifications(5):  # establish connection
             done_handshake = True
             print("Handshake done")
 
