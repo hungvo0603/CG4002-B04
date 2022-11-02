@@ -173,7 +173,7 @@ def connection_thread(bluno, char, addr):
         try:
             if bluno_handshake:
                 # establish connection, wait for 2s
-                if bluno.waitForNotifications(2.0):
+                if bluno.waitForNotifications(5):
                     pass
                 else:
                     bluno.disconnect()
