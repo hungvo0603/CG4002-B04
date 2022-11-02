@@ -1,5 +1,6 @@
 from bluepy.btle import Peripheral, DefaultDelegate, BTLEDisconnectError
 import numpy as np
+from scipy import stats
 import struct
 import threading
 import sys
@@ -239,7 +240,7 @@ class Client(threading.Thread):
     def extract_features(self, raw_data):
         extracted = []
         extracted = np.append(extracted, (np.min(raw_data)))
-        extracted = np.append(extracted, (np.max(raw_data)))
+        extracted = np.append(extracted, (stats.iqr(raw_data)))
         extracted = np.append(extracted, (sum(raw_data)))
         extracted = np.append(extracted, (median(raw_data)))
         extracted = np.append(extracted, (variance(raw_data)))
@@ -247,7 +248,7 @@ class Client(threading.Thread):
         extracted = np.append(extracted, np.min(abs(raw_data)))
         extracted = np.append(extracted, np.max(abs(raw_data)))
         extracted = np.append(extracted, mean(abs(raw_data)))
-        extracted = np.append(extracted, median(abs(raw_data)))
+        extracted = np.append(extracted, stats.iqr(abs(raw_data)))
         extracted = np.append(extracted, variance(abs(raw_data)))
         return extracted
 

@@ -199,7 +199,7 @@ class EvalServer(multiprocessing.Process):
                     self.gamestate.get_data_plain_text(player))
                 if action == "shoot":
                     # check for vest ir receiver
-                    if self.has_incoming_bullet_p1_out.poll(timeout=1.5):
+                    if self.has_incoming_bullet_p1_out.poll(timeout=5):
                         self.has_incoming_bullet_p1_out.recv()
                         clear(self.has_incoming_bullet_p1_out)
                         self.gamestate.update_player(
@@ -215,7 +215,7 @@ class EvalServer(multiprocessing.Process):
                     self.gamestate.get_data_plain_text(player))
                 if action == "shoot":
                     # check for vest ir receiver
-                    if self.has_incoming_bullet_p2_out.poll(timeout=1.5):
+                    if self.has_incoming_bullet_p2_out.poll(timeout=5):
                         self.has_incoming_bullet_p2_out.recv()
                         clear(self.has_incoming_bullet_p2_out)
                         self.gamestate.update_player(
