@@ -11,7 +11,8 @@ P1 = 0
 P2 = 1
 BOTH = 2
 ALL = 3
-TOTAL_MOVE = 5
+# put in total move (on screen) - 1
+TOTAL_MOVE = 17
 
 
 def clear(pipe):
@@ -65,8 +66,9 @@ class EvalServer(multiprocessing.Process):
                 time.sleep(10)
                 print("Logout move")
                 self.gamestate.update_player("logout", P1)
-                self.eval_viz.put(
-                    self.gamestate.get_data_plain_text(P1))
+                self.eval_viz.put(self.gamestate.get_data_plain_text(P1))
+                self.gamestate.update_player("logout", P2)
+                self.eval_viz.put(self.gamestate.get_data_plain_text(P2))
                 self.gamestate.send_encrypted(self.conn, self.secret_key)
                 self.logout()
                 break
