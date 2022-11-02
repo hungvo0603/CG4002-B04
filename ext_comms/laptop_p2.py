@@ -98,7 +98,7 @@ class ScannerDelegate(DefaultDelegate):
                 self.SeqID = (self.SeqID + 1) & 0xFF
                 if(correct_pkt):
                     self.char.write(str.encode(ACK))
-                    # print("Vest correct")
+                    print("Vest correct")
                     relay_buffer.put(pkt)
                 else:
                     self.char.write(str.encode(NAK))
@@ -355,16 +355,16 @@ class Client(threading.Thread):
                     print("Vest received shot hit")
                     self.send_data(message)
 
-                    # wait for a while then clear pending data (debounce)
-                    time.sleep(0.3)
-                    relay_buffer.queue.clear()
-
                 elif pkt[0] == GUN and pkt[3] == SHOT_FIRED:
                     message = int(P2).to_bytes(1, 'big') + pkt + bytearray(PACKET_SIZE-len(pkt)-2) + \
                         int(CONNECT).to_bytes(1, 'big')
                     print("Gun fired")
                     print("Message: ", message)
                     self.send_data(message)
+
+                    # wait for a while then clear pending data (debounce)
+                    time.sleep(0.3)
+                    relay_buffer.queue.clear()
 
                 # else:
                     # print("Unknown packet: ", pkt)
