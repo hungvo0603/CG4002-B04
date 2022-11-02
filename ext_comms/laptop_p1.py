@@ -175,10 +175,10 @@ def connection_thread(bluno, char, addr):
                 if bluno.waitForNotifications(2.0):
                     pass
                 else:
-                    bluno.disconnect()
-                    print("Bluno " + addr + " disconnected")
-                    bluno_handshake = False
-                    bluno, char = connection(addr)
+                    # bluno.disconnect()
+                    # print("Bluno " + addr + " disconnected")
+                    # bluno_handshake = False
+                    # bluno, char = connection(addr)
                     pass
             else:
                 bluno_handshake = handshake(bluno, char, addr)
