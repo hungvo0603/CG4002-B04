@@ -54,7 +54,6 @@ start = False
 dataCounter = 0
 cycle = False
 actual_cycle = False
-
 has_connected = {
     GUN_MAC: False, GLOVE_MAC: False, VEST_MAC: False
 }

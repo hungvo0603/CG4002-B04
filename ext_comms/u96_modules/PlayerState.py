@@ -94,10 +94,8 @@ class PlayerStateStudent(PlayerStateBase):
     This is a dummy class
     """
 
+    # Update player state and returns previous action
     def update_actl(self, new_data):
-        if new_data == "glove disconnect" or new_data == "gun disconnect" or new_data == "vest disconnect" or \
-                new_data == "glove connect" or new_data == "gun connect" or new_data == "vest connect":
-            self.action = new_data
         if new_data == 'shoot':
             self.action = 'shoot'
             self.bullets -= 1

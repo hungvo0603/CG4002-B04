@@ -1,3 +1,4 @@
+from multiprocessing import dummy
 import threading
 import multiprocessing
 import socket
@@ -9,6 +10,7 @@ from GameState import GameState
 P1 = 0
 P2 = 1
 BOTH = 2
+ALL = 3
 TOTAL_MOVE = 18
 
 
@@ -181,9 +183,9 @@ class EvalServer(multiprocessing.Process):
 
             if action == "glove disconnect" or action == "gun disconnect" or action == "vest disconnect"\
                     or action == "glove connect" or action == "gun connect" or action == "vest connect":
-                self.gamestate.update_player(action, player)
-                self.eval_viz.put(
-                    self.gamestate.get_data_plain_text(player))
+                dummy_state = self.gamestate.get_data_plain_text(player)
+                dummy_state[player] = action
+                self.eval_viz.put(dummy_state)
                 print("Action received:", action, "for player", player+1)
                 continue
 
