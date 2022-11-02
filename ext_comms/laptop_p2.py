@@ -342,15 +342,23 @@ class Client(threading.Thread):
                     # print("Len: ", len(message))
                     print("DC Message: ", message)
                     self.send_data(message)
-                elif(pkt[0] == VEST and pkt[3] == SHOT_HIT) or (pkt[0] == GUN and pkt[3] == SHOT_FIRED):
+                elif pkt[0] == VEST and pkt[3] == SHOT_HIT:
                     message = int(P2).to_bytes(1, 'big') + pkt + bytearray(PACKET_SIZE-len(pkt)-2) + \
                         int(CONNECT).to_bytes(1, 'big')
                     print("Message: ", message)
+                    print("Vest received shot hit")
                     self.send_data(message)
-                    if pkt[0] == 2:
-                        # wait for a while then clear pending data (debounce)
-                        time.sleep(0.3)
-                        relay_buffer.queue.clear()
+
+                    # wait for a while then clear pending data (debounce)
+                    time.sleep(0.3)
+                    relay_buffer.queue.clear()
+
+                elif pkt[0] == GUN and pkt[3] == SHOT_FIRED:
+                    message = int(P2).to_bytes(1, 'big') + pkt + bytearray(PACKET_SIZE-len(pkt)-2) + \
+                        int(CONNECT).to_bytes(1, 'big')
+                    print("Gun fired")
+                    print("Message: ", message)
+                    self.send_data(message)
 
                 # else:
                     # print("Unknown packet: ", pkt)
