@@ -18,7 +18,7 @@ def clear(pipe):
     try:
         while pipe.poll():
             pipe.recv()
-    except Empty:
+    except (Empty, EOFError) as e:
         pass
 
 
@@ -105,7 +105,6 @@ class EvalServer(multiprocessing.Process):
 
             print("Sending to eval...")
             self.gamestate.send_encrypted(self.conn, self.secret_key)
-            self.action_counter += 1
 
         self.logout()
 
@@ -117,6 +116,8 @@ class EvalServer(multiprocessing.Process):
                 if not success:
                     print("connection with eval server closed")
                     break
+                self.action_counter += 1
+                print("action counter:", self.action_counter)
                 self.eval_viz.put(
                     self.gamestate.get_data_plain_text(BOTH))
             except Exception as e:

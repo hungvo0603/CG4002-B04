@@ -39,7 +39,7 @@ PACKET_SIZE = 51  # player + type + 6 floats + disconnect
 P1 = 0
 P2 = 1
 GUN_MAC = "D0:39:72:BF:C1:BF"
-GLOVE_MAC = "C4:BE:84:20:1C:05"
+GLOVE_MAC = "80:30:DC:D9:0C:C7"
 VEST_MAC = "D0:39:72:BF:BF:ED"
 
 
