@@ -261,14 +261,15 @@ class Client(threading.Thread):
                 print("Detecting start of move")
                 if self.is_start_of_move():
                     print("Start of move detected")
+                    time.sleep(1)
                     self.start_collection = True
-                else:
-                    self.array_ax = []
-                    self.array_ay = []
-                    self.array_az = []
-                    self.array_gx = []
-                    self.array_gy = []
-                    self.array_gz = []
+
+                self.array_ax = []
+                self.array_ay = []
+                self.array_az = []
+                self.array_gx = []
+                self.array_gy = []
+                self.array_gz = []
         else:
             if (len(self.array_ax) >= 40):
                 print("40 data set collected")
