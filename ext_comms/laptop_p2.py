@@ -266,7 +266,7 @@ class Client(threading.Thread):
                 print("Detecting start of move")
                 if self.is_start_of_move():
                     print("Start of move detected")
-                    time.sleep(1)
+                    time.sleep(0.5)
                     self.start_collection = True
 
                 self.array_ax = []

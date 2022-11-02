@@ -11,7 +11,7 @@ P1 = 0
 P2 = 1
 BOTH = 2
 ALL = 3
-TOTAL_MOVE = 18
+TOTAL_MOVE = 5
 
 
 def clear(pipe):
