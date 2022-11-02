@@ -184,8 +184,11 @@ class EvalServer(multiprocessing.Process):
             if action == "glove disconnect" or action == "gun disconnect" or action == "vest disconnect"\
                     or action == "glove connect" or action == "gun connect" or action == "vest connect":
                 dummy_state = self.gamestate.get_data_plain_text(player)
-                dummy_state[player] = action
+
+                player_txt = "p1" if player == P1 else "p2"
+                dummy_state[player_txt]["action"] = action
                 self.eval_viz.put(dummy_state)
+
                 print("Action received:", action, "for player", player+1)
                 continue
 
@@ -201,6 +204,7 @@ class EvalServer(multiprocessing.Process):
                         clear(self.has_incoming_bullet_p1_out)
                         self.gamestate.update_player(
                             "bullet_hit", P2)
+                        print("Bullet hit for player 1")
                 print(f"Player 1 action done : {action}")
                 self.has_action[P1].set()
 
@@ -216,5 +220,6 @@ class EvalServer(multiprocessing.Process):
                         clear(self.has_incoming_bullet_p2_out)
                         self.gamestate.update_player(
                             "bullet_hit", P1)
+                        print("Bullet hit for player 2")
                 print(f"Player 2 action done : {action}")
                 self.has_action[P2].set()

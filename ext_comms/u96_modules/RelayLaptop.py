@@ -111,8 +111,10 @@ class Server(threading.Thread):
                     (extracted_features, player))  # 0 is p1, 1 is p2 (need to change)
                 # print("[Relay] Send", len(extracted_features), "bytes")
             elif byte_msg[1] == VEST and byte_msg[4] == self.shot_hit:
+                print(player, "vest received shot hit")
                 self.has_incoming_bullet_in.send(True)  # need to change
             elif byte_msg[1] == GUN and byte_msg[4] == self.shot_fired:
+                print(player, "gun hit")
                 self.relay_eval.send(("shoot", player))
             else:
                 print("[Relay] Unknown packet: ", byte_msg)
