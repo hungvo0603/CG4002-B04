@@ -179,7 +179,6 @@ def connection_thread(bluno, char, addr):
                     print("Bluno " + addr + " disconnected")
                     bluno_handshake = False
                     bluno.char = connection(addr)
-                    droppedCounter += 1
                     pass
             else:
                 bluno_handshake = handshake(bluno, char, addr)
