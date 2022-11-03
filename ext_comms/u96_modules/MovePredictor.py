@@ -64,20 +64,22 @@ class MovePredictor(multiprocessing.Process):
         while not self.has_terminated.value:
             try:
                 self.action_count = {"grenade": 0, "shield": 0, "reload": 0}
-                for _ in range(0, 3):
-                    data, player = self.pred_relay.recv()
-                    # clear pipe content
-                    print("[ML] Recived: ", len(data))
-                    action = self.pred_action(data, player)
+                for i in range(0, 3):
+                    action = None
+                    while action is None:
+                        data, player = self.pred_relay.recv()
+                        # clear pipe content
+                        print("[ML] Recived: ", len(data))
+                        action = self.pred_action(data, player)
 
-                    if action is not None:
-                        self.action_count[action] += 1
-                        print("[MovePredictor] Predicted action: ",
-                              action, " for player ", player+1)
-                        max_action = max(self.action_count,
-                                         key=self.action_count.get)
-                        print("Max action: ", max_action)
-                        self.pred_eval.send((max_action, player))
+                    self.action_count[action] += 1
+                    print("[MovePredictor] Predicted", i, "action: ",
+                          action, " for player ", player+1)
+
+                max_action = max(self.action_count,
+                                 key=self.action_count.get)
+                print("Max action: ", max_action)
+                self.pred_eval.send((max_action, player))
 
             except KeyboardInterrupt:
                 print("[MovePredictor]Keyboard Interrupt, terminating")
