@@ -12,7 +12,7 @@ P2 = 1
 BOTH = 2
 ALL = 3
 # put in total move (on screen) - 1
-TOTAL_MOVE = 17
+TOTAL_MOVE = 18
 
 
 def clear(pipe):
@@ -89,18 +89,6 @@ class EvalServer(multiprocessing.Process):
                 self.eval_viz.put(
                     self.gamestate.get_data_plain_text(P2))
 
-            # Clear all pedning data in pipe
-            print("Clearing eval pipe")
-            clear(self.eval_pred)
-            clear(self.eval_relay)
-            # clear(self.eval_viz)
-
-            self.has_shield[P1].clear()
-            self.has_shield[P2].clear()
-            self.has_action[P1].clear()
-            self.has_action[P2].clear()
-            print("Cleared action")
-
             print("Adjusting data")
             self.gamestate.update_player('adjust_data', P1)
             self.gamestate.update_player('adjust_data', P2)
@@ -122,6 +110,19 @@ class EvalServer(multiprocessing.Process):
                 print("action counter:", self.action_counter)
                 self.eval_viz.put(
                     self.gamestate.get_data_plain_text(BOTH))
+
+                # Clear all pedning data in pipe
+                print("Clearing eval pipe")
+                clear(self.eval_pred)
+                clear(self.eval_relay)
+                # clear(self.eval_viz)
+
+                self.has_shield[P1].clear()
+                self.has_shield[P2].clear()
+                self.has_action[P1].clear()
+                self.has_action[P2].clear()
+                print("Cleared action")
+                
             except Exception as e:
                 print(e)
 
