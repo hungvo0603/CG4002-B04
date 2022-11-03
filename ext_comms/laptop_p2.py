@@ -365,8 +365,8 @@ class Client(threading.Thread):
                         continue
 
                     messages = self.preprocess(pkt)
-                    for message in messages:
-                        if message is not None:
+                    if messages is not None:
+                        for message in messages:
                             print("Len msg: ", len(message))
                             for i in range(0, 10):
                                 # send data in chunks of 48 -> 6*10*8 = 480
