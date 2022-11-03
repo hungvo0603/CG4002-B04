@@ -230,6 +230,7 @@ class Client(threading.Thread):
         self.array_gx = []
         self.array_gy = []
         self.array_gz = []
+        self.array_axayaz_gxgygz = [[], [], []]
 
     def is_start_of_move(self):
         # might need to change
@@ -276,23 +277,56 @@ class Client(threading.Thread):
                 self.array_gy = []
                 self.array_gz = []
         else:
-            if (len(self.array_ax) >= 40):
-                print("40 data set collected")
-                array_axayaz_gxgygz = []
+            if (len(self.array_ax) >= 50):
+                print("50 data set collected")
+                self.array_axayaz_gxgygz = [[], [], []]
                 self.start_collection = False
-                array_axayaz_gxgygz = np.concatenate((
-                    array_axayaz_gxgygz, self.extract_features(self.array_ax)))
-                array_axayaz_gxgygz = np.concatenate((
-                    array_axayaz_gxgygz, self.extract_features(self.array_ay)))
-                array_axayaz_gxgygz = np.concatenate((
-                    array_axayaz_gxgygz, self.extract_features(self.array_az)))
-                array_axayaz_gxgygz = np.concatenate((
-                    array_axayaz_gxgygz, self.extract_features(self.array_gx)))
-                array_axayaz_gxgygz = np.concatenate((
-                    array_axayaz_gxgygz, self.extract_features(self.array_gy)))
-                array_axayaz_gxgygz = np.concatenate((
-                    array_axayaz_gxgygz, self.extract_features(self.array_gz)))
-                array_axayaz_gxgygz = np.float_(array_axayaz_gxgygz)
+
+                self.array_axayaz_gxgygz[0] = np.concatenate((
+                    self.array_axayaz_gxgygz[0], self.extract_features(self.array_ax[0:40])))
+                self.array_axayaz_gxgygz[0] = np.concatenate((
+                    self.array_axayaz_gxgygz[0], self.extract_features(self.array_ay[0:40])))
+                self.array_axayaz_gxgygz[0] = np.concatenate((
+                    self.array_axayaz_gxgygz[0], self.extract_features(self.array_az[0:40])))
+                self.array_axayaz_gxgygz[0] = np.concatenate((
+                    self.array_axayaz_gxgygz[0], self.extract_features(self.array_gx[0:40])))
+                self.array_axayaz_gxgygz[0] = np.concatenate((
+                    self.array_axayaz_gxgygz[0], self.extract_features(self.array_gy[0:40])))
+                self.array_axayaz_gxgygz[0] = np.concatenate((
+                    self.array_axayaz_gxgygz[0], self.extract_features(self.array_gz[0:40])))
+                self.array_axayaz_gxgygz[0] = np.float_(
+                    self.array_axayaz_gxgygz[0])
+
+                self.array_axayaz_gxgygz[1] = np.concatenate((
+                    self.array_axayaz_gxgygz[1], self.extract_features(self.array_ax[5:45])))
+                self.array_axayaz_gxgygz[1] = np.concatenate((
+                    self.array_axayaz_gxgygz[1], self.extract_features(self.array_ay[5:45])))
+                self.array_axayaz_gxgygz[1] = np.concatenate((
+                    self.array_axayaz_gxgygz[1], self.extract_features(self.array_az[5:45])))
+                self.array_axayaz_gxgygz[1] = np.concatenate((
+                    self.array_axayaz_gxgygz[1], self.extract_features(self.array_gx[5:45])))
+                self.array_axayaz_gxgygz[1] = np.concatenate((
+                    self.array_axayaz_gxgygz[1], self.extract_features(self.array_gy[5:45])))
+                self.array_axayaz_gxgygz[1] = np.concatenate((
+                    self.array_axayaz_gxgygz[1], self.extract_features(self.array_gz[5:45])))
+                self.array_axayaz_gxgygz[1] = np.float_(
+                    self.array_axayaz_gxgygz[1])
+
+                self.array_axayaz_gxgygz[2] = np.concatenate((
+                    self.array_axayaz_gxgygz[2], self.extract_features(self.array_ax[10:50])))
+                self.array_axayaz_gxgygz[2] = np.concatenate((
+                    self.array_axayaz_gxgygz[2], self.extract_features(self.array_ay[10:50])))
+                self.array_axayaz_gxgygz[2] = np.concatenate((
+                    self.array_axayaz_gxgygz[2], self.extract_features(self.array_az[10:50])))
+                self.array_axayaz_gxgygz[2] = np.concatenate((
+                    self.array_axayaz_gxgygz[2], self.extract_features(self.array_gx[10:50])))
+                self.array_axayaz_gxgygz[2] = np.concatenate((
+                    self.array_axayaz_gxgygz[2], self.extract_features(self.array_gy[10:50])))
+                self.array_axayaz_gxgygz[2] = np.concatenate((
+                    self.array_axayaz_gxgygz[2], self.extract_features(self.array_gz[10:50])))
+                self.array_axayaz_gxgygz[2] = np.float_(
+                    self.array_axayaz_gxgygz[2])
+
                 if (np.max(self.array_ax) > 0.5 and np.max(self.array_ay) > 0.5 and np.max(self.array_az) > 0.5):
                     print("action detected")
                     self.array_ax = []
@@ -301,7 +335,8 @@ class Client(threading.Thread):
                     self.array_gx = []
                     self.array_gy = []
                     self.array_gz = []
-                    return array_axayaz_gxgygz.tobytes()
+                    return [self.array_axayaz_gxgygz[0].tobytes(), self.array_axayaz_gxgygz[1].tobytes(), self.array_axayaz_gxgygz[2].tobytes()]
+
                 self.array_ax = []
                 self.array_ay = []
                 self.array_az = []
@@ -329,20 +364,22 @@ class Client(threading.Thread):
                         self.send_data(message)
                         continue
 
-                    message = self.preprocess(pkt)
-                    if message is not None:
-                        print("Len msg: ", len(message))
-                        for i in range(0, 10):
-                            # send data in chunks of 48 -> 6*10*8 = 480
-                            text = int(P2).to_bytes(
-                                1, 'big') + pkt[0].to_bytes(
-                                1, 'big') + message[i*(PACKET_SIZE-3):(i+1)*(PACKET_SIZE-3)] + int(CONNECT).to_bytes(1, 'big')
-                            print("Message: ", text)
-                            self.send_data(text)
-                            time.sleep(0.2)
-                        # check me (clear aft action)
-                        time.sleep(2)
-                        relay_buffer.queue.clear()
+                    messages = self.preprocess(pkt)
+                    for message in messages:
+                        if message is not None:
+                            print("Len msg: ", len(message))
+                            for i in range(0, 10):
+                                # send data in chunks of 48 -> 6*10*8 = 480
+                                text = int(P2).to_bytes(
+                                    1, 'big') + pkt[0].to_bytes(
+                                    1, 'big') + message[i*(PACKET_SIZE-3):(i+1)*(PACKET_SIZE-3)] + int(CONNECT).to_bytes(1, 'big')
+                                print("Message: ", text)
+                                self.send_data(text)
+                                time.sleep(0.2)
+                            # check me (clear aft action)
+                            time.sleep(2)
+                            relay_buffer.queue.clear()
+
                 elif(pkt[0] == VEST or pkt[0] == GUN) and len(pkt) == 2 and (pkt[1] == DISCONNECT or pkt[1] == CONNECT):
                     message = int(P2).to_bytes(1, 'big') + int(pkt[0]).to_bytes(1, 'big') + bytearray(PACKET_SIZE-3) + \
                         int(pkt[1]).to_bytes(1, 'big')
