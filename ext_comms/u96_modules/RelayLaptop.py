@@ -20,7 +20,7 @@ P1 = 0
 P2 = 1
 PACKET_SIZE = 51  # player + type + 6 floats + disconnect
 PORT_1 = 9000
-PORT_2 = 10000
+PORT_2 = 11000
 
 
 class RelayLaptop(multiprocessing.Process):
@@ -60,8 +60,8 @@ class Server(threading.Thread):
 
     def setup_connection(self):
         try:
-            # accepted any number of connections that the system will allow before refusing new connections
-            self.socket.listen()
+            # accepted 1 number of connections that the system will allow before refusing new connections
+            self.socket.listen(1)
             # Wait for a connection
             print('[Relay]Waiting for a connection')
             self.conn, client_address = self.socket.accept()
@@ -118,6 +118,7 @@ class Server(threading.Thread):
             else:
                 print("[Relay] Unknown packet: ", byte_msg)
                 print("Invalid data received")
+
             time.sleep(0.1)  # sleep a bit after send
 
     def logout(self):

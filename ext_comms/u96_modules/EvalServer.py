@@ -4,7 +4,7 @@ import multiprocessing
 import socket
 import time
 from _socket import SHUT_RDWR
-from queues import Empty
+from queue import Empty
 from GameState import GameState
 
 P1 = 0
@@ -159,7 +159,7 @@ class EvalServer(multiprocessing.Process):
 
                 if action == 'grenade':
                     # wait for 2 seconds
-                    is_hit = self.viz_eval_p1.get()
+                    is_hit = self.viz_eval_p1.get(timeout=5)
                     print(
                         f"Data received from Visualizer {is_hit}")
                     if is_hit:
@@ -178,7 +178,7 @@ class EvalServer(multiprocessing.Process):
 
                 if action == 'grenade':
                     # uncomment on viz
-                    is_hit = self.viz_eval_p2.get()
+                    is_hit = self.viz_eval_p2.get(timeout=5)
                     print(
                         f"Data received from Visualizer {is_hit}")
                     if is_hit:
