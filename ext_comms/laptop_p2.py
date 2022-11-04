@@ -148,8 +148,8 @@ def handshake(bluno, char, addr):
 
 def connection(addr):
     is_connected = False
-    service_uuid = "dfb0"
-    char_id = "dfb1"
+    service_uuid = "0000dfb0-0000-1000-8000-00805f9b34fb"
+    char_id = "0000dfb1-0000-1000-8000-00805f9b34fb"
     while is_connected == False:
         try:
             print("Establishing a connection with: " + addr)

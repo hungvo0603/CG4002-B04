@@ -9,6 +9,7 @@ ezButton button(2);
 #define SYN 'S'
 #define ACK 'A'
 #define NAK 'N'
+#define BUZZER_PIN          A2
 
 uint16_t click_counter = 0; //6 bullets in game
 
@@ -30,7 +31,7 @@ bool packetDone = false;
 long retransmitCount = 0;
 byte SeqID = 0x00;
 byte BeetleID = 0x02; //gun
-int data = 0xBC; //188
+int data = 0xBA;
 
 uint16_t sAddress = 0x7812;
 uint8_t sCommand = 0x28;
@@ -132,6 +133,7 @@ void setup() {
     Serial.begin(115200); 
     button.setDebounceTime(50);
     IrSender.begin(IR_SEND_PIN); // Start with IR_SEND_PIN as send pin and if NO_LED_FEEDBACK_CODE is NOT defined, enable feedback LED at default feedback LED pin
+    pinMode(BUZZER_PIN, OUTPUT);
 }
 
 void loop() {
@@ -139,8 +141,20 @@ void loop() {
   button.loop();
 
   if(doneHandshake){
+      if(Serial.read() == SYN){
+        doneHandshake = false;
+      }
+      
       if(button.isPressed()){
       IrSender.sendNEC(sAddress, sCommand, sRepeats);
+      digitalWrite(BUZZER_PIN, HIGH);
+      data = 0xBC;
+    }
+      if(button.isReleased()){
+      digitalWrite(BUZZER_PIN, LOW);
+      data = 0xBA;
+    }
+      SeqID++;
       packet[0] = BeetleID;
       packet[1] = SeqID;
       packet[2] = (byte) 0x00;
@@ -148,8 +162,7 @@ void loop() {
       addChecksumToPacket(packet, packetsize);
       Serial.write(packet,packetsize);
       delay(100);
-      SeqID++;
-    } 
+    
   } 
   else {
     if(rcvSYN){
