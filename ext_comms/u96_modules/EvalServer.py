@@ -4,7 +4,7 @@ import multiprocessing
 import socket
 import time
 from _socket import SHUT_RDWR
-from queue import Empty
+from queues import Empty
 from GameState import GameState
 
 P1 = 0
@@ -15,17 +15,17 @@ ALL = 3
 TOTAL_MOVE = 18
 
 
-def clear(pipe):
+def clear(q):
     try:
-        while pipe.poll():
-            pipe.recv()
+        while not q.empty():
+            q.get_nowait()
     except (Empty, EOFError) as e:
         pass
 
 
 class EvalServer(multiprocessing.Process):
     # Client to eval_server
-    def __init__(self, ip_addr, port_num, group_id, secret_key, eval_pred, eval_relay, eval_viz, viz_eval_p1, viz_eval_p2, has_terminated, has_incoming_bullet_p1_out, has_incoming_bullet_p2_out):
+    def __init__(self, ip_addr, port_num, group_id, secret_key, eval_pred, eval_relay, eval_viz, viz_eval_p1, viz_eval_p2, has_terminated, has_incoming_bullet_p1, has_incoming_bullet_p2):
         super().__init__()  # init parent (Thread)
         self.conn = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.server_address = (ip_addr, port_num)
@@ -34,8 +34,8 @@ class EvalServer(multiprocessing.Process):
         # has received p1, p2 actions
         self.has_action = [threading.Event(), threading.Event()]
         self.has_shield = [threading.Event(), threading.Event()]
-        self.has_incoming_bullet_p1_out = has_incoming_bullet_p1_out
-        self.has_incoming_bullet_p2_out = has_incoming_bullet_p2_out
+        self.has_incoming_bullet_p1 = has_incoming_bullet_p1
+        self.has_incoming_bullet_p2 = has_incoming_bullet_p2
 
         self.gamestate = GameState(main=self)  # static
         self.has_terminated = has_terminated
@@ -96,6 +96,12 @@ class EvalServer(multiprocessing.Process):
             print("Sending to eval...")
             self.gamestate.send_encrypted(self.conn, self.secret_key)
 
+            # Clear all pending data in pipe
+            print("Clearing eval queues")
+            clear(self.eval_pred)
+            clear(self.eval_relay)
+            # clear(self.eval_viz)
+
         self.logout()
 
     def receive_data(self):  # blocking call
@@ -106,13 +112,14 @@ class EvalServer(multiprocessing.Process):
                 if not success:
                     print("connection with eval server closed")
                     break
+
                 self.action_counter += 1
                 print("action counter:", self.action_counter)
                 self.eval_viz.put(
                     self.gamestate.get_data_plain_text(BOTH))
 
-                # Clear all pedning data in pipe
-                print("Clearing eval pipe")
+                # Clear all pending data in pipe
+                print("Clearing eval queues")
                 clear(self.eval_pred)
                 clear(self.eval_relay)
                 # clear(self.eval_viz)
@@ -122,7 +129,7 @@ class EvalServer(multiprocessing.Process):
                 self.has_action[P1].clear()
                 self.has_action[P2].clear()
                 print("Cleared action")
-                
+
             except Exception as e:
                 print(e)
 
@@ -138,8 +145,8 @@ class EvalServer(multiprocessing.Process):
 
     def process_glove(self):
         while not self.has_terminated.value:
-            action, player = self.eval_pred.recv()
-            # clear(self.eval_pred)
+            action, player = self.eval_pred.get()
+
             print("Glove action received:", action)
 
             if player == P1 and not self.has_action[P1].is_set():
@@ -182,8 +189,7 @@ class EvalServer(multiprocessing.Process):
 
     def process_others(self):
         while not self.has_terminated.value:
-            action, player = self.eval_relay.recv()
-            # clear(self.eval_relay)
+            action, player = self.eval_relay.get()
 
             if action == "glove disconnect" or action == "gun disconnect" or action == "vest disconnect"\
                     or action == "glove connect" or action == "gun connect" or action == "vest connect":
@@ -203,9 +209,9 @@ class EvalServer(multiprocessing.Process):
                     self.gamestate.get_data_plain_text(player))
                 if action == "shoot":
                     # check for vest ir receiver
-                    if self.has_incoming_bullet_p1_out.poll(timeout=5):
-                        self.has_incoming_bullet_p1_out.recv()
-                        clear(self.has_incoming_bullet_p1_out)
+                    if self.has_incoming_bullet_p1.poll(timeout=5):
+                        self.has_incoming_bullet_p1.get()
+                        clear(self.has_incoming_bullet_p1)
                         self.gamestate.update_player(
                             "bullet_hit", P2)
                         print("Bullet hit for player 1")
@@ -219,9 +225,9 @@ class EvalServer(multiprocessing.Process):
                     self.gamestate.get_data_plain_text(player))
                 if action == "shoot":
                     # check for vest ir receiver
-                    if self.has_incoming_bullet_p2_out.poll(timeout=5):
-                        self.has_incoming_bullet_p2_out.recv()
-                        clear(self.has_incoming_bullet_p2_out)
+                    if self.has_incoming_bullet_p2.poll(timeout=5):
+                        self.has_incoming_bullet_p2.get()
+                        clear(self.has_incoming_bullet_p2)
                         self.gamestate.update_player(
                             "bullet_hit", P1)
                         print("Bullet hit for player 2")

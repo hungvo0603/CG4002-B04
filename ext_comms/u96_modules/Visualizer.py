@@ -20,8 +20,6 @@ class Visualizer():
     def publish(self):
         while not self.has_terminated.value:
             state = self.eval_viz.get()
-            # clear(self.viz_eval)
-            # print("Visualizer state bef pub: ", state)
             self.pub.publish(json.dumps(state))
 
     def subscribe(self):

@@ -13,15 +13,15 @@ from RelayLaptop import RelayLaptop
 from Visualizer import Visualizer
 
 import sys
-from multiprocessing import Pipe, Value, Queue
+from multiprocessing import Value, Queue
 import time
 
 # Data buffer
-pred_relay, relay_pred = Pipe()  # internal data, data
-eval_pred, pred_eval = Pipe()  # data, action
-has_incoming_bullet_p1_out, has_incoming_bullet_p1_in = Pipe()
-has_incoming_bullet_p2_out, has_incoming_bullet_p2_in = Pipe()
-eval_relay, relay_eval = Pipe()  # internal data, action
+pred_relay = Queue()  # internal data, data
+eval_pred = Queue()  # data, action
+has_incoming_bullet_p1 = Queue()
+has_incoming_bullet_p2 = Queue()
+eval_relay = Queue()  # internal data, action
 viz_eval_p1 = Queue()
 viz_eval_p2 = Queue()
 eval_viz = Queue()
@@ -39,10 +39,10 @@ if __name__ == '__main__':
 
     # Ultra96 Processes
     relay = RelayLaptop(group_id,
-                        relay_pred, relay_eval, has_terminated, has_incoming_bullet_p1_in, has_incoming_bullet_p2_in)
-    predictor = MovePredictor(pred_relay, pred_eval, has_terminated)
+                        pred_relay, eval_relay, has_terminated, has_incoming_bullet_p1, has_incoming_bullet_p2)
+    predictor = MovePredictor(pred_relay, eval_pred, has_terminated)
     eval = EvalServer(eval_ip, eval_port, group_id,
-                      secret_key, eval_pred, eval_relay, eval_viz, viz_eval_p1, viz_eval_p2, has_terminated, has_incoming_bullet_p1_out, has_incoming_bullet_p2_out)
+                      secret_key, eval_pred, eval_relay, eval_viz, viz_eval_p1, viz_eval_p2, has_terminated, has_incoming_bullet_p1, has_incoming_bullet_p2)
     visualizer = Visualizer(eval_viz, viz_eval_p1, viz_eval_p2, has_terminated)
 
     relay.start()
