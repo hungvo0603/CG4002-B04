@@ -37,6 +37,8 @@ class EvalServer(multiprocessing.Process):
         self.has_shield = [threading.Event(), threading.Event()]
         self.has_incoming_bullet_p1 = has_incoming_bullet_p1
         self.has_incoming_bullet_p2 = has_incoming_bullet_p2
+        self.can_receive = threading.Event()
+        self.can_receive.set()
 
         self.gamestate = GameState(main=self)  # static
         self.has_terminated = has_terminated
@@ -80,6 +82,9 @@ class EvalServer(multiprocessing.Process):
             self.has_action[P1].wait()
             self.has_action[P2].wait()
 
+            print("Prevent getting action until u96 received")
+            self.can_receive.clear()
+
             # Set shield if got
             if self.has_shield[P1].is_set():
                 self.gamestate.update_player('shield', P1)
@@ -104,6 +109,12 @@ class EvalServer(multiprocessing.Process):
             clear(self.eval_relay)
             # clear(self.eval_viz)
 
+            self.has_shield[P1].clear()
+            self.has_shield[P2].clear()
+            self.has_action[P1].clear()
+            self.has_action[P2].clear()
+            print("Cleared action")
+
         self.logout()
 
     def receive_data(self):  # blocking call
@@ -126,11 +137,8 @@ class EvalServer(multiprocessing.Process):
                 clear(self.eval_relay)
                 # clear(self.eval_viz)
 
-                self.has_shield[P1].clear()
-                self.has_shield[P2].clear()
-                self.has_action[P1].clear()
-                self.has_action[P2].clear()
-                print("Cleared action")
+                # Can receive aft this
+                self.can_receive.set()
 
             except Exception as e:
                 print("Error in eval receive_data:", e)
@@ -148,7 +156,11 @@ class EvalServer(multiprocessing.Process):
     def process_glove(self):
         while not self.has_terminated.value:
             try:
+                self.can_receive.wait()
                 action, player = self.eval_pred.get()
+
+                if not self.can_receive.is_set():
+                    continue
 
                 print("Glove action received:", action)
 
@@ -195,7 +207,11 @@ class EvalServer(multiprocessing.Process):
     def process_others(self):
         while not self.has_terminated.value:
             try:
+                self.can_receive.wait()
                 action, player = self.eval_relay.get()
+
+                if not self.can_receive.is_set():
+                    continue
 
                 if action == "glove disconnect" or action == "gun disconnect" or action == "vest disconnect"\
                         or action == "glove connect" or action == "gun connect" or action == "vest connect":
