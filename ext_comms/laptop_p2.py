@@ -351,6 +351,8 @@ class Client(threading.Thread):
                     # print("Len: ", len(message))
                     print("DC Message: ", message)
                     self.send_data(message)
+                    relay_buffer.queue.clear()
+
                 elif pkt[0] == VEST and pkt[3] == SHOT_HIT:
                     message = int(P2).to_bytes(1, 'big') + pkt + bytearray(PACKET_SIZE-len(pkt)-2) + \
                         int(CONNECT).to_bytes(1, 'big')
