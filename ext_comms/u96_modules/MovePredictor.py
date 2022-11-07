@@ -3,9 +3,24 @@ import pynq.lib.dma
 from pynq import allocate
 from pynq import Overlay
 import multiprocessing
+import threading
 
 
 class MovePredictor(multiprocessing.Process):
+    def __init__(self, pred_relay_p1, pred_relay_p2, eval_pred, has_terminated):
+        super().__init__()
+        self.ml1 = MLPred(pred_relay_p1, eval_pred, has_terminated)
+        self.ml2 = MLPred(pred_relay_p2, eval_pred, has_terminated)
+        self.daemon = True
+        # self.has_terminated = has_terminated
+
+    def run(self):
+        self.ml1.start()
+        # conn2 run on main thread
+        self.ml2.run()
+
+
+class MLPred(threading.Thread):
     def __init__(self, pred_relay, eval_pred, has_terminated):
         super().__init__()  # init parent (Thread)
         self.daemon = True

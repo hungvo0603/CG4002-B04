@@ -24,12 +24,12 @@ PORT_2 = 10000
 
 
 class RelayLaptop(multiprocessing.Process):
-    def __init__(self, group_id, pred_relay, eval_relay, has_terminated, has_incoming_bullet_p1, has_incoming_bullet_p2):
+    def __init__(self, group_id, pred_relay_p1, pred_relay_p2, eval_relay, has_terminated, has_incoming_bullet_p1, has_incoming_bullet_p2):
         super().__init__()
         self.conn1 = Server(P1, PORT_1, group_id,
-                            pred_relay, eval_relay, has_terminated, has_incoming_bullet_p1, SHOT_FIRED_1, SHOT_HIT_1)
+                            pred_relay_p1, eval_relay, has_terminated, has_incoming_bullet_p1, SHOT_FIRED_1, SHOT_HIT_1)
         self.conn2 = Server(P2, PORT_2, group_id,
-                            pred_relay, eval_relay, has_terminated, has_incoming_bullet_p2, SHOT_FIRED_2, SHOT_HIT_2)
+                            pred_relay_p2, eval_relay, has_terminated, has_incoming_bullet_p2, SHOT_FIRED_2, SHOT_HIT_2)
         self.daemon = True
         # self.has_terminated = has_terminated
 
@@ -106,8 +106,12 @@ class Server(threading.Thread):
                 for i in range(2, PACKET_SIZE-1, 8):
                     extracted_features.append(
                         struct.unpack('<d', byte_msg[i:i+8])[0])
-                self.pred_relay.put(
-                    (extracted_features, player))  # 0 is p1, 1 is p2 (need to change)
+                if player == P1:
+                    self.pred_relay_p1.put(
+                        (extracted_features, player))
+                if player == P2:
+                    self.pred_relay_p2.put(
+                        (extracted_features, player))
                 # print("[Relay] put", len(extracted_features), "bytes")
             elif byte_msg[1] == VEST and byte_msg[4] == self.shot_hit:
                 print(player+1, "vest received shot hit")
