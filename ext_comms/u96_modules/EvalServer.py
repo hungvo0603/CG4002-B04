@@ -1,4 +1,3 @@
-from multiprocessing import dummy
 import threading
 import multiprocessing
 import socket
@@ -19,8 +18,10 @@ def clear(q):
     try:
         while not q.empty():
             q.get_nowait()
-    except (Empty, EOFError) as e:
+    except (Empty, EOFError):
         pass
+    except Exception as e:
+        print("Clearing queue error:", e)
 
 
 class EvalServer(multiprocessing.Process):
@@ -214,8 +215,7 @@ class EvalServer(multiprocessing.Process):
                         self.gamestate.get_data_plain_text(player))
                     if action == "shoot":
                         # check for vest ir receiver
-                        if self.has_incoming_bullet_p1.poll(timeout=5):
-                            self.has_incoming_bullet_p1.get()
+                        if self.has_incoming_bullet_p1.get(timeout=5):
                             clear(self.has_incoming_bullet_p1)
                             self.gamestate.update_player(
                                 "bullet_hit", P2)
@@ -230,8 +230,7 @@ class EvalServer(multiprocessing.Process):
                         self.gamestate.get_data_plain_text(player))
                     if action == "shoot":
                         # check for vest ir receiver
-                        if self.has_incoming_bullet_p2.poll(timeout=5):
-                            self.has_incoming_bullet_p2.get()
+                        if self.has_incoming_bullet_p2.get(timeout=5):
                             clear(self.has_incoming_bullet_p2)
                             self.gamestate.update_player(
                                 "bullet_hit", P1)

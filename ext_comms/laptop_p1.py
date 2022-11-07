@@ -271,17 +271,11 @@ class Client(threading.Thread):
                     time.sleep(0.5)
                     self.start_collection = True
 
-                self.array_ax = []
-                self.array_ay = []
-                self.array_az = []
-                self.array_gx = []
-                self.array_gy = []
-                self.array_gz = []
+                self.clear_ml_data()
         else:
             if (len(self.array_ax) >= 40):
                 print("40 data set collected")
                 array_axayaz_gxgygz = []
-                self.start_collection = False
                 array_axayaz_gxgygz = np.concatenate((
                     array_axayaz_gxgygz, self.extract_features(self.array_ax)))
                 array_axayaz_gxgygz = np.concatenate((
@@ -297,21 +291,21 @@ class Client(threading.Thread):
                 array_axayaz_gxgygz = np.float_(array_axayaz_gxgygz)
                 if (np.max(self.array_ax) > 0.5 and np.max(self.array_ay) > 0.5 and np.max(self.array_az) > 0.5):
                     print("action detected")
-                    self.array_ax = []
-                    self.array_ay = []
-                    self.array_az = []
-                    self.array_gx = []
-                    self.array_gy = []
-                    self.array_gz = []
+                    self.clear_ml_data()
                     return array_axayaz_gxgygz.tobytes()
-                self.array_ax = []
-                self.array_ay = []
-                self.array_az = []
-                self.array_gx = []
-                self.array_gy = []
-                self.array_gz = []
+
+                self.clear_ml_data()
 
         return None
+
+    def clear_ml_data(self):
+        self.array_ax = []
+        self.array_ay = []
+        self.array_az = []
+        self.array_gx = []
+        self.array_gy = []
+        self.array_gz = []
+        self.start_collection = False
 
     def run(self):
         # Open tunnel and connect
@@ -323,12 +317,21 @@ class Client(threading.Thread):
                 pkt = relay_buffer.get()
                 # print("Packet:", pkt)
                 if(pkt[0] == GLOVE):
-                    if len(pkt) == 2 and (pkt[1] == DISCONNECT or pkt[1] == CONNECT):
+                    if len(pkt) == 2 and pkt[1] == CONNECT:
                         message = int(P1).to_bytes(1, 'big') + int(pkt[0]).to_bytes(1, 'big') + bytearray(PACKET_SIZE-3) + \
                             int(pkt[1]).to_bytes(1, 'big')
                         print("Len: ", len(message))
-                        print("DC Message: ", message)
+                        print("Connect Message: ", message)
                         self.send_data(message)
+                        continue
+
+                    if len(pkt) == 2 and pkt[1] == DISCONNECT:
+                        message = int(P1).to_bytes(1, 'big') + int(pkt[0]).to_bytes(1, 'big') + bytearray(PACKET_SIZE-3) + \
+                            int(pkt[1]).to_bytes(1, 'big')
+                        print("Len: ", len(message))
+                        print("Disconnect Message: ", message)
+                        self.send_data(message)
+                        self.clear_ml_data()
                         continue
 
                     message = self.preprocess(pkt)
@@ -345,13 +348,21 @@ class Client(threading.Thread):
                         # check me (clear aft action)
                         time.sleep(2)
                         relay_buffer.queue.clear()
-                elif(pkt[0] == VEST or pkt[0] == GUN) and len(pkt) == 2 and (pkt[1] == DISCONNECT or pkt[1] == CONNECT):
+
+                elif(pkt[0] == VEST or pkt[0] == GUN) and len(pkt) == 2 and pkt[1] == CONNECT:
                     message = int(P1).to_bytes(1, 'big') + int(pkt[0]).to_bytes(1, 'big') + bytearray(PACKET_SIZE-3) + \
                         int(pkt[1]).to_bytes(1, 'big')
                     # print("Len: ", len(message))
-                    print("DC Message: ", message)
+                    print("Connect Message: ", message)
                     self.send_data(message)
-                    relay_buffer.queue.clear()
+
+                elif(pkt[0] == VEST or pkt[0] == GUN) and len(pkt) == 2 and pkt[1] == DISCONNECT:
+                    message = int(P1).to_bytes(1, 'big') + int(pkt[0]).to_bytes(1, 'big') + bytearray(PACKET_SIZE-3) + \
+                        int(pkt[1]).to_bytes(1, 'big')
+                    # print("Len: ", len(message))
+                    print("Disconnect Message: ", message)
+                    self.send_data(message)
+                    # relay_buffer.queue.clear()
 
                 elif pkt[0] == VEST and pkt[3] == SHOT_HIT:
                     message = int(P1).to_bytes(1, 'big') + pkt + bytearray(PACKET_SIZE-len(pkt)-2) + \
