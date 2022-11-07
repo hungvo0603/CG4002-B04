@@ -276,6 +276,7 @@ class Client(threading.Thread):
             if (len(self.array_ax) >= 40):
                 print("40 data set collected")
                 array_axayaz_gxgygz = []
+                self.start_collection = False
                 array_axayaz_gxgygz = np.concatenate((
                     array_axayaz_gxgygz, self.extract_features(self.array_ax)))
                 array_axayaz_gxgygz = np.concatenate((
@@ -305,7 +306,6 @@ class Client(threading.Thread):
         self.array_gx = []
         self.array_gy = []
         self.array_gz = []
-        self.start_collection = False
 
     def run(self):
         # Open tunnel and connect
@@ -332,6 +332,7 @@ class Client(threading.Thread):
                         print("Disconnect Message: ", message)
                         self.send_data(message)
                         self.clear_ml_data()
+                        self.start_collection = False
                         continue
 
                     message = self.preprocess(pkt)
