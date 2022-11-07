@@ -4,24 +4,54 @@ from pynq import allocate
 from pynq import Overlay
 import multiprocessing
 import threading
+from queue import Empty
+
+
+def clear(q):
+    try:
+        while not q.empty():
+            q.get_nowait()
+    except (Empty, EOFError):
+        pass
+    except Exception as e:
+        print("Clearing queue error:", e)
 
 
 class MovePredictor(multiprocessing.Process):
     def __init__(self, pred_relay_p1, pred_relay_p2, eval_pred, has_terminated):
         super().__init__()
-        self.ml1 = MLPred(pred_relay_p1, eval_pred, has_terminated)
-        self.ml2 = MLPred(pred_relay_p2, eval_pred, has_terminated)
+        self.ml_queue = threading.Queue()
+        self.ml = MLPred(self.ml_queue, eval_pred, has_terminated)
+        self.receive_p1 = pred_relay_p1
+        self.receive_p2 = pred_relay_p2
         self.daemon = True
-        # self.has_terminated = has_terminated
+        self.has_terminated = has_terminated
 
     def run(self):
-        self.ml1.start()
-        # conn2 run on main thread
-        self.ml2.run()
+        player1_recv = threading.Thread(
+            self.receive_data, args=(self.receive_p1))
+        player2_recv = threading.Thread(
+            self.receive_data, args=(self.receive_p2))
+
+        player1_recv.start()
+        player2_recv.start()
+
+        self.ml.run()  # ml run on main thread
+
+        player1_recv.join()
+        player2_recv.join()
+
+    def receive_data(self, player_queue):
+        while not self.has_terminated.value:
+            try:
+                data = player_queue.get()
+                self.ml_queue.put(data)
+            except Exception as e:
+                print("Error in receive_data:", e)
 
 
-class MLPred(threading.Thread):
-    def __init__(self, pred_relay, eval_pred, has_terminated):
+class MLPred():
+    def __init__(self, relay_queue, eval_pred, has_terminated):
         super().__init__()  # init parent (Thread)
         self.daemon = True
         self.has_terminated = has_terminated
@@ -29,7 +59,7 @@ class MLPred(threading.Thread):
         self.overlay = Overlay('mlp.bit')
         self.dma_send = self.overlay.axi_dma_0
         self.dma_recv = self.overlay.axi_dma_0
-        self.pred_relay = pred_relay
+        self.relay_queue = relay_queue
         self.eval_pred = eval_pred
 
         self.input_arr = [[], []]  # p1, p2
@@ -55,17 +85,17 @@ class MLPred(threading.Thread):
         self.dma_recv.recvchannel.transfer(self.output_buffer[player])
         self.dma_send.sendchannel.wait()
         self.dma_recv.recvchannel.wait()
+        clear(self.relay_queue)
         self.input_arr[player].clear()  # clear array after prediction
-        print("len of input arr: ", len(self.input_arr[player]))
+        print("len of input arr after clear: ", len(self.input_arr[player]))
         # print("Cleared pipe after buffer")
-        # clear(self.pred_relay)
 
         return actions[self.output_buffer[player][0]]
 
     def run(self):
         while not self.has_terminated.value:
             try:
-                data, player = self.pred_relay.get()
+                data, player = self.relay_queue.get()
                 # clear pipe content
                 print("[ML] Recived: ", len(data))
                 action = self.pred_action(data, player)
