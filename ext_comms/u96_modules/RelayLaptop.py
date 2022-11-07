@@ -106,12 +106,8 @@ class Server(threading.Thread):
                 for i in range(2, PACKET_SIZE-1, 8):
                     extracted_features.append(
                         struct.unpack('<d', byte_msg[i:i+8])[0])
-                if player == P1:
-                    self.pred_relay_p1.put(
-                        (extracted_features, player))
-                if player == P2:
-                    self.pred_relay_p2.put(
-                        (extracted_features, player))
+                self.pred_relay.put(
+                    (extracted_features, player))
                 # print("[Relay] put", len(extracted_features), "bytes")
             elif byte_msg[1] == VEST and byte_msg[4] == self.shot_hit:
                 print(player+1, "vest received shot hit")

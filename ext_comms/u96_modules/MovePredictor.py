@@ -4,7 +4,7 @@ from pynq import allocate
 from pynq import Overlay
 import multiprocessing
 import threading
-from queue import Empty
+from queue import Queue, Empty
 
 
 def clear(q):
@@ -20,7 +20,7 @@ def clear(q):
 class MovePredictor(multiprocessing.Process):
     def __init__(self, pred_relay_p1, pred_relay_p2, eval_pred, has_terminated):
         super().__init__()
-        self.ml_queue = threading.Queue()
+        self.ml_queue = Queue()
         self.ml = MLPred(self.ml_queue, eval_pred, has_terminated)
         self.receive_p1 = pred_relay_p1
         self.receive_p2 = pred_relay_p2
@@ -29,9 +29,9 @@ class MovePredictor(multiprocessing.Process):
 
     def run(self):
         player1_recv = threading.Thread(
-            self.receive_data, args=(self.receive_p1))
+            target=self.receive_data, args=(self.receive_p1,))
         player2_recv = threading.Thread(
-            self.receive_data, args=(self.receive_p2))
+            target=self.receive_data, args=(self.receive_p2,))
 
         player1_recv.start()
         player2_recv.start()
