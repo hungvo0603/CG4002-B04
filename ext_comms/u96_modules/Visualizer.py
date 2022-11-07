@@ -56,13 +56,13 @@ class Mqtt():
         def on_connect(client, broker, port, rc):
             if rc != 0:
                 print("Failed to connect, return code: ", rc)
-
         try:
             self.conn = mqtt_client.Client()  # clean_session=True
             self.conn.on_connect = on_connect
             self.conn.connect(mqtt_broker, mqtt_port)
             print("[Mqtt] Connection established to ", self.topic)
-        except:
+        except Exception as e:
+            print("[Mqtt] Connection failed: ", e)
             self.connect_mqtt()
 
     def publish(self, state):
@@ -76,6 +76,8 @@ class Mqtt():
         except (KeyboardInterrupt, socket.gaierror, ConnectionError):
             print("[Mqtt Pub]Keyboard Interrupt, terminating")
             self.has_terminated.value = True
+        except Exception as e:
+            print("[Mqtt Pub]Encountered error: ", e)
 
     def parse_player(player):
         if player == "p1":
@@ -84,14 +86,17 @@ class Mqtt():
 
     def subscribe(self):
         def on_message(client, userdata, msg):
-            data = msg.payload.decode()
-            print("[Mqtt]Received data: ", data)
-            player, is_hit = data.split("-")
-            if player == "p1":
-                self.p1_buffer.put(is_hit == "hit")
+            try:
+                data = msg.payload.decode()
+                print("[Mqtt]Received data: ", data)
+                player, is_hit = data.split("-")
+                if player == "p1":
+                    self.p1_buffer.put(is_hit == "hit")
 
-            if player == "p2":
-                self.p2_buffer.put(is_hit == "hit")
+                if player == "p2":
+                    self.p2_buffer.put(is_hit == "hit")
+            except Exception as e:
+                print("[Mqtt Sub]Encountered error: ", e)
 
         self.conn.on_message = on_message
         self.conn.subscribe(self.topic, qos=2)

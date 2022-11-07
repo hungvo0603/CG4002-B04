@@ -200,6 +200,8 @@ def connection_thread(bluno, char, addr):
             has_connected[addr] = False
             bluno_handshake = False
             bluno, char = connection(addr)
+        except Exception as e:
+            print("Encounter exception at bluetooth thread: ", e)
 
 
 def checksum(data):
@@ -374,6 +376,8 @@ class Client(threading.Thread):
                 has_closed = True
                 self.conn.close()
                 break
+            except Exception as e:
+                print("Encounter exception at external: ", e)
 
     def create_tunnel(self):
         try:
@@ -400,6 +404,7 @@ class Client(threading.Thread):
             print(tunnel_xilinx.tunnel_is_up, flush=True)
             return tunnel_xilinx.local_bind_address
         except Exception as e:
+            print("Error creating tunnel: ", e)
             print("Reconnecting to tunnel")
             return self.create_tunnel()
 

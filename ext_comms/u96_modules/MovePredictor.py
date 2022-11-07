@@ -66,3 +66,5 @@ class MovePredictor(multiprocessing.Process):
                 print("[MovePredictor]Keyboard Interrupt, terminating")
                 self.has_terminated.value = True
                 break
+            except Exception as e:
+                print("[MovePredictor]Encountered error: ", e)

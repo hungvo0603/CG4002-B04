@@ -20,7 +20,7 @@ P1 = 0
 P2 = 1
 PACKET_SIZE = 51  # player + type + 6 floats + disconnect
 PORT_1 = 9000
-PORT_2 = 11000
+PORT_2 = 10000
 
 
 class RelayLaptop(multiprocessing.Process):
