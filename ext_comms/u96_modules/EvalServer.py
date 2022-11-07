@@ -26,7 +26,8 @@ def clear(q):
 
 class EvalServer(multiprocessing.Process):
     # Client to eval_server
-    def __init__(self, ip_addr, port_num, group_id, secret_key, eval_pred, eval_relay, eval_viz, viz_eval_p1, viz_eval_p2, has_terminated, has_incoming_bullet_p1, has_incoming_bullet_p2):
+    def __init__(self, ip_addr, port_num, group_id, secret_key, eval_pred, eval_relay, eval_viz, viz_eval_p1, viz_eval_p2, has_terminated,
+                 has_incoming_bullet_p1, has_incoming_bullet_p2, pred_relay_p1, pred_relay_p2):
         super().__init__()  # init parent (Thread)
         self.conn = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.server_address = (ip_addr, port_num)
@@ -37,6 +38,8 @@ class EvalServer(multiprocessing.Process):
         self.has_shield = [threading.Event(), threading.Event()]
         self.has_incoming_bullet_p1 = has_incoming_bullet_p1
         self.has_incoming_bullet_p2 = has_incoming_bullet_p2
+        self.pred_relay_p1 = pred_relay_p1
+        self.pred_relay_p2 = pred_relay_p2
         self.can_receive = threading.Event()
         self.can_receive.set()
 
@@ -108,6 +111,8 @@ class EvalServer(multiprocessing.Process):
             clear(self.eval_pred)
             clear(self.eval_relay)
             # clear(self.eval_viz)
+            clear(self.pred_relay_p1)
+            clear(self.pred_relay_p2)
 
             self.has_shield[P1].clear()
             self.has_shield[P2].clear()
@@ -136,6 +141,8 @@ class EvalServer(multiprocessing.Process):
                 clear(self.eval_pred)
                 clear(self.eval_relay)
                 # clear(self.eval_viz)
+                clear(self.pred_relay_p1)
+                clear(self.pred_relay_p2)
 
                 # Can receive aft this
                 self.can_receive.set()
@@ -155,103 +162,113 @@ class EvalServer(multiprocessing.Process):
 
     def process_glove(self):
         while not self.has_terminated.value:
-            try:
-                self.can_receive.wait()
-                action, player = self.eval_pred.get()
+            self.can_receive.wait()
+            action, player = self.eval_pred.get()
 
-                if not self.can_receive.is_set():
-                    continue
+            if not self.can_receive.is_set():
+                continue
 
-                print("Glove action received:", action)
+            print("Glove action received:", action)
 
-                if player == P1 and not self.has_action[P1].is_set():
-                    if action != 'shield':
-                        self.gamestate.update_player(action, player)
-                        self.eval_viz.put(
-                            self.gamestate.get_data_plain_text(player))
-                    else:
-                        self.has_shield[player].set()
+            if player == P1 and not self.has_action[P1].is_set():
+                if action != 'shield':
+                    self.gamestate.update_player(action, player)
+                    self.eval_viz.put(
+                        self.gamestate.get_data_plain_text(player))
+                else:
+                    self.has_shield[player].set()
 
-                    if action == 'grenade':
-                        # wait for 2 seconds
+                if action == 'grenade':
+                    # wait for 5 seconds
+                    try:
                         is_hit = self.viz_eval_p1.get(timeout=5)
                         print(
                             f"Data received from Visualizer {is_hit}")
                         if is_hit:
                             self.gamestate.update_player(
                                 "grenade_damage", P2)
-                    print(f"Player 1 action done : {action}")
-                    self.has_action[P1].set()
+                    except Empty:
+                        print("Grenade timeout for player 1")
+                print(f"Player 1 action done : {action}")
+                self.has_action[P1].set()
 
-                if player == P2 and not self.has_action[P2].is_set():
-                    if action != 'shield':
-                        self.gamestate.update_player(action, player)
-                        self.eval_viz.put(
-                            self.gamestate.get_data_plain_text(player))
-                    else:
-                        self.has_shield[player].set()
+            if player == P2 and not self.has_action[P2].is_set():
+                if action != 'shield':
+                    self.gamestate.update_player(action, player)
+                    self.eval_viz.put(
+                        self.gamestate.get_data_plain_text(player))
+                else:
+                    self.has_shield[player].set()
 
-                    if action == 'grenade':
-                        # uncomment on viz
+                if action == 'grenade':
+                    try:
                         is_hit = self.viz_eval_p2.get(timeout=5)
                         print(
                             f"Data received from Visualizer {is_hit}")
                         if is_hit:
                             self.gamestate.update_player(
                                 "grenade_damage", P1)
-                    print(f"Player 2 action done : {action}")
-                    self.has_action[P2].set()
-            except Exception as e:
-                print("Error in eval process_glove:", e)
+                    except Empty:
+                        print("Grenade timeout for player 2")
+                print(f"Player 2 action done : {action}")
+                self.has_action[P2].set()
+            # except Exception as e:
+            #     print("Error in eval process_glove:", e)
 
     def process_others(self):
         while not self.has_terminated.value:
-            try:
-                self.can_receive.wait()
-                action, player = self.eval_relay.get()
+            self.can_receive.wait()
+            action, player = self.eval_relay.get()
 
-                if not self.can_receive.is_set():
-                    continue
+            if not self.can_receive.is_set():
+                continue
 
-                if action == "glove disconnect" or action == "gun disconnect" or action == "vest disconnect"\
-                        or action == "glove connect" or action == "gun connect" or action == "vest connect":
-                    dummy_state = self.gamestate.get_data_plain_text(player)
+            if action == "glove disconnect" or action == "gun disconnect" or action == "vest disconnect"\
+                    or action == "glove connect" or action == "gun connect" or action == "vest connect":
+                dummy_state = self.gamestate.get_data_plain_text(player)
 
-                    player_txt = "p1" if player == P1 else "p2"
-                    dummy_state[player_txt]["action"] = action
-                    self.eval_viz.put(dummy_state)
+                player_txt = "p1" if player == P1 else "p2"
+                dummy_state[player_txt]["action"] = action
+                self.eval_viz.put(dummy_state)
 
-                    print("Action received:", action, "for player", player+1)
-                    continue
+                print("Action received:", action, "for player", player+1)
+                continue
 
-                if player == P1 and not self.has_action[P1].is_set():
-                    self.gamestate.update_player(action, player)
-                    # first only action, state from eval
-                    self.eval_viz.put(
-                        self.gamestate.get_data_plain_text(player))
-                    if action == "shoot":
-                        # check for vest ir receiver
+            if player == P1 and not self.has_action[P1].is_set():
+                self.gamestate.update_player(action, player)
+                # first only action, state from eval
+                self.eval_viz.put(
+                    self.gamestate.get_data_plain_text(player))
+                if action == "shoot":
+                    # check for vest ir receiver
+                    try:
                         if self.has_incoming_bullet_p1.get(timeout=5):
                             clear(self.has_incoming_bullet_p1)
                             self.gamestate.update_player(
                                 "bullet_hit", P2)
                             print("Bullet hit for player 1")
-                    print(f"Player 1 action done : {action}")
-                    self.has_action[P1].set()
+                    except Empty:
+                        print("Bullet missed for player 1")
+                print(f"Player 1 action done : {action}")
+                self.has_action[P1].set()
 
-                if player == P2 and not self.has_action[P2].is_set():
-                    self.gamestate.update_player(action, player)
-                    # first only action, state from eval
-                    self.eval_viz.put(
-                        self.gamestate.get_data_plain_text(player))
-                    if action == "shoot":
-                        # check for vest ir receiver
+            if player == P2 and not self.has_action[P2].is_set():
+                self.gamestate.update_player(action, player)
+                # first only action, state from eval
+                self.eval_viz.put(
+                    self.gamestate.get_data_plain_text(player))
+                if action == "shoot":
+                    # check for vest ir receiver
+                    try:
                         if self.has_incoming_bullet_p2.get(timeout=5):
                             clear(self.has_incoming_bullet_p2)
                             self.gamestate.update_player(
                                 "bullet_hit", P1)
                             print("Bullet hit for player 2")
-                    print(f"Player 2 action done : {action}")
-                    self.has_action[P2].set()
-            except Exception as e:
-                print("Error in eval process_others:", e)
+                    except Empty:
+                        print("Bullet 2  missed for player 1")
+
+                print(f"Player 2 action done : {action}")
+                self.has_action[P2].set()
+            # except Exception as e:
+            #     print("Error in eval process_others:", e)
