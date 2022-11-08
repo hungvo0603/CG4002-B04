@@ -200,7 +200,6 @@ def display_data(queue):
                     print(", %.5f" % struct.unpack("<f", pkt[3:7]), end = ' ') #little endian gx: 
                     print(", %.5f" % struct.unpack("<f", pkt[7:11]), end = ' ') #gy: 
                     print(", %.5f" % struct.unpack("<f", pkt[11:15]), end = ' ') #little endian gZ:
-
                 if(cycle):
                     cycle = False
                     actual_cycle = True
@@ -229,9 +228,9 @@ def display_data(queue):
                 start_collection = False
                 resp =input()
                 if(resp.lowercase() == 'y'): 
-                with open('hung_grenade_p2.csv', 'a', encoding = 'UTF8', newline = '') as f:
-		            writer = csv.writer(f)
-		            writer.writerow(array_axayaz_gxgygz)
+                    with open('hung_grenade_p2.csv', 'a', encoding = 'UTF8', newline = '') as f:
+                        writer = csv.writer(f)
+                        writer.writerow(array_axayaz_gxgygz)
                 
                 array_ax = []
                 array_ay = []
