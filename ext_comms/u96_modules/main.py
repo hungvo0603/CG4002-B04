@@ -43,9 +43,10 @@ if __name__ == '__main__':
                         pred_relay_p1, pred_relay_p2, eval_relay, has_terminated, has_incoming_bullet_p1, has_incoming_bullet_p2)
     predictor = MovePredictor(
         pred_relay_p1, pred_relay_p2, eval_pred, has_terminated)
-    eval = EvalServer(eval_ip, eval_port, group_id,
-                      secret_key, eval_pred, eval_relay, eval_viz, viz_eval_p1, viz_eval_p2, has_terminated, has_incoming_bullet_p1, has_incoming_bullet_p2)
-    visualizer = Visualizer(eval_viz, viz_eval_p1, viz_eval_p2, has_terminated)
+    eval = EvalServer(eval_ip, eval_port, group_id, secret_key, eval_pred, eval_relay, eval_viz,
+                      viz_eval_p1, viz_eval_p2, has_terminated, has_incoming_bullet_p1, has_incoming_bullet_p2, pred_relay_p1, pred_relay_p2)
+    visualizer = Visualizer(eval_viz, viz_eval_p1, viz_eval_p2,
+                            has_terminated)
 
     relay.start()
     predictor.start()
