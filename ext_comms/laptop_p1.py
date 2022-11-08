@@ -264,7 +264,7 @@ class Client(threading.Thread):
         print(len(self.array_ax))
         # print(self.array_ax)
         if(not self.start_collection):
-            if (len(self.array_ax) >= 5):
+            if (len(self.array_ax) >= 3):
                 print("Detecting start of move")
                 if self.is_start_of_move():
                     print("Start of move detected")
@@ -273,7 +273,7 @@ class Client(threading.Thread):
 
                 self.clear_ml_data()
         else:
-            if (len(self.array_ax) >= 40):
+            if (len(self.array_ax) >= 25):
                 print("40 data set collected")
                 array_axayaz_gxgygz = []
                 self.start_collection = False
