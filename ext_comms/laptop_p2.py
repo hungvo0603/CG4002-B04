@@ -235,7 +235,7 @@ class Client(threading.Thread):
 
     def is_start_of_move(self):
         # might need to change
-        print(np.max(self.array_ax) +
+        print("SOM number:", np.max(self.array_ax) +
               np.max(self.array_ay) + np.max(self.array_az))
         return np.max(self.array_ax) + np.max(self.array_ay) + np.max(self.array_az) > SOM_THRESHOLD
 
@@ -268,7 +268,6 @@ class Client(threading.Thread):
                 print("Detecting start of move")
                 if self.is_start_of_move():
                     print("Start of move detected")
-                    time.sleep(0.5)
                     self.start_collection = True
 
                 self.clear_ml_data()

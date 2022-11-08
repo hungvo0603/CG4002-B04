@@ -32,7 +32,7 @@ SUNFIRE_PWD = '[sunfire password]'
 - `python u96_modules/main.py 4 8000 localhost 1234567890123456`
 5. Run relay laptop code:
 - laptop 1: `python3 laptop_p1.py 8000 9000 4`
-- laptop 2: `python3 laptop_p2.py 8000 10000 4`
+- laptop 2: `python3 laptop_p2.py 9000 10000 4`
 6. Connect all hardware and pray it works! :pray:
 
 # To kill proces in port: 
