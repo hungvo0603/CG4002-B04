@@ -163,9 +163,17 @@ def display_data(queue):
             array_gx.append(struct.unpack("<f", pkt[3:7])[0])
             array_gy.append(struct.unpack("<f", pkt[7:11])[0])
             array_gz.append(struct.unpack("<f", pkt[11:15])[0])
+            ''' 
+            print("%.5f" % struct.unpack("<f", pkt[15:19])[0], end = ' ') #ax: 
+            print(", %.5f" % struct.unpack("<f", pkt[19:23])[0], end = ' ')#ay: 
+            print(", %.5f" % struct.unpack("<f", pkt[23:27])[0], end = ' ')#az: 
+            print(", %.5f" % struct.unpack("<f", pkt[3:7])[0], end = ' ') #little endian gx: 
+            print(", %.5f" % struct.unpack("<f", pkt[7:11])[0], end = ' ') #gy: 
+            print(", %.5f" % struct.unpack("<f", pkt[11:15])[0], end = ' ') #little endian gZ:
+            '''
             print(len(array_ax))
             
-            if (len(array_ax) >= 5 and start_collection == False):
+            if (len(array_ax) >= 3 and start_collection == False):    
                 print("Detecting start of move")
                 if np.max(array_ax) + np.max(array_ay) + np.max(array_az) > SOM_THRESHOLD:
                     print("Start of move detected")
@@ -173,6 +181,7 @@ def display_data(queue):
                 array_ax = []
                 array_ay = []
                 array_az = []
+            '''
             if(pkt[0]==0 and start_collection and len(array_ax) < 40):
                 if(actual_cycle):
                     print("")
@@ -191,12 +200,11 @@ def display_data(queue):
                     print(", %.5f" % struct.unpack("<f", pkt[3:7]), end = ' ') #little endian gx: 
                     print(", %.5f" % struct.unpack("<f", pkt[7:11]), end = ' ') #gy: 
                     print(", %.5f" % struct.unpack("<f", pkt[11:15]), end = ' ') #little endian gZ:
-
                 if(cycle):
                     cycle = False
                     actual_cycle = True
-
-            elif(len(array_ax) > 40):
+            '''
+            if len(array_ax) == 40 and start_collection:
                 array_axayaz_gxgygz = []
                 array_axayaz_gxgygz = np.concatenate((
                     array_axayaz_gxgygz, extract_features(array_ax)))
@@ -218,9 +226,18 @@ def display_data(queue):
                 array_gy = []
                 array_gz = []
                 start_collection = False
-                with open('data.csv', 'a', encoding = 'UTF8', newline = '') as f:
-                    writer = csv.writer(f)
-                    writer.writerow(array_axayaz_gxgygz)
+                resp =input()
+                if(resp.lowercase() == 'y'): 
+                    with open('hung_grenade_p2.csv', 'a', encoding = 'UTF8', newline = '') as f:
+                        writer = csv.writer(f)
+                        writer.writerow(array_axayaz_gxgygz)
+                
+                array_ax = []
+                array_ay = []
+                array_az = []
+                array_gx = []
+                array_gy = []
+                array_gz = []
 
 
         except KeyboardInterrupt:
