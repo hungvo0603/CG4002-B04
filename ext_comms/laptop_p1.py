@@ -290,10 +290,10 @@ class Client(threading.Thread):
                 array_axayaz_gxgygz = np.concatenate((
                     array_axayaz_gxgygz, self.extract_features(self.array_gz)))
                 array_axayaz_gxgygz = np.float_(array_axayaz_gxgygz)
-                if (np.max(self.array_ax) > 0.5 and np.max(self.array_ay) > 0.5 and np.max(self.array_az) > 0.5):
+                if (np.max(self.array_ax) > 0.4 and np.max(self.array_ay) > 0.4 and np.max(self.array_az) > 0.4):
                     print("action detected")
 
-                    with open('p1_data.csv', 'a', encoding='UTF8', newline='') as f:
+                    with open('xj_shield.csv', 'a', encoding='UTF8', newline='') as f:
                         writer = csv.writer(f)
                         writer.writerow(array_axayaz_gxgygz)
 
