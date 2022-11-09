@@ -78,6 +78,11 @@ class Server(threading.Thread):
             # max packt player + sender + 6 extracted features (8 each) + dc
             byte_msg = self.conn.recv(PACKET_SIZE)
 
+            # drop broken packets
+            if len(byte_msg) != PACKET_SIZE:
+                print("[Relay] Broken packet")
+                continue
+
             # print("[Relay] Received", len(byte_msg), "bytes")
             player = byte_msg[0]
             if self.is_active[byte_msg[1]] and byte_msg[PACKET_SIZE-1] == DISCONNECT:

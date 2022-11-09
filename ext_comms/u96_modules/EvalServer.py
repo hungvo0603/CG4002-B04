@@ -18,8 +18,10 @@ def clear(q):
     try:
         while not q.empty():
             q.get_nowait()
-    except (Empty, EOFError):
+    except Empty:
         pass
+    except EOFError:
+        print("Error clearing queue as EOF")
     except Exception as e:
         print("Clearing queue error:", e)
 
@@ -107,10 +109,12 @@ class EvalServer(multiprocessing.Process):
             self.gamestate.send_encrypted(self.conn, self.secret_key)
 
             # Clear all pending data in pipe
-            print("Clearing eval queues")
+            print("Clearing eval queues on send")
             clear(self.eval_pred)
             clear(self.eval_relay)
             # clear(self.eval_viz)
+            clear(self.viz_eval_p1)
+            clear(self.viz_eval_p2)
             clear(self.pred_relay_p1)
             clear(self.pred_relay_p2)
 
@@ -125,8 +129,8 @@ class EvalServer(multiprocessing.Process):
     def receive_data(self):  # blocking call
         while not self.has_terminated.value:
             try:
-                print("[eval] get data from eval")
                 success = self.gamestate.recv_and_update(self.conn)
+                print("[eval] get data from eval")
                 if not success:
                     print("connection with eval server closed")
                     break
@@ -137,10 +141,12 @@ class EvalServer(multiprocessing.Process):
                     self.gamestate.get_data_plain_text(BOTH))
 
                 # Clear all pending data in pipe
-                print("Clearing eval queues")
+                print("Clearing eval queues on recv")
                 clear(self.eval_pred)
                 clear(self.eval_relay)
                 # clear(self.eval_viz)
+                clear(self.viz_eval_p1)
+                clear(self.viz_eval_p2)
                 clear(self.pred_relay_p1)
                 clear(self.pred_relay_p2)
 
