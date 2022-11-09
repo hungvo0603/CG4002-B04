@@ -83,7 +83,7 @@ class Server(threading.Thread):
                 print("[Relay] Broken packet")
                 continue
 
-            # print("[Relay] Received", len(byte_msg), "bytes")
+            print("[Relay] Received", len(byte_msg), "bytes")
             player = byte_msg[0]
             if self.is_active[byte_msg[1]] and byte_msg[PACKET_SIZE-1] == DISCONNECT:
                 if byte_msg[1] == GLOVE:
@@ -98,6 +98,8 @@ class Server(threading.Thread):
             if not self.is_active[byte_msg[1]] and byte_msg[PACKET_SIZE-1] == CONNECT:
                 self.is_active[byte_msg[1]] = True
                 if byte_msg[1] == GLOVE:
+                    # need to tell ml to clear input list on dc
+                    self.pred_relay.put((CONNECT, player))
                     self.eval_relay.put(("glove connect", player))
                 elif byte_msg[1] == GUN:
                     self.eval_relay.put(("gun connect", player))

@@ -6,6 +6,8 @@ import multiprocessing
 import threading
 from queue import Queue, Empty
 
+CONNECT = 0
+
 
 def clear(q):
     try:
@@ -96,6 +98,12 @@ class MLPred():
         while not self.has_terminated.value:
             try:
                 data, player = self.relay_queue.get()
+
+                # on connect/reconnect, we clear all the input array for the player
+                if data == CONNECT:
+                    self.input_arr[player] = []
+                    continue
+
                 # clear pipe content
                 print("[ML] Recived: ", len(data))
                 action = self.pred_action(data, player)
