@@ -26,7 +26,7 @@ array_gz = []
 array_axayaz_gxgygz =[]
 
 #Need to send ACK and SYN as 20 byte packets as well
-action_count = 0
+
 packetOne_len = 20
 
 SOM_THRESHOLD = 0.8  # threshold value for start of move
@@ -48,7 +48,6 @@ Q = Queue()
 class ScannerDelegate(DefaultDelegate):
 
     def __init__(self, char):
-        self.count = 0
         DefaultDelegate.__init__(self)
         self.char = char
         self.done_handshake = False
@@ -153,7 +152,7 @@ def extract_features(raw_data):
         return extracted
 
 def display_data(queue):
-    global cycle, actual_cycle, start_collection, array_ax,array_ay,array_az,array_gx,array_gy,array_gz, array_axayaz_gxgygz, action_count
+    global cycle, actual_cycle, start_collection, array_ax,array_ay,array_az,array_gx,array_gy,array_gz, array_axayaz_gxgygz
 
     while True:
         try:
@@ -227,12 +226,9 @@ def display_data(queue):
                 array_gy = []
                 array_gz = []
                 start_collection = False
-                print("Keep data: (y/n)")
-                resp = input()
-                if(resp.lower() == 'y'):
-                    action_count += 1
-                    print('Action counter:', action_count) 
-                    with open('xj_reload_p1.csv', 'a', encoding = 'UTF8', newline = '') as f:
+                resp =input("Keep this data? (y/n) ")
+                if(resp == 'y'): 
+                    with open('hung_shield_p1.csv', 'a', encoding = 'UTF8', newline = '') as f:
                         writer = csv.writer(f)
                         writer.writerow(array_axayaz_gxgygz)
                 
