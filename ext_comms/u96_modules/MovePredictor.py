@@ -5,6 +5,7 @@ from pynq import Overlay
 import multiprocessing
 import threading
 from queue import Queue, Empty
+import csv
 
 CONNECT = 0
 
@@ -75,6 +76,12 @@ class MLPred():
         print("len of input arr: ", len(self.input_arr[player]))
         if len(self.input_arr[player]) < 60:
             return None
+
+        # put ml data to csv
+        filename = 'p' + str(player+1) + '_data.csv'
+        with open(filename, 'a', encoding='UTF8', newline='') as f:
+            writer = csv.writer(f)
+            writer.writerow(self.input_arr[player])
 
         actions = ["grenade", "shield", "reload", "nomovement"]
 

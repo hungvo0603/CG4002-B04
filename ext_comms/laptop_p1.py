@@ -13,6 +13,7 @@ import struct
 from statistics import median, mean, variance
 from scipy.fftpack import fft
 import time
+import csv
 
 relay_buffer = Queue()
 has_closed = False
@@ -291,6 +292,11 @@ class Client(threading.Thread):
                 array_axayaz_gxgygz = np.float_(array_axayaz_gxgygz)
                 if (np.max(self.array_ax) > 0.5 and np.max(self.array_ay) > 0.5 and np.max(self.array_az) > 0.5):
                     print("action detected")
+
+                    with open('p1_data.csv', 'a', encoding='UTF8', newline='') as f:
+                        writer = csv.writer(f)
+                        writer.writerow(array_axayaz_gxgygz)
+
                     self.clear_ml_data()
                     return array_axayaz_gxgygz.tobytes()
 
