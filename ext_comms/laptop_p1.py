@@ -40,7 +40,7 @@ P1 = 0
 P2 = 1
 GUN_MAC = "D0:39:72:BF:C1:BF"
 GLOVE_MAC = "80:30:DC:D9:0C:C7"
-VEST_MAC = "D0:39:72:BF:BF:ED"
+VEST_MAC = "C4:BE:84:20:1C:05"#"D0:39:72:BF:BF:ED"
 
 
 # Need to send ACK and SYN as 20 byte packets as well
