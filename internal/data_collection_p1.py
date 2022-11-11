@@ -228,7 +228,7 @@ def display_data(queue):
                 start_collection = False
                 resp =input("Keep this data? (y/n) ")
                 if(resp == 'y'): 
-                    with open('hung_shield_p1.csv', 'a', encoding = 'UTF8', newline = '') as f:
+                    with open('hung_test_p1.csv', 'a', encoding = 'UTF8', newline = '') as f:
                         writer = csv.writer(f)
                         writer.writerow(array_axayaz_gxgygz)
                 

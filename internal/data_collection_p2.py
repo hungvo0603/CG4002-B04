@@ -232,7 +232,7 @@ def display_data(queue):
                 if(resp.lower() == 'y'):
                     action_count += 1
                     print('Action counter:', action_count) 
-                    with open('xj_reload_p1.csv', 'a', encoding = 'UTF8', newline = '') as f:
+                    with open('test.csv', 'a', encoding = 'UTF8', newline = '') as f:
                         writer = csv.writer(f)
                         writer.writerow(array_axayaz_gxgygz)
                 
@@ -320,7 +320,7 @@ def checksum(data):
 
 if __name__ == '__main__':
     
-	addr_list = ["80:30:DC:D9:0C:C7"] 
+	addr_list = ["78:DB:2F:BF:34:35"] 
 
 	bluno_list = []
 	char_list = []
