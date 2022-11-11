@@ -1,19 +1,15 @@
 # Gameplay logic:
-- Invalid action (shoot at no bullet, grenade at no grenade, reload at >0 bullet) -> action registers but no damage
+- Invalid action (shoot at no bullet, grenade at no grenade, reload at > 0 bullet) -> action registers but no damage
 - shield action always processed last
 
-# To install:
-- `python3 -m venv <virtual_env_name>`
-- `source <virtual_env_name>/bin/activate`
-- `pip3 install -r requirements.txt`
-- `pip3 install -r requirements_client.txt` (For client dependencies)
-
 # To setup:
-- Create a .env file. Then fill in the following details in `[]` and copy it to your .env file
+- Create a .env file. Then fill in the following details in `<>` and copy it to your `.env` file. template is provided in the `.env_sample` file too
+
 ```
-XILINX_HOST = '[xilinx host IP address]'
-SUNFIRE_USER = '[sunfire username]'
-SUNFIRE_PWD = '[sunfire password]'
+XILINX_HOST = '<xilinx_ip>'
+XILINX_PWD = '<xilinx_password>'
+SUNFIRE_USER = '<stu_username>'
+SUNFIRE_PWD = '<stu_password>'
 ```
 - DONT USE PORT NUM < 2000
 
@@ -24,25 +20,27 @@ SUNFIRE_PWD = '[sunfire password]'
 2. ssh to xilinx:
 - `ssh xilinx@192.168.246`
 3. Run Eval code:
-- `python eval_sever/eval_server.py 8000 4 2`
+- `python eval_sever/eval_server.py <local_port> <group_num> <player_num>`
 - Secret key: `1234567890123456`
 4. Run ultra96 code:
 - `sudo -i`
 - `cd /home/xilinx`
-- `python u96_modules/main.py 4 8000 localhost 1234567890123456`
-5. Run relay laptop code:
-- laptop 1: `python3 laptop_p1.py 8000 9000 4`
-- laptop 2: `python3 laptop_p2.py 8000 10000 4`
+- `python u96_modules/main.py <group_id> <eval_server_port> <eval_server_ip> <secret_key>`
+5. Run relay laptop code: (can choose to run on different or same laptop)
+- laptop 1: `python3 laptop_p1.py <local_port> <remote_u96_port> <group_id>`
+- laptop 2: `python3 laptop_p2.py <local_port> <remote_u96_port> <group_id>`
 6. Connect all hardware and pray it works! :pray:
 
 # To kill proces in port: 
-fuser -k 10000/tcp 
-fuser -k 9000/tcp 
-fuser -k 8000/tcp
+- fuser -k 10000/tcp 
+- fuser -k 9000/tcp 
+- fuser -k 8000/tcp
 
 # Start virtual env
 - `source <virtual_env_name>/bin/activate`
 - `python3 eval_server.py <PORT> <GROUP_ID> <NUM_PLAYERS>`
+
+# Eval Server details (provided at start of module)
 
 JSON Format:
 {

@@ -24,12 +24,12 @@ PORT_2 = 10000
 
 
 class RelayLaptop(multiprocessing.Process):
-    def __init__(self, group_id, relay_pred, relay_eval, has_terminated, has_incoming_bullet_p1_in, has_incoming_bullet_p2_in):
+    def __init__(self, group_id, pred_relay_p1, pred_relay_p2, eval_relay, has_terminated, has_incoming_bullet_p1, has_incoming_bullet_p2):
         super().__init__()
         self.conn1 = Server(P1, PORT_1, group_id,
-                            relay_pred, relay_eval, has_terminated, has_incoming_bullet_p1_in, SHOT_FIRED_1, SHOT_HIT_1)
+                            pred_relay_p1, eval_relay, has_terminated, has_incoming_bullet_p1, SHOT_FIRED_1, SHOT_HIT_1)
         self.conn2 = Server(P2, PORT_2, group_id,
-                            relay_pred, relay_eval, has_terminated, has_incoming_bullet_p2_in, SHOT_FIRED_2, SHOT_HIT_2)
+                            pred_relay_p2, eval_relay, has_terminated, has_incoming_bullet_p2, SHOT_FIRED_2, SHOT_HIT_2)
         self.daemon = True
         # self.has_terminated = has_terminated
 
@@ -40,7 +40,7 @@ class RelayLaptop(multiprocessing.Process):
 
 
 class Server(threading.Thread):
-    def __init__(self, player, port_num, group_id, relay_pred, relay_eval, has_terminated, has_incoming_bullet_in, shot_fired, shot_hit):
+    def __init__(self, player, port_num, group_id, pred_relay, eval_relay, has_terminated, has_incoming_bullet_in, shot_fired, shot_hit):
         super().__init__()
         self.is_active = [False, False, False]
         self.player = player
@@ -49,8 +49,8 @@ class Server(threading.Thread):
         self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.soc_addr = ('', port_num)  # localhost
         self.socket.bind(self.soc_addr)
-        self.relay_pred = relay_pred
-        self.relay_eval = relay_eval
+        self.pred_relay = pred_relay
+        self.eval_relay = eval_relay
         self.has_incoming_bullet_in = has_incoming_bullet_in
         self.group_id = group_id
         self.conn = None
@@ -60,13 +60,13 @@ class Server(threading.Thread):
 
     def setup_connection(self):
         try:
-            # 1 is the number of unaccepted connections that the system will allow before refusing new connections
+            # accepted 1 number of connections that the system will allow before refusing new connections
             self.socket.listen(1)
             # Wait for a connection
             print('[Relay]Waiting for a connection')
             self.conn, client_address = self.socket.accept()
-            print('[Relay]Connection from', client_address,
-                  ' ', self.player+1, "th connection")
+            print('[Relay]Connection from Player', client_address,
+                  ' ', self.player+1, "connection")
         except ConnectionRefusedError:
             print("[Relay] Cannot connect to Ultra96")
         except Exception as e:
@@ -76,29 +76,35 @@ class Server(threading.Thread):
         self.setup_connection()
         while not self.has_terminated.value:
             # max packt player + sender + 6 extracted features (8 each) + dc
-            # s = time.perf_counter()
             byte_msg = self.conn.recv(PACKET_SIZE)
 
-            # print("[Relay] Received", len(byte_msg), "bytes")
+            # drop broken packets
+            if len(byte_msg) != PACKET_SIZE:
+                print("[Relay] Broken packet")
+                continue
+
+            print("[Relay] Received", len(byte_msg), "bytes")
             player = byte_msg[0]
             if self.is_active[byte_msg[1]] and byte_msg[PACKET_SIZE-1] == DISCONNECT:
                 if byte_msg[1] == GLOVE:
-                    self.relay_eval.send(("glove disconnect", player))
+                    self.eval_relay.put(("glove disconnect", player))
                 elif byte_msg[1] == GUN:
-                    self.relay_eval.send(("gun disconnect", player))
+                    self.eval_relay.put(("gun disconnect", player))
                 elif byte_msg[1] == VEST:
-                    self.relay_eval.send(("vest disconnect", player))
+                    self.eval_relay.put(("vest disconnect", player))
                 self.is_active[byte_msg[1]] = False
                 continue
 
             if not self.is_active[byte_msg[1]] and byte_msg[PACKET_SIZE-1] == CONNECT:
                 self.is_active[byte_msg[1]] = True
                 if byte_msg[1] == GLOVE:
-                    self.relay_eval.send(("glove connect", player))
+                    # need to tell ml to clear input list on dc
+                    self.pred_relay.put((CONNECT, player))
+                    self.eval_relay.put(("glove connect", player))
                 elif byte_msg[1] == GUN:
-                    self.relay_eval.send(("gun connect", player))
+                    self.eval_relay.put(("gun connect", player))
                 elif byte_msg[1] == VEST:
-                    self.relay_eval.send(("vest connect", player))
+                    self.eval_relay.put(("vest connect", player))
                 continue
 
             if byte_msg[1] == GLOVE:
@@ -107,18 +113,19 @@ class Server(threading.Thread):
                 for i in range(2, PACKET_SIZE-1, 8):
                     extracted_features.append(
                         struct.unpack('<d', byte_msg[i:i+8])[0])
-                self.relay_pred.send(
-                    (extracted_features, player))  # 0 is p1, 1 is p2 (need to change)
-                # print("[Relay] Send", len(extracted_features), "bytes")
+                self.pred_relay.put(
+                    (extracted_features, player))
+                # print("[Relay] put", len(extracted_features), "bytes")
             elif byte_msg[1] == VEST and byte_msg[4] == self.shot_hit:
                 print(player+1, "vest received shot hit")
-                self.has_incoming_bullet_in.send(True)  # need to change
+                self.has_incoming_bullet_in.put(True)  # need to change
             elif byte_msg[1] == GUN and byte_msg[4] == self.shot_fired:
                 print(player+1, "gun hit")
-                self.relay_eval.send(("shoot", player))
+                self.eval_relay.put(("shoot", player))
             else:
                 print("[Relay] Unknown packet: ", byte_msg)
                 print("Invalid data received")
+
             time.sleep(0.1)  # sleep a bit after send
 
     def logout(self):

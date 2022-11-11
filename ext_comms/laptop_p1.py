@@ -200,6 +200,8 @@ def connection_thread(bluno, char, addr):
             has_connected[addr] = False
             bluno_handshake = False
             bluno, char = connection(addr)
+        except Exception as e:
+            print("Encounter exception at bluetooth thread: ", e)
 
 
 def checksum(data):
@@ -233,7 +235,7 @@ class Client(threading.Thread):
 
     def is_start_of_move(self):
         # might need to change
-        print(np.max(self.array_ax) +
+        print("SOM number:", np.max(self.array_ax) +
               np.max(self.array_ay) + np.max(self.array_az))
         return np.max(self.array_ax) + np.max(self.array_ay) + np.max(self.array_az) > SOM_THRESHOLD
 
@@ -262,21 +264,15 @@ class Client(threading.Thread):
         print(len(self.array_ax))
         # print(self.array_ax)
         if(not self.start_collection):
-            if (len(self.array_ax) >= 5):
+            if (len(self.array_ax) >= 3):
                 print("Detecting start of move")
                 if self.is_start_of_move():
                     print("Start of move detected")
-                    time.sleep(0.5)
                     self.start_collection = True
 
-                self.array_ax = []
-                self.array_ay = []
-                self.array_az = []
-                self.array_gx = []
-                self.array_gy = []
-                self.array_gz = []
+                self.clear_ml_data()
         else:
-            if (len(self.array_ax) >= 40):
+            if (len(self.array_ax) >= 25):
                 print("40 data set collected")
                 array_axayaz_gxgygz = []
                 self.start_collection = False
@@ -295,21 +291,20 @@ class Client(threading.Thread):
                 array_axayaz_gxgygz = np.float_(array_axayaz_gxgygz)
                 if (np.max(self.array_ax) > 0.5 and np.max(self.array_ay) > 0.5 and np.max(self.array_az) > 0.5):
                     print("action detected")
-                    self.array_ax = []
-                    self.array_ay = []
-                    self.array_az = []
-                    self.array_gx = []
-                    self.array_gy = []
-                    self.array_gz = []
+                    self.clear_ml_data()
                     return array_axayaz_gxgygz.tobytes()
-                self.array_ax = []
-                self.array_ay = []
-                self.array_az = []
-                self.array_gx = []
-                self.array_gy = []
-                self.array_gz = []
+
+                self.clear_ml_data()
 
         return None
+
+    def clear_ml_data(self):
+        self.array_ax = []
+        self.array_ay = []
+        self.array_az = []
+        self.array_gx = []
+        self.array_gy = []
+        self.array_gz = []
 
     def run(self):
         # Open tunnel and connect
@@ -321,12 +316,22 @@ class Client(threading.Thread):
                 pkt = relay_buffer.get()
                 # print("Packet:", pkt)
                 if(pkt[0] == GLOVE):
-                    if len(pkt) == 2 and (pkt[1] == DISCONNECT or pkt[1] == CONNECT):
+                    if len(pkt) == 2 and pkt[1] == CONNECT:
                         message = int(P1).to_bytes(1, 'big') + int(pkt[0]).to_bytes(1, 'big') + bytearray(PACKET_SIZE-3) + \
                             int(pkt[1]).to_bytes(1, 'big')
                         print("Len: ", len(message))
-                        print("DC Message: ", message)
+                        print("Connect Message: ", message)
                         self.send_data(message)
+                        continue
+
+                    if len(pkt) == 2 and pkt[1] == DISCONNECT:
+                        message = int(P1).to_bytes(1, 'big') + int(pkt[0]).to_bytes(1, 'big') + bytearray(PACKET_SIZE-3) + \
+                            int(pkt[1]).to_bytes(1, 'big')
+                        print("Len: ", len(message))
+                        print("Disconnect Message: ", message)
+                        self.send_data(message)
+                        self.clear_ml_data()
+                        self.start_collection = False
                         continue
 
                     message = self.preprocess(pkt)
@@ -343,12 +348,21 @@ class Client(threading.Thread):
                         # check me (clear aft action)
                         time.sleep(2)
                         relay_buffer.queue.clear()
-                elif(pkt[0] == VEST or pkt[0] == GUN) and len(pkt) == 2 and (pkt[1] == DISCONNECT or pkt[1] == CONNECT):
+
+                elif(pkt[0] == VEST or pkt[0] == GUN) and len(pkt) == 2 and pkt[1] == CONNECT:
                     message = int(P1).to_bytes(1, 'big') + int(pkt[0]).to_bytes(1, 'big') + bytearray(PACKET_SIZE-3) + \
                         int(pkt[1]).to_bytes(1, 'big')
                     # print("Len: ", len(message))
-                    print("DC Message: ", message)
+                    print("Connect Message: ", message)
                     self.send_data(message)
+
+                elif(pkt[0] == VEST or pkt[0] == GUN) and len(pkt) == 2 and pkt[1] == DISCONNECT:
+                    message = int(P1).to_bytes(1, 'big') + int(pkt[0]).to_bytes(1, 'big') + bytearray(PACKET_SIZE-3) + \
+                        int(pkt[1]).to_bytes(1, 'big')
+                    # print("Len: ", len(message))
+                    print("Disconnect Message: ", message)
+                    self.send_data(message)
+                    # relay_buffer.queue.clear()
 
                 elif pkt[0] == VEST and pkt[3] == SHOT_HIT:
                     message = int(P1).to_bytes(1, 'big') + pkt + bytearray(PACKET_SIZE-len(pkt)-2) + \
@@ -375,6 +389,8 @@ class Client(threading.Thread):
                 has_closed = True
                 self.conn.close()
                 break
+            except Exception as e:
+                print("Encounter exception at external: ", e)
 
     def create_tunnel(self):
         try:
@@ -401,6 +417,7 @@ class Client(threading.Thread):
             print(tunnel_xilinx.tunnel_is_up, flush=True)
             return tunnel_xilinx.local_bind_address
         except Exception as e:
+            print("Error creating tunnel: ", e)
             print("Reconnecting to tunnel")
             return self.create_tunnel()
 
