@@ -10,8 +10,6 @@ P1 = 0
 P2 = 1
 BOTH = 2
 ALL = 3
-# put in total move (on screen) - 1
-TOTAL_MOVE = 18
 
 
 def clear(q):
@@ -40,6 +38,7 @@ class EvalServer(multiprocessing.Process):
         self.has_shield = [threading.Event(), threading.Event()]
         self.has_incoming_bullet_p1 = has_incoming_bullet_p1
         self.has_incoming_bullet_p2 = has_incoming_bullet_p2
+        self.is_logout = False
         self.pred_relay_p1 = pred_relay_p1
         self.pred_relay_p2 = pred_relay_p2
         self.can_receive = threading.Event()
@@ -70,10 +69,12 @@ class EvalServer(multiprocessing.Process):
         gun_thread.start()
 
         while not self.has_terminated.value:
-            if self.action_counter >= TOTAL_MOVE:
-                time.sleep(10)
-                # Need to change
-                print("Logout move")
+            time.sleep(0.5)
+
+            if self.is_logout:
+                print(
+                    "#############################################Terminating u96#############################################")
+                self.has_terminated.value = True
                 self.gamestate.update_player("logout", P1)
                 self.eval_viz.put(self.gamestate.get_data_plain_text(P1))
                 self.gamestate.update_player("logout", P2)
@@ -112,7 +113,6 @@ class EvalServer(multiprocessing.Process):
             print("Clearing eval queues on send")
             clear(self.eval_pred)
             clear(self.eval_relay)
-            # clear(self.eval_viz)
             clear(self.viz_eval_p1)
             clear(self.viz_eval_p2)
             clear(self.pred_relay_p1)
@@ -144,7 +144,6 @@ class EvalServer(multiprocessing.Process):
                 print("Clearing eval queues on recv")
                 clear(self.eval_pred)
                 clear(self.eval_relay)
-                # clear(self.eval_viz)
                 clear(self.viz_eval_p1)
                 clear(self.viz_eval_p2)
                 clear(self.pred_relay_p1)
@@ -218,8 +217,11 @@ class EvalServer(multiprocessing.Process):
                         print("Grenade timeout for player 2")
                 print(f"Player 2 action done : {action}")
                 self.has_action[P2].set()
-            # except Exception as e:
-            #     print("Error in eval process_glove:", e)
+
+            if action == 'logout':
+                self.has_terminated.value = True
+                self.is_logout = True
+                break
 
     def process_others(self):
         while not self.has_terminated.value:
@@ -276,5 +278,3 @@ class EvalServer(multiprocessing.Process):
 
                 print(f"Player 2 action done : {action}")
                 self.has_action[P2].set()
-            # except Exception as e:
-            #     print("Error in eval process_others:", e)

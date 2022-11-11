@@ -125,7 +125,6 @@ class GameState:
                 break
 
             data = data.decode("utf-8")
-            #print(f"data from gamestate: {data}")
             length = int(data[:-1])
 
             data = b''
