@@ -108,10 +108,18 @@ namespace M2MQTT.MainController
             }
             else {
             // TESTING FOR VISUALIZER
-            string sample_json_string = "{\"p1\": {\"hp\": 100, \"action\": \"shield\", \"bullets\": 5, \"grenades\": 1, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 0, \"num_shield\": 3}, \"p2\": {\"hp\": 100, \"action\": \"none\", \"bullets\": 6, \"grenades\": 2, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 0, \"num_shield\": 3}}";
+            string sample_json_string = "{\"p1\": {\"hp\": 100, \"action\": \"grenade\", \"bullets\": 5, \"grenades\": 1, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 8, \"num_shield\": 3}, \"p2\": {\"hp\": 100, \"action\": \"shield\", \"bullets\": 6, \"grenades\": 2, \"shield_time\": 10, \"shield_health\": 30, \"num_deaths\": 5, \"num_shield\": 3}}";
             client.Publish("cg4002/4/viz_u96", System.Text.Encoding.UTF8.GetBytes(sample_json_string), MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE, false);
             Debug.Log("Test message published");
+            PublishMessageButton.gameObject.SetActive(false);
+            StartCoroutine(ReactivatePublishButton());
             }
+        }
+
+        IEnumerator ReactivatePublishButton()
+        {
+            yield return new WaitForSeconds(10f);
+            PublishMessageButton.gameObject.SetActive(true);
         }
 
         protected override void OnConnecting()

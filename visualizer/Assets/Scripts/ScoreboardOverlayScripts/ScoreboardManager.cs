@@ -16,15 +16,39 @@ public class ScoreboardManager : MonoBehaviour
     {
         player1Kill.text = Player.player1KillStatistic.ToString();
         player2Kill.text = Player.player2KillStatistic.ToString();
-        if (Player.player1KillStatistic > Player.player2KillStatistic)
+        if (SettingsController.REGISTERED_PLAYER == 1)
         {
-            scoreboardHeader.text = "VICTORY";
-            victorySound.Play();
+            if (Player.player1KillStatistic > Player.player2KillStatistic)
+            {
+                scoreboardHeader.text = "VICTORY";
+                victorySound.Play();
+            }
+            else if (Player.player1KillStatistic < Player.player2KillStatistic)
+            {
+                scoreboardHeader.text = "DEFEAT";
+                defeatSound.Play();
+            }
+            else
+            {
+                scoreboardHeader.text = "DRAW";
+            }
         }
-        else
+        else if (SettingsController.REGISTERED_PLAYER == 2)
         {
-            scoreboardHeader.text = "DEFEAT";
-            defeatSound.Play();
+            if (Player.player1KillStatistic < Player.player2KillStatistic)
+            {
+                scoreboardHeader.text = "VICTORY";
+                victorySound.Play();
+            }
+            else if (Player.player1KillStatistic > Player.player2KillStatistic)
+            {
+                scoreboardHeader.text = "DEFEAT";
+                defeatSound.Play();
+            }
+            else
+            {
+                scoreboardHeader.text = "DRAW";
+            }
         }
     }
 
