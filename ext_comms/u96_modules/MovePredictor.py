@@ -76,7 +76,7 @@ class MLPred():
         if len(self.input_arr[player]) < 60:
             return None
 
-        actions = ["grenade", "shield", "reload", "nomovement", "logout"]
+        actions = ["grenade", "shield", "reload", "logout"]
 
         for i in range(60):
             self.input_buffer[player][i] = float(self.input_arr[player][i])
